@@ -119,28 +119,83 @@ soc-fpga/
 
 ### 1. 环境要求
 
-**Linux（推荐）：**
+#### 1.1 Ubuntu操作系统准备
+
+除了最终的生成bitstream文件需要使用Windows系统上的Vivado外，其余任务都需要在Ubuntu 22.04上完成。以下三种方式均可选择：
+
+1. **使用WSL2** - Windows子系统
+2. **VMware虚拟机** - 建议分配较多CPU核心和内存
+3. **移动硬盘安装Portable Linux**
+
+#### 1.2 Verilog代码仿真环境
+
+注意要先换国内源：
 ```bash
-# 安装RISC-V工具链
-sudo apt install riscv32-unknown-elf-gcc
-
-# 安装Verilator（用于RTL仿真）
-sudo apt install verilator
-
-# 安装Python3
-sudo apt install python3
+sudo apt update
+sudo apt install -y iverilog gtkwave make build-essential vim nano
 ```
 
-**Windows：**
-- RISC-V GCC工具链（如 `riscv-none-embed-gcc`）
+#### 1.3 RISC-V交叉编译工具链
+
+**安装依赖：**
+```bash
+sudo apt install autoconf automake autotools-dev curl python3 python3-pip
+sudo apt install libmpc-dev libmpfr-dev libgmp-dev gawk
+sudo apt install build-essential bison flex texinfo gperf libtool patchutils
+sudo apt install bc zlib1g-dev libexpat-dev ninja-build git cmake libglib2.0-dev
+```
+
+**下载源码：**
+```bash
+git clone --recursive https://github.com/riscv/riscv-gnu-toolchain
+cd riscv-gnu-toolchain
+mkdir build
+cd build
+```
+
+**编译配置（支持rv32im_zicsr）：**
+```bash
+../configure \
+  --prefix=/opt/riscv32im_zicsr \
+  --target=riscv32-unknown-elf \
+  --enable-multilib \
+  --with-multilib-generator="rv32im_zicsr-ilp32--;" \
+  --with-arch=rv32im_zicsr \
+  --with-abi=ilp32
+```
+
+**开始编译（建议多线程）：**
+```bash
+sudo make -j $(nproc)
+```
+
+**配置环境变量：**
+```bash
+echo 'export PATH=/opt/riscv32im_zicsr/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**验证安装：**
+```bash
+riscv32-unknown-elf-gcc --version
+```
+成功输出类似：
+```
+riscv32-unknown-elf-gcc (g5115c7e44) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+```
+
+### 2. Windows环境
+
 - Vivado 2023.2
+- RISC-V GCC工具链（如 `riscv-none-embed-gcc`）
 - Python 3.x
 
-### 2. 工具链配置
+### 3. 工具链配置
 
 编辑 `sim/config.mk` 文件：
 
-**Linux配置：**
+**Linux配置（使用编译的工具链）：**
 ```makefile
 EMBTOOLPREFIX   = riscv32-unknown-elf
 CC              = ${EMBTOOLPREFIX}-gcc
