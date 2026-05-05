@@ -1,0 +1,69 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Fri May  1 07:26:47 2026
+[*]
+[dumpfile] "/home/ketted/diff-tools/diff-tools/sim_tools_simple/obj_dir/sim.vcd"
+[dumpfile_mtime] "Fri May  1 07:26:38 2026"
+[dumpfile_size] 4955629
+[savefile] "/home/ketted/diff-tools/diff-tools/sim_tools_simple/debug1.gtkw"
+[timestart] 2413
+[size] 1268 727
+[pos] 22 -30
+*-2.677157 2417 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] TOP.
+[treeopen] TOP.pa_chip_top_sim.
+[treeopen] TOP.pa_chip_top_sim.u_pa_core_top.
+[treeopen] TOP.pa_chip_top_sim.u_pa_core_top.u_pa_core_rtu.
+[sst_width] 297
+[signals_width] 281
+[sst_expanded] 1
+[sst_vpaned_height] 305
+@28
+TOP.pa_chip_top_sim.u_pa_core_top.u_pa_core_exu.clk_i
+@22
+TOP.pa_chip_top_sim.u_pa_core_top.u_pa_core_pcgen.pc_o[31:0]
+@28
+TOP.pa_chip_top_sim.u_pa_core_top.u_pa_core_exu.bxx_valid
+@22
+TOP.pa_chip_top_sim.u_pa_core_top.u_pa_core_exu.op1_data[31:0]
+TOP.pa_chip_top_sim.u_pa_core_top.u_pa_core_exu.op2_data[31:0]
+TOP.pa_chip_top_sim.u_pa_core_top.u_pa_core_rtu.u_pa_core_xreg.debug_reg_15[31:0]
+TOP.pa_chip_top_sim.u_pa_perips_tcm.addr1_i[31:0]
+TOP.pa_chip_top_sim.u_pa_perips_tcm.data1_o[31:0]
+TOP.pa_chip_top_sim.u_pa_perips_tcm.addr2_i[31:0]
+@28
+TOP.pa_chip_top_sim.u_pa_perips_tcm.size1_i[2:0]
+@22
+TOP.pa_chip_top_sim.u_pa_core_top.u_pa_core_rtu.u_pa_core_xreg.debug_reg_14[31:0]
+@28
+TOP.pa_chip_top_sim.u_pa_core_top.op_load
+@22
+TOP.pa_chip_top_sim.u_pa_core_top.dbus_data_i[31:0]
+@28
+TOP.pa_chip_top_sim.m1_rd
+TOP.pa_chip_top_sim.m1_we
+@22
+TOP.pa_chip_top_sim.m1_addr[31:0]
+TOP.pa_chip_top_sim.m1_rdata[31:0]
+TOP.pa_chip_top_sim.m1_wdata[31:0]
+@200
+-
+@22
+TOP.pa_chip_top_sim.u_pa_core_top.u_pa_core_pcgen.pc_o[31:0]
+@28
+TOP.pa_chip_top_sim.u_pa_perips_tcm.clk_i
+TOP.pa_chip_top_sim.u_pa_perips_tcm.rst_n_i
+TOP.pa_chip_top_sim.u_pa_perips_tcm.rd1_i
+@22
+TOP.pa_chip_top_sim.u_pa_perips_tcm.data1_o[31:0]
+@28
+TOP.pa_chip_top_sim.u_pa_perips_tcm.we1_i
+TOP.pa_chip_top_sim.u_pa_perips_tcm.size1_i[2:0]
+@22
+TOP.pa_chip_top_sim.u_pa_perips_tcm.addr1_i[31:0]
+@23
+TOP.pa_chip_top_sim.u_pa_perips_tcm.data1_i[31:0]
+@22
+TOP.pa_chip_top_sim.u_pa_perips_tcm.data1_i[31:0]
+[pattern_trace] 1
+[pattern_trace] 0

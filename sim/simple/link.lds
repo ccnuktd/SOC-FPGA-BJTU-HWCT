@@ -1,0 +1,87 @@
+OUTPUT_ARCH( "riscv" )
+ENTRY(_start)
+
+MEMORY
+{
+    ram (rwx)  : ORIGIN = 0x80000000, LENGTH = 64K
+    iap (rwx) : ORIGIN = 0x80008000, LENGTH = 32K
+}
+
+SECTIONS
+{
+    .init           :
+    {
+        KEEP (*(SORT_NONE(.init)))
+    } >ram
+
+    .text           :
+    {
+        . = ALIGN(4);
+        __fsymtab_start = .;
+        KEEP(*(FSymTab))
+        __fsymtab_end = .;
+
+        . = ALIGN(4);
+        __vsymtab_start = .;
+        KEEP(*(VSymTab))
+        __vsymtab_end = .;
+
+        . = ALIGN(4);
+        *(.text.unlikely .text.unlikely.*)
+        *(.text.startup .text.startup.*)
+        *(.text .text.*)
+        *(.gnu.linkonce.t.*)
+    } >ram
+
+    .data          :
+    {
+        __data_lma = LOADADDR(.data);
+        __data_start = .;
+
+        . = ALIGN(4);
+        __rt_init_start = .;
+        KEEP(*(SORT(.rti_fn*)))
+        __rt_init_end = .;
+
+        *(.rdata)
+        *(.rodata .rodata.*)
+        *(.gnu.linkonce.r.*)
+        *(.data .data.*)
+        *(.gnu.linkonce.d.*)
+        *(.sdata .sdata.*)
+        *(.sdata*)
+        *(.gnu.linkonce.s.*)
+
+        . = ALIGN(4);
+        __data_end = .;
+    } >ram
+
+    .bss            :
+    {
+        __bss_start = .;
+
+        *(.sbss .sbss.*)
+        *(.gnu.linkonce.sb.*)
+        *(.bss .bss.*)
+        *(.gnu.linkonce.b.*)
+        *(COMMON)
+
+        . = ALIGN(4);
+        __bss_end = .;
+        __end = .;
+    } >ram
+
+    .stack ORIGIN(ram) + LENGTH(ram):
+    {
+        __stack_top = .;
+    } >ram
+
+    .intr_stack (NOLOAD) :
+    {
+        . = ALIGN(4);
+        __intr_stack_bottom = .;
+        . = . + 0x400;  /* 1KB interrupt stack */
+        __intr_stack_top = .;
+    } >ram
+}
+

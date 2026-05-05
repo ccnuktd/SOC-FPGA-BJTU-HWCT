@@ -1,0 +1,11 @@
+set_property -dict {PACKAGE_PIN AD12 IOSTANDARD DIFF_HSTL_II_18} [get_ports clk_p]
+set_property -dict {PACKAGE_PIN D11 IOSTANDARD LVCMOS33} [get_ports rst_n_i]
+set_property -dict {PACKAGE_PIN D17 IOSTANDARD LVCMOS33} [get_ports txd]
+set_property -dict {PACKAGE_PIN D18 IOSTANDARD LVCMOS33} [get_ports rxd]
+
+set_property CFGBVS VCCO [current_design]
+set_property CONFIG_VOLTAGE 3.3 [current_design]
+set_property BITSTREAM.GENERAL.COMPRESS true [current_design]
+set_property BITSTREAM.CONFIG.CONFIGRATE 50 [current_design]
+set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
+set_property BITSTREAM.CONFIG.SPI_FALL_EDGE Yes [current_design]

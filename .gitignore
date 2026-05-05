@@ -1,0 +1,84 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Vivado project files (generated)
+project/*.cache/
+project/*.gen/
+project/*.hw/
+project/*.ip_user_files/
+project/*.runs/
+project/*.sim/
+project/.Xil/
+project/*.log
+project/*.jou
+project/soc-fpga.cache/
+project/soc-fpga.gen/
+project/soc-fpga.hw/
+project/soc-fpga.sim/
+project/soc-fpga.runs/
+
+# Xilinx simulation output
+xsim.dir/
+
+# Simulation outputs
+sim/work/
+sim/*.vvp
+sim/*.out
+sim/*.wdb
+sim/*.log
+sim/.tmp/
+sim/build/
+sim/build-*.*
+
+# Testbench outputs
+tb/work/
+tb/*.vvp
+tb/*.out
+
+# NEMU (keep as external submodule)
+nemu/.git
+
+# NEMU build outputs
+nemu/build/
+nemu/.config
+nemu/.config.old
+
+# RTL build outputs
+.rtl/
+
+# Compiled binaries
+*.o
+*.a
+*.so
+*.elf
+*.bin
+
+# Libraries (keep source, exclude built)
+libs/*/*.a
+libs/*/*.o
+
+# Windows specific
+*:Zone.Identifier
+diff-tools/*/rtl-windows/
+diff-tools/*/rtl-og/
+
+# Generated files
+*.bak
+*.orig
+
+# Auto-generated COE files
+sim/*/rom.coe
+sim/*/riscv.bin
+sim/*/riscv.dump
+sim/*/riscv.map
+
+# NEMU source (will be submodule)
+nemu/.gitignore

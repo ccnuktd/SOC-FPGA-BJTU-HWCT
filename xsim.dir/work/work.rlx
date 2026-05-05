@@ -1,0 +1,8 @@
+0.7
+2020.2
+Oct 13 2023
+20:47:58
+C:/Users/nana4/riscv-related/teacher_training/soc-fpga/rtl/core/pa_core_clint.v,1776935214,systemVerilog,,C:/Users/nana4/riscv-related/teacher_training/soc-fpga/tb/pa_core_clint_tb.v,C:/Users/nana4/riscv-related/teacher_training/soc-fpga/rtl/pa_chip_param.v,pa_core_clint,,,,,,,,
+C:/Users/nana4/riscv-related/teacher_training/soc-fpga/rtl/pa_chip_param.v,1749350670,verilog,,,,,,,,,,,,
+C:/Users/nana4/riscv-related/teacher_training/soc-fpga/rtl/utils/pa_dff.v,1747019747,systemVerilog,,C:/Users/nana4/riscv-related/teacher_training/soc-fpga/rtl/core/pa_core_clint.v,C:/Users/nana4/riscv-related/teacher_training/soc-fpga/rtl/pa_chip_param.v,pa_dff_en_2;pa_dff_en_l;pa_dff_rst_0;pa_dff_rst_1;pa_dff_rst_def,,,,,,,,
+C:/Users/nana4/riscv-related/teacher_training/soc-fpga/tb/pa_core_clint_tb.v,1776916046,systemVerilog,,,C:/Users/nana4/riscv-related/teacher_training/soc-fpga/rtl/pa_chip_param.v,pa_core_clint_tb,,,,,,,,

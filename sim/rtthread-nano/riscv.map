@@ -1,0 +1,1265 @@
+由于文件 (符号) 而包含了归档成员
+
+/opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strncmp.o)
+                              /tmp/ccwZxzgn.o (strncmp)
+/opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memset.o)
+                              /tmp/ccitLcCH.o (memset)
+/opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strlen.o)
+                              /tmp/ccwZxzgn.o (strlen)
+
+Merging object attributes
+
+
+舍弃的输入节
+
+ .text          0x00000000        0x0 /tmp/ccJPgvCk.o
+ .data          0x00000000        0x0 /tmp/ccJPgvCk.o
+ .bss           0x00000000        0x0 /tmp/ccJPgvCk.o
+ .data          0x00000000        0x0 /tmp/ccHEtOBu.o
+ .bss           0x00000000        0x0 /tmp/ccHEtOBu.o
+ .data          0x00000000        0x0 /tmp/ccQGAZSm.o
+ .bss           0x00000000        0x0 /tmp/ccQGAZSm.o
+ .text          0x00000000        0x0 /tmp/cc0ulacy.o
+ .data          0x00000000        0x0 /tmp/cc0ulacy.o
+ .bss           0x00000000        0x0 /tmp/cc0ulacy.o
+ .text.get_cyclel_value
+                0x00000000        0x8 /tmp/cc0ulacy.o
+ .text.delay_us
+                0x00000000       0x40 /tmp/cc0ulacy.o
+ .text.delay_ms
+                0x00000000       0x48 /tmp/cc0ulacy.o
+ .text          0x00000000        0x0 /tmp/ccxwwMuw.o
+ .data          0x00000000        0x0 /tmp/ccxwwMuw.o
+ .bss           0x00000000        0x0 /tmp/ccxwwMuw.o
+ .text          0x00000000        0x0 /tmp/ccT4PlP5.o
+ .data          0x00000000        0x0 /tmp/ccT4PlP5.o
+ .bss           0x00000000        0x0 /tmp/ccT4PlP5.o
+ .text.uart_send
+                0x00000000       0x10 /tmp/ccT4PlP5.o
+ .text.uart_read
+                0x00000000       0x28 /tmp/ccT4PlP5.o
+ .text          0x00000000        0x0 /tmp/ccnJO0Gt.o
+ .data          0x00000000        0x0 /tmp/ccnJO0Gt.o
+ .bss           0x00000000        0x0 /tmp/ccnJO0Gt.o
+ .text.get_frequency
+                0x00000000        0xc /tmp/ccnJO0Gt.o
+ .abi_section   0x00000000        0xc /tmp/ccnJO0Gt.o
+ .comment       0x00000000       0x1a /tmp/ccnJO0Gt.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccnJO0Gt.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/ccnJO0Gt.o
+ .text          0x00000000        0x0 /tmp/ccIEqZut.o
+ .data          0x00000000        0x0 /tmp/ccIEqZut.o
+ .bss           0x00000000        0x0 /tmp/ccIEqZut.o
+ .text.xputc    0x00000000       0x50 /tmp/ccIEqZut.o
+ .text.xprintf  0x00000000      0xb04 /tmp/ccIEqZut.o
+ .rodata.xprintf
+                0x00000000       0xb8 /tmp/ccIEqZut.o
+ .text          0x00000000        0x0 /tmp/ccKYYACJ.o
+ .data          0x00000000        0x0 /tmp/ccKYYACJ.o
+ .bss           0x00000000        0x0 /tmp/ccKYYACJ.o
+ .text          0x00000000        0x0 /tmp/ccrpZ7sE.o
+ .data          0x00000000        0x0 /tmp/ccrpZ7sE.o
+ .bss           0x00000000        0x0 /tmp/ccrpZ7sE.o
+ .comment       0x00000000       0x1a /tmp/ccrpZ7sE.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccrpZ7sE.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/ccrpZ7sE.o
+ .text          0x00000000        0x0 /tmp/ccjlf9uX.o
+ .data          0x00000000        0x0 /tmp/ccjlf9uX.o
+ .bss           0x00000000        0x0 /tmp/ccjlf9uX.o
+ .text          0x00000000        0x0 /tmp/ccfLAZYe.o
+ .data          0x00000000        0x0 /tmp/ccfLAZYe.o
+ .bss           0x00000000        0x0 /tmp/ccfLAZYe.o
+ .text          0x00000000        0x0 /tmp/ccwZxzgn.o
+ .data          0x00000000        0x0 /tmp/ccwZxzgn.o
+ .bss           0x00000000        0x0 /tmp/ccwZxzgn.o
+ .text          0x00000000        0x0 /tmp/ccitLcCH.o
+ .data          0x00000000        0x0 /tmp/ccitLcCH.o
+ .bss           0x00000000        0x0 /tmp/ccitLcCH.o
+ .text.finsh_get_prompt_mode
+                0x00000000       0x18 /tmp/ccitLcCH.o
+ .text.finsh_set_prompt_mode
+                0x00000000       0x24 /tmp/ccitLcCH.o
+ .text.finsh_set_echo
+                0x00000000       0x20 /tmp/ccitLcCH.o
+ .text.finsh_get_echo
+                0x00000000       0x14 /tmp/ccitLcCH.o
+ .text.finsh_system_function_init
+                0x00000000       0x14 /tmp/ccitLcCH.o
+ .text.finsh_system_var_init
+                0x00000000       0x14 /tmp/ccitLcCH.o
+ .text          0x00000000        0x0 /tmp/ccgUCav1.o
+ .data          0x00000000        0x0 /tmp/ccgUCav1.o
+ .bss           0x00000000        0x0 /tmp/ccgUCav1.o
+ .rodata.rt_hw_cpu_shutdown.str1.4
+                0x00000000        0xd /tmp/ccgUCav1.o
+ .text.rt_hw_cpu_shutdown
+                0x00000000       0x24 /tmp/ccgUCav1.o
+ .text          0x00000000        0x0 /tmp/ccLqhjnM.o
+ .data          0x00000000        0x0 /tmp/ccLqhjnM.o
+ .bss           0x00000000        0x0 /tmp/ccLqhjnM.o
+ .text.rt_system_tick_init
+                0x00000000        0x4 /tmp/ccLqhjnM.o
+ .text.rt_tick_set
+                0x00000000       0x34 /tmp/ccLqhjnM.o
+ .text          0x00000000        0x0 /tmp/ccUID47o.o
+ .data          0x00000000        0x0 /tmp/ccUID47o.o
+ .bss           0x00000000        0x0 /tmp/ccUID47o.o
+ .text.rt_components_init
+                0x00000000       0x48 /tmp/ccUID47o.o
+ .text.rt_application_init
+                0x00000000       0x5c /tmp/ccUID47o.o
+ .text          0x00000000        0x0 /tmp/ccALYInd.o
+ .data          0x00000000        0x0 /tmp/ccALYInd.o
+ .bss           0x00000000        0x0 /tmp/ccALYInd.o
+ .comment       0x00000000       0x1a /tmp/ccALYInd.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccALYInd.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/ccALYInd.o
+ .text          0x00000000        0x0 /tmp/cchgo7L2.o
+ .data          0x00000000        0x0 /tmp/cchgo7L2.o
+ .bss           0x00000000        0x0 /tmp/cchgo7L2.o
+ .text.rt_thread_idle_excute
+                0x00000000        0x4 /tmp/cchgo7L2.o
+ .text.rt_thread_idle_gethandler
+                0x00000000        0xc /tmp/cchgo7L2.o
+ .text          0x00000000        0x0 /tmp/ccdUH71j.o
+ .data          0x00000000        0x0 /tmp/ccdUH71j.o
+ .bss           0x00000000        0x0 /tmp/ccdUH71j.o
+ .text.rt_sem_detach
+                0x00000000       0x8c /tmp/ccdUH71j.o
+ .text.rt_sem_take
+                0x00000000      0x178 /tmp/ccdUH71j.o
+ .text.rt_sem_trytake
+                0x00000000      0x178 /tmp/ccdUH71j.o
+ .text.rt_sem_release
+                0x00000000       0x98 /tmp/ccdUH71j.o
+ .text.rt_sem_control
+                0x00000000       0xc8 /tmp/ccdUH71j.o
+ .text.rt_mb_init
+                0x00000000       0x78 /tmp/ccdUH71j.o
+ .text.rt_mb_detach
+                0x00000000       0xd0 /tmp/ccdUH71j.o
+ .text.rt_mb_send_wait
+                0x00000000      0x2fc /tmp/ccdUH71j.o
+ .text.rt_mb_send
+                0x00000000        0xc /tmp/ccdUH71j.o
+ .text.rt_mb_recv
+                0x00000000      0x2d4 /tmp/ccdUH71j.o
+ .text.rt_mb_control
+                0x00000000      0x104 /tmp/ccdUH71j.o
+ .text          0x00000000        0x0 /tmp/ccwxf6NA.o
+ .data          0x00000000        0x0 /tmp/ccwxf6NA.o
+ .bss           0x00000000        0x0 /tmp/ccwxf6NA.o
+ .text.rt_interrupt_enter
+                0x00000000       0x30 /tmp/ccwxf6NA.o
+ .text.rt_interrupt_leave
+                0x00000000       0x30 /tmp/ccwxf6NA.o
+ .text.rt_interrupt_get_nest
+                0x00000000       0x3c /tmp/ccwxf6NA.o
+ .text          0x00000000        0x0 /tmp/ccSTmYux.o
+ .data          0x00000000        0x0 /tmp/ccSTmYux.o
+ .bss           0x00000000        0x0 /tmp/ccSTmYux.o
+ .text.rt_get_errno
+                0x00000000       0x44 /tmp/ccSTmYux.o
+ .text.rt_set_errno
+                0x00000000       0x54 /tmp/ccSTmYux.o
+ .text._rt_errno
+                0x00000000       0x44 /tmp/ccSTmYux.o
+ .text.rt_memcpy
+                0x00000000      0x184 /tmp/ccSTmYux.o
+ .text.rt_memcmp
+                0x00000000       0x3c /tmp/ccSTmYux.o
+ .text.rt_strstr
+                0x00000000       0x94 /tmp/ccSTmYux.o
+ .text.rt_strcasecmp
+                0x00000000       0x4c /tmp/ccSTmYux.o
+ .text.rt_strncmp
+                0x00000000       0x44 /tmp/ccSTmYux.o
+ .text.rt_strcmp
+                0x00000000       0x40 /tmp/ccSTmYux.o
+ .text.rt_strnlen
+                0x00000000       0x38 /tmp/ccSTmYux.o
+ .text.rt_strlen
+                0x00000000       0x28 /tmp/ccSTmYux.o
+ .text.rt_snprintf
+                0x00000000       0x3c /tmp/ccSTmYux.o
+ .text.rt_vsprintf
+                0x00000000       0x14 /tmp/ccSTmYux.o
+ .text.rt_sprintf
+                0x00000000       0x48 /tmp/ccSTmYux.o
+ .text.rt_hw_console_output
+                0x00000000        0x4 /tmp/ccSTmYux.o
+ .text.rt_kputs
+                0x00000000       0x10 /tmp/ccSTmYux.o
+ .sbss.__rt_errno
+                0x00000000        0x4 /tmp/ccSTmYux.o
+ .text          0x00000000        0x0 /tmp/ccKX5G6p.o
+ .data          0x00000000        0x0 /tmp/ccKX5G6p.o
+ .bss           0x00000000        0x0 /tmp/ccKX5G6p.o
+ .comment       0x00000000       0x1a /tmp/ccKX5G6p.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccKX5G6p.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/ccKX5G6p.o
+ .text          0x00000000        0x0 /tmp/ccmEHfZe.o
+ .data          0x00000000        0x0 /tmp/ccmEHfZe.o
+ .bss           0x00000000        0x0 /tmp/ccmEHfZe.o
+ .comment       0x00000000       0x1a /tmp/ccmEHfZe.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccmEHfZe.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/ccmEHfZe.o
+ .text          0x00000000        0x0 /tmp/ccG8MzCP.o
+ .data          0x00000000        0x0 /tmp/ccG8MzCP.o
+ .bss           0x00000000        0x0 /tmp/ccG8MzCP.o
+ .comment       0x00000000       0x1a /tmp/ccG8MzCP.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccG8MzCP.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/ccG8MzCP.o
+ .text          0x00000000        0x0 /tmp/ccDWy5k2.o
+ .data          0x00000000        0x0 /tmp/ccDWy5k2.o
+ .bss           0x00000000        0x0 /tmp/ccDWy5k2.o
+ .text.rt_system_object_init
+                0x00000000        0x4 /tmp/ccDWy5k2.o
+ .text.rt_object_get_length
+                0x00000000       0xb8 /tmp/ccDWy5k2.o
+ .text.rt_object_get_pointers
+                0x00000000       0xf8 /tmp/ccDWy5k2.o
+ .text.rt_object_get_type
+                0x00000000        0xc /tmp/ccDWy5k2.o
+ .text.rt_object_find
+                0x00000000      0x124 /tmp/ccDWy5k2.o
+ .text          0x00000000        0x0 /tmp/cctxGdJL.o
+ .data          0x00000000        0x0 /tmp/cctxGdJL.o
+ .bss           0x00000000        0x0 /tmp/cctxGdJL.o
+ .text.rt_critical_level
+                0x00000000        0xc /tmp/cctxGdJL.o
+ .text          0x00000000        0x0 /tmp/ccysYBZS.o
+ .data          0x00000000        0x0 /tmp/ccysYBZS.o
+ .bss           0x00000000        0x0 /tmp/ccysYBZS.o
+ .comment       0x00000000       0x1a /tmp/ccysYBZS.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccysYBZS.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/ccysYBZS.o
+ .text          0x00000000        0x0 /tmp/ccKJvWFo.o
+ .data          0x00000000        0x0 /tmp/ccKJvWFo.o
+ .bss           0x00000000        0x0 /tmp/ccKJvWFo.o
+ .text.rt_thread_detach
+                0x00000000       0xf8 /tmp/ccKJvWFo.o
+ .text.rt_thread_sleep
+                0x00000000       0xec /tmp/ccKJvWFo.o
+ .text.rt_thread_delay
+                0x00000000       0xec /tmp/ccKJvWFo.o
+ .text.rt_thread_delay_until
+                0x00000000      0x150 /tmp/ccKJvWFo.o
+ .text.rt_thread_control
+                0x00000000      0x190 /tmp/ccKJvWFo.o
+ .text.rt_thread_suspend
+                0x00000000       0x84 /tmp/ccKJvWFo.o
+ .text.rt_thread_resume
+                0x00000000       0x90 /tmp/ccKJvWFo.o
+ .text.rt_thread_find
+                0x00000000        0xc /tmp/ccKJvWFo.o
+ .text          0x00000000        0x0 /tmp/ccP0Yg7i.o
+ .data          0x00000000        0x0 /tmp/ccP0Yg7i.o
+ .bss           0x00000000        0x0 /tmp/ccP0Yg7i.o
+ .text.rt_timer_next_timeout_tick
+                0x00000000       0x68 /tmp/ccP0Yg7i.o
+ .text          0x00000000        0x0 /tmp/ccYHJqGX.o
+ .data          0x00000000        0x0 /tmp/ccYHJqGX.o
+ .bss           0x00000000        0x0 /tmp/ccYHJqGX.o
+ .text          0x00000000        0x0 /tmp/ccCkcjeD.o
+ .data          0x00000000        0x0 /tmp/ccCkcjeD.o
+ .bss           0x00000000        0x0 /tmp/ccCkcjeD.o
+ .text          0x00000000        0x0 /tmp/cc0nGwEu.o
+ .data          0x00000000        0x0 /tmp/cc0nGwEu.o
+ .bss           0x00000000        0x0 /tmp/cc0nGwEu.o
+ .text          0x00000000        0x0 /tmp/ccxLZAex.o
+ .data          0x00000000        0x0 /tmp/ccxLZAex.o
+ .bss           0x00000000        0x0 /tmp/ccxLZAex.o
+ .text.calc_func
+                0x00000000      0x140 /tmp/ccxLZAex.o
+ .text.cmp_idx  0x00000000       0x54 /tmp/ccxLZAex.o
+ .text.copy_info
+                0x00000000       0x14 /tmp/ccxLZAex.o
+ .text.core_list_insert_new
+                0x00000000       0x60 /tmp/ccxLZAex.o
+ .text.core_list_remove
+                0x00000000       0x28 /tmp/ccxLZAex.o
+ .text.core_list_undo_remove
+                0x00000000       0x20 /tmp/ccxLZAex.o
+ .text.core_list_find
+                0x00000000       0x4c /tmp/ccxLZAex.o
+ .text.core_list_reverse
+                0x00000000       0x24 /tmp/ccxLZAex.o
+ .text.core_list_mergesort
+                0x00000000      0x1b0 /tmp/ccxLZAex.o
+ .text          0x00000000        0x0 /tmp/ccfM5j8Q.o
+ .data          0x00000000        0x0 /tmp/ccfM5j8Q.o
+ .bss           0x00000000        0x0 /tmp/ccfM5j8Q.o
+ .text.iterate  0x00000000       0xe0 /tmp/ccfM5j8Q.o
+ .rodata.str1.4
+                0x00000000       0x16 /tmp/ccfM5j8Q.o
+ .data.mem_name
+                0x00000000        0xc /tmp/ccfM5j8Q.o
+ .text          0x00000000        0x0 /tmp/cceroMa0.o
+ .data          0x00000000        0x0 /tmp/cceroMa0.o
+ .bss           0x00000000        0x0 /tmp/cceroMa0.o
+ .text.matrix_sum
+                0x00000000       0x98 /tmp/cceroMa0.o
+ .text.matrix_mul_const
+                0x00000000       0x4c /tmp/cceroMa0.o
+ .text.matrix_add_const
+                0x00000000       0x38 /tmp/cceroMa0.o
+ .text.matrix_mul_vect
+                0x00000000       0x58 /tmp/cceroMa0.o
+ .text.matrix_mul_matrix
+                0x00000000       0xa0 /tmp/cceroMa0.o
+ .text.matrix_mul_matrix_bitextract
+                0x00000000       0xb4 /tmp/cceroMa0.o
+ .text          0x00000000        0x0 /tmp/cczlSq7M.o
+ .data          0x00000000        0x0 /tmp/cczlSq7M.o
+ .bss           0x00000000        0x0 /tmp/cczlSq7M.o
+ .text          0x00000000        0x0 /tmp/ccyheYaf.o
+ .data          0x00000000        0x0 /tmp/ccyheYaf.o
+ .bss           0x00000000        0x0 /tmp/ccyheYaf.o
+ .text          0x00000000        0x0 /tmp/ccKMiEpK.o
+ .data          0x00000000        0x0 /tmp/ccKMiEpK.o
+ .bss           0x00000000        0x0 /tmp/ccKMiEpK.o
+ .text.crcu8    0x00000000      0x130 /tmp/ccKMiEpK.o
+ .text          0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strncmp.o)
+ .data          0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strncmp.o)
+ .bss           0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strncmp.o)
+ .data          0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memset.o)
+ .bss           0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memset.o)
+ .text          0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strlen.o)
+ .data          0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strlen.o)
+ .bss           0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strlen.o)
+
+内存配置
+
+名称           来源             长度             属性
+ram              0x80000000         0x00010000         xrw
+iap              0x80008000         0x00008000         xrw
+*default*        0x00000000         0xffffffff
+
+链结器命令稿和内存映射
+
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a
+LOAD /tmp/ccJPgvCk.o
+LOAD /tmp/ccHEtOBu.o
+LOAD /tmp/ccQGAZSm.o
+LOAD /tmp/cc0ulacy.o
+LOAD /tmp/ccxwwMuw.o
+LOAD /tmp/ccT4PlP5.o
+LOAD /tmp/ccnJO0Gt.o
+LOAD /tmp/ccIEqZut.o
+LOAD /tmp/ccKYYACJ.o
+LOAD /tmp/ccrpZ7sE.o
+LOAD /tmp/ccjlf9uX.o
+LOAD /tmp/ccfLAZYe.o
+LOAD /tmp/ccwZxzgn.o
+LOAD /tmp/ccitLcCH.o
+LOAD /tmp/ccgUCav1.o
+LOAD /tmp/ccLqhjnM.o
+LOAD /tmp/ccUID47o.o
+LOAD /tmp/ccALYInd.o
+LOAD /tmp/cchgo7L2.o
+LOAD /tmp/ccdUH71j.o
+LOAD /tmp/ccwxf6NA.o
+LOAD /tmp/ccSTmYux.o
+LOAD /tmp/ccKX5G6p.o
+LOAD /tmp/ccmEHfZe.o
+LOAD /tmp/ccG8MzCP.o
+LOAD /tmp/ccDWy5k2.o
+LOAD /tmp/cctxGdJL.o
+LOAD /tmp/ccysYBZS.o
+LOAD /tmp/ccKJvWFo.o
+LOAD /tmp/ccP0Yg7i.o
+LOAD /tmp/ccYHJqGX.o
+LOAD /tmp/ccCkcjeD.o
+LOAD /tmp/cc0nGwEu.o
+LOAD /tmp/ccxLZAex.o
+LOAD /tmp/ccfM5j8Q.o
+LOAD /tmp/cceroMa0.o
+LOAD /tmp/cczlSq7M.o
+LOAD /tmp/ccyheYaf.o
+LOAD /tmp/ccKMiEpK.o
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a
+START GROUP
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libgloss.a
+END GROUP
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a
+
+.init           0x80000000       0x94
+ *(SORT_NONE(.init))
+ .init          0x80000000       0x94 /tmp/ccJPgvCk.o
+                0x80000000                _start
+
+.text           0x80000094     0x75bc
+                0x80000094                        . = ALIGN (0x4)
+                0x80000094                        __fsymtab_start = .
+ *(FSymTab)
+ FSymTab        0x80000094       0x80 /tmp/ccjlf9uX.o
+                0x80000094                __fsym_list
+                0x8000009c                __fsym___cmd_list_timer
+                0x800000a4                __fsym_list_timer
+                0x800000ac                __fsym___cmd_list_mailbox
+                0x800000b4                __fsym_list_mailbox
+                0x800000bc                __fsym___cmd_list_sem
+                0x800000c4                __fsym_list_sem
+                0x800000cc                __fsym___cmd_list_thread
+                0x800000d4                __fsym_list_thread
+                0x800000dc                __fsym___cmd_simple_add
+                0x800000e4                __fsym_simple_add
+                0x800000ec                __fsym___cmd_exec_coremark
+                0x800000f4                __fsym_exec_coremark
+                0x800000fc                __fsym___cmd_version
+                0x80000104                __fsym_version
+                0x8000010c                __fsym_hello
+ FSymTab        0x80000114       0x10 /tmp/ccwZxzgn.o
+                0x80000114                __fsym___cmd_ps
+                0x8000011c                __fsym___cmd_help
+                0x80000124                        __fsymtab_end = .
+                0x80000124                        . = ALIGN (0x4)
+                0x80000124                        __vsymtab_start = .
+ *(VSymTab)
+                0x80000124                        __vsymtab_end = .
+                0x80000124                        . = ALIGN (0x4)
+ *(.text.unlikely .text.unlikely.*)
+ *(.text.startup .text.startup.*)
+ .text.startup.main
+                0x80000124       0x44 /tmp/cc0nGwEu.o
+                0x80000124                main
+ *(.text .text.*)
+ .text          0x80000168      0x2b4 /tmp/ccHEtOBu.o
+                0x80000168                interrupt_disable
+                0x80000170                interrupt_enable
+                0x80000178                trap_entry
+ .text          0x8000041c      0x160 /tmp/ccQGAZSm.o
+                0x8000041c                rt_hw_interrupt_disable
+                0x80000424                rt_hw_interrupt_enable
+                0x8000042c                rt_hw_context_switch_to
+                0x80000434                rt_hw_context_switch
+ .text.get_cycle_value
+                0x8000057c        0xc /tmp/cc0ulacy.o
+                0x8000057c                get_cycle_value
+ .text.timer_init
+                0x80000588       0x2c /tmp/ccxwwMuw.o
+                0x80000588                timer_init
+ .text.timer_control
+                0x800005b4       0x1c /tmp/ccxwwMuw.o
+                0x800005b4                timer_control
+ .text.timer_clearflag
+                0x800005d0        0x8 /tmp/ccxwwMuw.o
+                0x800005d0                timer_clearflag
+ .text.uart_send_wait
+                0x800005d8       0x1c /tmp/ccT4PlP5.o
+                0x800005d8                uart_send_wait
+ .text.uart_read_wait
+                0x800005f4       0x20 /tmp/ccT4PlP5.o
+                0x800005f4                uart_read_wait
+ .text.xputs    0x80000614       0x84 /tmp/ccIEqZut.o
+                0x80000614                xputs
+ .text.uart_init
+                0x80000698        0x8 /tmp/ccKYYACJ.o
+ .text.rt_os_tick_callback
+                0x800006a0        0x8 /tmp/ccKYYACJ.o
+                0x800006a0                rt_os_tick_callback
+ .text.rt_hw_board_init
+                0x800006a8        0x8 /tmp/ccKYYACJ.o
+                0x800006a8                rt_hw_board_init
+ .text.rt_hw_console_output
+                0x800006b0        0x8 /tmp/ccKYYACJ.o
+                0x800006b0                rt_hw_console_output
+ .text.hello    0x800006b8       0x28 /tmp/ccjlf9uX.o
+                0x800006b8                hello
+ .text.simple_add
+                0x800006e0       0xb8 /tmp/ccjlf9uX.o
+                0x800006e0                simple_add
+ .text.version  0x80000798       0x20 /tmp/ccjlf9uX.o
+                0x80000798                version
+ .text.exec_coremark
+                0x800007b8        0x8 /tmp/ccjlf9uX.o
+                0x800007b8                exec_coremark
+ .text.list_thread
+                0x800007c0      0x384 /tmp/ccjlf9uX.o
+                0x800007c0                list_thread
+ .text.list     0x80000b44       0xb8 /tmp/ccjlf9uX.o
+                0x80000b44                list
+ .text.list_timer
+                0x80000bfc      0x2d8 /tmp/ccjlf9uX.o
+                0x80000bfc                list_timer
+ .text.list_sem
+                0x80000ed4      0x334 /tmp/ccjlf9uX.o
+                0x80000ed4                list_sem
+ .text.list_mailbox
+                0x80001208      0x338 /tmp/ccjlf9uX.o
+                0x80001208                list_mailbox
+ .text.rt_hw_console_getchar
+                0x80001540        0xc /tmp/ccfLAZYe.o
+                0x80001540                rt_hw_console_getchar
+ .text.msh_help
+                0x8000154c       0xd4 /tmp/ccwZxzgn.o
+                0x8000154c                msh_help
+ .text.cmd_ps   0x80001620       0x20 /tmp/ccwZxzgn.o
+                0x80001620                cmd_ps
+ .text.msh_is_used
+                0x80001640        0x8 /tmp/ccwZxzgn.o
+                0x80001640                msh_is_used
+ .text.msh_exec
+                0x80001648      0x360 /tmp/ccwZxzgn.o
+                0x80001648                msh_exec
+ .text.msh_auto_complete
+                0x800019a8      0x264 /tmp/ccwZxzgn.o
+                0x800019a8                msh_auto_complete
+ .text.finsh_system_init
+                0x80001c0c      0x114 /tmp/ccitLcCH.o
+                0x80001c0c                finsh_system_init
+ .text.finsh_get_prompt
+                0x80001d20       0xb0 /tmp/ccitLcCH.o
+                0x80001d20                finsh_get_prompt
+ .text.finsh_thread_entry
+                0x80001dd0      0x540 /tmp/ccitLcCH.o
+                0x80001dd0                finsh_thread_entry
+ .text.rt_hw_stack_init
+                0x80002310       0x44 /tmp/ccgUCav1.o
+                0x80002310                rt_hw_stack_init
+ .text.rt_hw_context_switch_interrupt
+                0x80002354       0x20 /tmp/ccgUCav1.o
+                0x80002354                rt_hw_context_switch_interrupt
+ .text.rt_tick_get
+                0x80002374        0xc /tmp/ccLqhjnM.o
+                0x80002374                rt_tick_get
+ .text.rt_tick_increase
+                0x80002380       0x60 /tmp/ccLqhjnM.o
+                0x80002380                rt_tick_increase
+ .text.rt_tick_from_millisecond
+                0x800023e0       0x10 /tmp/ccLqhjnM.o
+                0x800023e0                rt_tick_from_millisecond
+ .text.rti_start
+                0x800023f0        0x8 /tmp/ccUID47o.o
+ .text.main_thread_entry
+                0x800023f8       0x4c /tmp/ccUID47o.o
+                0x800023f8                main_thread_entry
+ .text.rti_board_start
+                0x80002444        0x8 /tmp/ccUID47o.o
+ .text.rti_board_end
+                0x8000244c        0x8 /tmp/ccUID47o.o
+ .text.rti_end  0x80002454        0x8 /tmp/ccUID47o.o
+ .text.rt_components_board_init
+                0x8000245c       0x48 /tmp/ccUID47o.o
+                0x8000245c                rt_components_board_init
+ .text.rtthread_startup
+                0x800024a4      0x104 /tmp/ccUID47o.o
+                0x800024a4                rtthread_startup
+ .text.entry    0x800025a8        0x8 /tmp/ccUID47o.o
+                0x800025a8                entry
+ .text.rt_thread_idle_entry
+                0x800025b0        0x4 /tmp/cchgo7L2.o
+ .text.rt_thread_idle_init
+                0x800025b4       0x5c /tmp/cchgo7L2.o
+                0x800025b4                rt_thread_idle_init
+ .text.rt_sem_init
+                0x80002610       0x58 /tmp/ccdUH71j.o
+                0x80002610                rt_sem_init
+ .text.print_number
+                0x80002668      0x6d0 /tmp/ccSTmYux.o
+ .text.rt_memset
+                0x80002d38       0xf8 /tmp/ccSTmYux.o
+                0x80002d38                rt_memset
+ .text.rt_memmove
+                0x80002e30       0xd4 /tmp/ccSTmYux.o
+                0x80002e30                rt_memmove
+ .text.rt_strncpy
+                0x80002f04       0x64 /tmp/ccSTmYux.o
+                0x80002f04                rt_strncpy
+ .text.rt_vsnprintf
+                0x80002f68      0x7bc /tmp/ccSTmYux.o
+                0x80002f68                rt_vsnprintf
+ .text.rt_kprintf
+                0x80003724       0x90 /tmp/ccSTmYux.o
+                0x80003724                rt_kprintf
+ .text.rt_show_version
+                0x800037b4       0x64 /tmp/ccSTmYux.o
+                0x800037b4                rt_show_version
+ .text.__rt_ffs
+                0x80003818       0x98 /tmp/ccSTmYux.o
+                0x80003818                __rt_ffs
+ .text.rt_object_get_information
+                0x800038b0       0x5c /tmp/ccDWy5k2.o
+                0x800038b0                rt_object_get_information
+ .text.rt_object_init
+                0x8000390c      0x114 /tmp/ccDWy5k2.o
+                0x8000390c                rt_object_init
+ .text.rt_object_detach
+                0x80003a20       0x4c /tmp/ccDWy5k2.o
+                0x80003a20                rt_object_detach
+ .text.rt_object_is_systemobject
+                0x80003a6c        0xc /tmp/ccDWy5k2.o
+                0x80003a6c                rt_object_is_systemobject
+ .text.rt_system_scheduler_init
+                0x80003a78       0xb8 /tmp/cctxGdJL.o
+                0x80003a78                rt_system_scheduler_init
+ .text.rt_system_scheduler_start
+                0x80003b30       0x4c /tmp/cctxGdJL.o
+                0x80003b30                rt_system_scheduler_start
+ .text.rt_schedule
+                0x80003b7c       0xbc /tmp/cctxGdJL.o
+                0x80003b7c                rt_schedule
+ .text.rt_schedule_insert_thread
+                0x80003c38       0x7c /tmp/cctxGdJL.o
+                0x80003c38                rt_schedule_insert_thread
+ .text.rt_schedule_remove_thread
+                0x80003cb4       0x90 /tmp/cctxGdJL.o
+                0x80003cb4                rt_schedule_remove_thread
+ .text.rt_enter_critical
+                0x80003d44       0x30 /tmp/cctxGdJL.o
+                0x80003d44                rt_enter_critical
+ .text.rt_exit_critical
+                0x80003d74       0x70 /tmp/cctxGdJL.o
+                0x80003d74                rt_exit_critical
+ .text.rt_thread_timeout
+                0x80003de4       0x44 /tmp/ccKJvWFo.o
+                0x80003de4                rt_thread_timeout
+ .text.rt_thread_exit
+                0x80003e28       0xdc /tmp/ccKJvWFo.o
+                0x80003e28                rt_thread_exit
+ .text.rt_thread_init
+                0x80003f04      0x10c /tmp/ccKJvWFo.o
+                0x80003f04                rt_thread_init
+ .text.rt_thread_self
+                0x80004010        0xc /tmp/ccKJvWFo.o
+                0x80004010                rt_thread_self
+ .text.rt_thread_startup
+                0x8000401c       0xa8 /tmp/ccKJvWFo.o
+                0x8000401c                rt_thread_startup
+ .text.rt_thread_yield
+                0x800040c4       0xb0 /tmp/ccKJvWFo.o
+                0x800040c4                rt_thread_yield
+ .text.rt_thread_mdelay
+                0x80004174       0xf4 /tmp/ccKJvWFo.o
+                0x80004174                rt_thread_mdelay
+ .text.rt_timer_init
+                0x80004268       0x74 /tmp/ccP0Yg7i.o
+                0x80004268                rt_timer_init
+ .text.rt_timer_detach
+                0x800042dc       0x68 /tmp/ccP0Yg7i.o
+                0x800042dc                rt_timer_detach
+ .text.rt_timer_start
+                0x80004344       0xfc /tmp/ccP0Yg7i.o
+                0x80004344                rt_timer_start
+ .text.rt_timer_stop
+                0x80004440       0x70 /tmp/ccP0Yg7i.o
+                0x80004440                rt_timer_stop
+ .text.rt_timer_control
+                0x800044b0      0x100 /tmp/ccP0Yg7i.o
+                0x800044b0                rt_timer_control
+ .text.rt_timer_check
+                0x800045b0      0x14c /tmp/ccP0Yg7i.o
+                0x800045b0                rt_timer_check
+ .text.rt_system_timer_init
+                0x800046fc       0x14 /tmp/ccP0Yg7i.o
+                0x800046fc                rt_system_timer_init
+ .text.rt_system_timer_thread_init
+                0x80004710        0x4 /tmp/ccP0Yg7i.o
+                0x80004710                rt_system_timer_thread_init
+ .text.init     0x80004714       0x20 /tmp/ccYHJqGX.o
+                0x80004714                init
+ .text.trap_handler
+                0x80004734      0x170 /tmp/ccCkcjeD.o
+                0x80004734                trap_handler
+ .text.timer1_handler
+                0x800048a4       0x40 /tmp/cc0nGwEu.o
+                0x800048a4                timer1_handler
+ .text.cmp_complex
+                0x800048e4      0x274 /tmp/ccxLZAex.o
+                0x800048e4                cmp_complex
+ .text.core_bench_list
+                0x80004b58      0x5b8 /tmp/ccxLZAex.o
+                0x80004b58                core_bench_list
+ .text.core_list_init
+                0x80005110      0x2dc /tmp/ccxLZAex.o
+                0x80005110                core_list_init
+ .text.ext_exec_coremark
+                0x800053ec      0x8ec /tmp/ccfM5j8Q.o
+                0x800053ec                ext_exec_coremark
+ .text.matrix_test
+                0x80005cd8      0x554 /tmp/cceroMa0.o
+                0x80005cd8                matrix_test
+ .text.core_bench_matrix
+                0x8000622c       0x44 /tmp/cceroMa0.o
+                0x8000622c                core_bench_matrix
+ .text.core_init_matrix
+                0x80006270      0x11c /tmp/cceroMa0.o
+                0x80006270                core_init_matrix
+ .text.start_time
+                0x8000638c       0x28 /tmp/cczlSq7M.o
+                0x8000638c                start_time
+ .text.stop_time
+                0x800063b4       0x28 /tmp/cczlSq7M.o
+                0x800063b4                stop_time
+ .text.get_time
+                0x800063dc       0x2c /tmp/cczlSq7M.o
+                0x800063dc                get_time
+ .text.time_in_secs
+                0x80006408       0x24 /tmp/cczlSq7M.o
+                0x80006408                time_in_secs
+ .text.portable_init
+                0x8000642c        0x4 /tmp/cczlSq7M.o
+                0x8000642c                portable_init
+ .text.core_init_state
+                0x80006430      0x228 /tmp/ccyheYaf.o
+                0x80006430                core_init_state
+ .text.core_state_transition
+                0x80006658      0x2e8 /tmp/ccyheYaf.o
+                0x80006658                core_state_transition
+ .text.core_bench_state
+                0x80006940      0x224 /tmp/ccyheYaf.o
+                0x80006940                core_bench_state
+ .text.get_seed_32
+                0x80006b64       0x64 /tmp/ccKMiEpK.o
+                0x80006b64                get_seed_32
+ .text.crcu16   0x80006bc8      0x228 /tmp/ccKMiEpK.o
+                0x80006bc8                crcu16
+ .text.crcu32   0x80006df0      0x420 /tmp/ccKMiEpK.o
+                0x80006df0                crcu32
+ .text.crc16    0x80007210      0x22c /tmp/ccKMiEpK.o
+                0x80007210                crc16
+ .text.check_data_types
+                0x8000743c        0x8 /tmp/ccKMiEpK.o
+                0x8000743c                check_data_types
+ .text.strncmp  0x80007444       0xa4 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strncmp.o)
+                0x80007444                strncmp
+ .text          0x800074e8       0xdc /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memset.o)
+                0x800074e8                memset
+ .text.strlen   0x800075c4       0x8c /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strlen.o)
+                0x800075c4                strlen
+ *(.gnu.linkonce.t.*)
+
+.srodata.__fsym_list_name
+                0x80007650        0x5
+ .srodata.__fsym_list_name
+                0x80007650        0x5 /tmp/ccjlf9uX.o
+                0x80007650                __fsym_list_name
+
+.srodata.__fsym_version_name
+                0x80007658        0x8
+ .srodata.__fsym_version_name
+                0x80007658        0x8 /tmp/ccjlf9uX.o
+                0x80007658                __fsym_version_name
+
+.srodata.__fsym_hello_name
+                0x80007660        0x6
+ .srodata.__fsym_hello_name
+                0x80007660        0x6 /tmp/ccjlf9uX.o
+                0x80007660                __fsym_hello_name
+
+.rela.dyn       0x80007668        0x0
+ .rela.init     0x80007668        0x0 /tmp/ccJPgvCk.o
+ .rela.text.finsh_system_init
+                0x80007668        0x0 /tmp/ccJPgvCk.o
+
+.data           0x80007668     0x1020
+                0x80007668                        __data_lma = LOADADDR (.data)
+                0x80007668                        __data_start = .
+                0x80007668                        . = ALIGN (0x4)
+                0x80007668                        __rt_init_start = .
+ *(SORT_BY_NAME(.rti_fn*))
+ .rti_fn.0      0x80007668        0x4 /tmp/ccUID47o.o
+                0x80007668                __rt_init_rti_start
+ .rti_fn.0.end  0x8000766c        0x4 /tmp/ccUID47o.o
+                0x8000766c                __rt_init_rti_board_start
+ .rti_fn.1      0x80007670        0x4 /tmp/ccKYYACJ.o
+                0x80007670                __rt_init_uart_init
+ .rti_fn.1.end  0x80007674        0x4 /tmp/ccUID47o.o
+                0x80007674                __rt_init_rti_board_end
+ .rti_fn.6      0x80007678        0x4 /tmp/ccitLcCH.o
+                0x80007678                __rt_init_finsh_system_init
+ .rti_fn.6.end  0x8000767c        0x4 /tmp/ccUID47o.o
+                0x8000767c                __rt_init_rti_end
+                0x80007680                        __rt_init_end = .
+ *(.rdata)
+ *(.rodata .rodata.*)
+ .rodata.hello.str1.4
+                0x80007680      0x9a5 /tmp/ccjlf9uX.o
+                                 0x12 (松开之前的大小)
+ .rodata.simple_add.str1.4
+                0x80008025        0x0 /tmp/ccjlf9uX.o
+                                 0x15 (松开之前的大小)
+ .rodata.list_thread.str1.4
+                0x80008025        0x0 /tmp/ccjlf9uX.o
+                                0x100 (松开之前的大小)
+ *fill*         0x80008025        0x3 
+ .rodata.list_thread
+                0x80008028       0x14 /tmp/ccjlf9uX.o
+ .rodata.list.str1.4
+                0x8000803c        0x0 /tmp/ccjlf9uX.o
+                                 0x18 (松开之前的大小)
+ .rodata.list_timer.str1.4
+                0x8000803c        0x0 /tmp/ccjlf9uX.o
+                                 0x9d (松开之前的大小)
+ .rodata.list_sem.str1.4
+                0x8000803c        0x0 /tmp/ccjlf9uX.o
+                                 0x6c (松开之前的大小)
+ .rodata.list_mailbox.str1.4
+                0x8000803c        0x0 /tmp/ccjlf9uX.o
+                                 0x76 (松开之前的大小)
+ .rodata.__fsym___cmd_list_timer_name
+                0x8000803c       0x11 /tmp/ccjlf9uX.o
+                0x8000803c                __fsym___cmd_list_timer_name
+ *fill*         0x8000804d        0x3 
+ .rodata.__fsym_list_timer_name
+                0x80008050        0xb /tmp/ccjlf9uX.o
+                0x80008050                __fsym_list_timer_name
+ *fill*         0x8000805b        0x1 
+ .rodata.__fsym___cmd_list_mailbox_name
+                0x8000805c       0x13 /tmp/ccjlf9uX.o
+                0x8000805c                __fsym___cmd_list_mailbox_name
+ *fill*         0x8000806f        0x1 
+ .rodata.__fsym_list_mailbox_name
+                0x80008070        0xd /tmp/ccjlf9uX.o
+                0x80008070                __fsym_list_mailbox_name
+ *fill*         0x8000807d        0x3 
+ .rodata.__fsym___cmd_list_sem_name
+                0x80008080        0xf /tmp/ccjlf9uX.o
+                0x80008080                __fsym___cmd_list_sem_name
+ *fill*         0x8000808f        0x1 
+ .rodata.__fsym_list_sem_name
+                0x80008090        0x9 /tmp/ccjlf9uX.o
+                0x80008090                __fsym_list_sem_name
+ *fill*         0x80008099        0x3 
+ .rodata.__fsym___cmd_list_thread_name
+                0x8000809c       0x12 /tmp/ccjlf9uX.o
+                0x8000809c                __fsym___cmd_list_thread_name
+ *fill*         0x800080ae        0x2 
+ .rodata.__fsym_list_thread_name
+                0x800080b0        0xc /tmp/ccjlf9uX.o
+                0x800080b0                __fsym_list_thread_name
+ .rodata.__fsym___cmd_simple_add_name
+                0x800080bc       0x11 /tmp/ccjlf9uX.o
+                0x800080bc                __fsym___cmd_simple_add_name
+ *fill*         0x800080cd        0x3 
+ .rodata.__fsym_simple_add_name
+                0x800080d0        0xb /tmp/ccjlf9uX.o
+                0x800080d0                __fsym_simple_add_name
+ *fill*         0x800080db        0x1 
+ .rodata.__fsym___cmd_exec_coremark_name
+                0x800080dc       0x14 /tmp/ccjlf9uX.o
+                0x800080dc                __fsym___cmd_exec_coremark_name
+ .rodata.__fsym_exec_coremark_name
+                0x800080f0        0xe /tmp/ccjlf9uX.o
+                0x800080f0                __fsym_exec_coremark_name
+ *fill*         0x800080fe        0x2 
+ .rodata.__fsym___cmd_version_name
+                0x80008100        0xe /tmp/ccjlf9uX.o
+                0x80008100                __fsym___cmd_version_name
+ .rodata.msh_help.str1.4
+                0x8000810e        0x0 /tmp/ccwZxzgn.o
+                                 0x2c (松开之前的大小)
+ .rodata.msh_exec.str1.4
+                0x8000810e        0x0 /tmp/ccwZxzgn.o
+                                 0x38 (松开之前的大小)
+ .rodata.msh_auto_complete.str1.4
+                0x8000810e        0x0 /tmp/ccwZxzgn.o
+                                  0x4 (松开之前的大小)
+ *fill*         0x8000810e        0x2 
+ .rodata.__fsym___cmd_ps_name
+                0x80008110        0x9 /tmp/ccwZxzgn.o
+                0x80008110                __fsym___cmd_ps_name
+ *fill*         0x80008119        0x3 
+ .rodata.__fsym___cmd_help_name
+                0x8000811c        0xb /tmp/ccwZxzgn.o
+                0x8000811c                __fsym___cmd_help_name
+ .rodata.finsh_system_init.str1.4
+                0x80008127        0x0 /tmp/ccitLcCH.o
+                                  0xd (松开之前的大小)
+ .rodata.finsh_thread_entry.str1.4
+                0x80008127        0x0 /tmp/ccitLcCH.o
+                                 0x23 (松开之前的大小)
+ *fill*         0x80008127        0x1 
+ .rodata.finsh_thread_entry
+                0x80008128       0x38 /tmp/ccitLcCH.o
+ .rodata.rt_application_init.str1.4
+                0x80008160        0x0 /tmp/ccUID47o.o
+                                  0x5 (松开之前的大小)
+ .rodata.rtthread_startup.str1.4
+                0x80008160        0x0 /tmp/ccUID47o.o
+                                 0x5d (松开之前的大小)
+ .rodata.rt_thread_idle_init.str1.4
+                0x80008160        0x0 /tmp/cchgo7L2.o
+                                  0x6 (松开之前的大小)
+ .rodata.rt_vsnprintf.str1.4
+                0x80008160        0x0 /tmp/ccSTmYux.o
+                                  0x7 (松开之前的大小)
+ .rodata.rt_vsnprintf
+                0x80008160      0x14c /tmp/ccSTmYux.o
+ .rodata.rt_show_version.str1.4
+                0x800082ac        0x0 /tmp/ccSTmYux.o
+                                 0x86 (松开之前的大小)
+ .rodata.small_digits.1
+                0x800082ac       0x11 /tmp/ccSTmYux.o
+ *fill*         0x800082bd        0x3 
+ .rodata.large_digits.2
+                0x800082c0       0x11 /tmp/ccSTmYux.o
+ *fill*         0x800082d1        0x3 
+ .rodata.__lowest_bit_bitmap
+                0x800082d4      0x100 /tmp/ccSTmYux.o
+                0x800082d4                __lowest_bit_bitmap
+ .rodata.rt_timer_control
+                0x800083d4       0x14 /tmp/ccP0Yg7i.o
+ .rodata.trap_handler.str1.4
+                0x800083e8        0x0 /tmp/ccCkcjeD.o
+                                 0x87 (松开之前的大小)
+ .rodata.ext_exec_coremark.str1.4
+                0x800083e8        0x0 /tmp/ccfM5j8Q.o
+                                0x419 (松开之前的大小)
+ .rodata.str1.4
+                0x800083e8        0x0 /tmp/ccyheYaf.o
+                                 0xad (松开之前的大小)
+ .rodata.errpat
+                0x800083e8       0x10 /tmp/ccyheYaf.o
+ .rodata.scipat
+                0x800083f8       0x10 /tmp/ccyheYaf.o
+ .rodata.floatpat
+                0x80008408       0x10 /tmp/ccyheYaf.o
+ .rodata.intpat
+                0x80008418       0x10 /tmp/ccyheYaf.o
+ .rodata.get_seed_32
+                0x80008428       0x18 /tmp/ccKMiEpK.o
+ .rodata        0x80008440      0x200 /tmp/ccKMiEpK.o
+ *(.gnu.linkonce.r.*)
+ *(.data .data.*)
+ .data.rt_object_container
+                0x80008640       0x40 /tmp/ccDWy5k2.o
+ *(.gnu.linkonce.d.*)
+ *(.sdata .sdata.*)
+ .sdata.seed4_volatile
+                0x80008680        0x4 /tmp/cczlSq7M.o
+                0x80008680                seed4_volatile
+ .sdata.seed3_volatile
+                0x80008684        0x4 /tmp/cczlSq7M.o
+                0x80008684                seed3_volatile
+ *(.sdata*)
+ *(.gnu.linkonce.s.*)
+                0x80008688                        . = ALIGN (0x4)
+                0x80008688                        __data_end = .
+
+.bss            0x80008688     0x2068
+                0x80008688                        __bss_start = .
+ *(.sbss .sbss.*)
+ .sbss.shell    0x80008688        0x4 /tmp/ccitLcCH.o
+                0x80008688                shell
+ .sbss._sysvar_table_end
+                0x8000868c        0x4 /tmp/ccitLcCH.o
+                0x8000868c                _sysvar_table_end
+ .sbss._sysvar_table_begin
+                0x80008690        0x4 /tmp/ccitLcCH.o
+                0x80008690                _sysvar_table_begin
+ .sbss._syscall_table_end
+                0x80008694        0x4 /tmp/ccitLcCH.o
+                0x80008694                _syscall_table_end
+ .sbss._syscall_table_begin
+                0x80008698        0x4 /tmp/ccitLcCH.o
+                0x80008698                _syscall_table_begin
+ .sbss.rt_thread_switch_interrupt_flag
+                0x8000869c        0x4 /tmp/ccgUCav1.o
+                0x8000869c                rt_thread_switch_interrupt_flag
+ .sbss.rt_interrupt_to_thread
+                0x800086a0        0x4 /tmp/ccgUCav1.o
+                0x800086a0                rt_interrupt_to_thread
+ .sbss.rt_interrupt_from_thread
+                0x800086a4        0x4 /tmp/ccgUCav1.o
+                0x800086a4                rt_interrupt_from_thread
+ .sbss.rt_tick  0x800086a8        0x4 /tmp/ccLqhjnM.o
+ .sbss.rt_interrupt_nest
+                0x800086ac        0x1 /tmp/ccwxf6NA.o
+                0x800086ac                rt_interrupt_nest
+ *fill*         0x800086ad        0x3 
+ .sbss.rt_thread_defunct
+                0x800086b0        0x8 /tmp/cctxGdJL.o
+                0x800086b0                rt_thread_defunct
+ .sbss.rt_current_priority
+                0x800086b8        0x1 /tmp/cctxGdJL.o
+                0x800086b8                rt_current_priority
+ *fill*         0x800086b9        0x3 
+ .sbss.rt_current_thread
+                0x800086bc        0x4 /tmp/cctxGdJL.o
+                0x800086bc                rt_current_thread
+ .sbss.rt_scheduler_lock_nest
+                0x800086c0        0x2 /tmp/cctxGdJL.o
+ *fill*         0x800086c2        0x2 
+ .sbss.rt_thread_ready_priority_group
+                0x800086c4        0x4 /tmp/cctxGdJL.o
+                0x800086c4                rt_thread_ready_priority_group
+ .sbss.random_nr.0
+                0x800086c8        0x4 /tmp/ccP0Yg7i.o
+ .sbss.rt_timer_list
+                0x800086cc        0x8 /tmp/ccP0Yg7i.o
+ .sbss.count    0x800086d4        0x4 /tmp/ccCkcjeD.o
+                0x800086d4                count
+ .sbss.t1       0x800086d8        0x8 /tmp/cczlSq7M.o
+ .sbss.t0       0x800086e0        0x8 /tmp/cczlSq7M.o
+ .sbss.seed5_volatile
+                0x800086e8        0x4 /tmp/cczlSq7M.o
+                0x800086e8                seed5_volatile
+ .sbss.seed2_volatile
+                0x800086ec        0x4 /tmp/cczlSq7M.o
+                0x800086ec                seed2_volatile
+ .sbss.seed1_volatile
+                0x800086f0        0x4 /tmp/cczlSq7M.o
+                0x800086f0                seed1_volatile
+ *(.gnu.linkonce.sb.*)
+ *(.bss .bss.*)
+ .bss.finsh_prompt.0
+                0x800086f4       0x81 /tmp/ccitLcCH.o
+ *fill*         0x80008775        0x3 
+ .bss._shell    0x80008778       0x7c /tmp/ccitLcCH.o
+                0x80008778                _shell
+ .bss.finsh_thread_stack
+                0x800087f4     0x1000 /tmp/ccitLcCH.o
+ .bss.finsh_thread
+                0x800097f4       0x78 /tmp/ccitLcCH.o
+ .bss.main_thread
+                0x8000986c       0x78 /tmp/ccUID47o.o
+                0x8000986c                main_thread
+ *fill*         0x800098e4        0x4 
+ .bss.main_stack
+                0x800098e8      0x400 /tmp/ccUID47o.o
+ .bss.rt_thread_stack
+                0x80009ce8      0x100 /tmp/cchgo7L2.o
+ .bss.idle      0x80009de8       0x78 /tmp/cchgo7L2.o
+ .bss.rt_log_buf.0
+                0x80009e60       0x80 /tmp/ccSTmYux.o
+ .bss.rt_thread_priority_table
+                0x80009ee0       0x40 /tmp/cctxGdJL.o
+                0x80009ee0                rt_thread_priority_table
+ .bss.static_memblk
+                0x80009f20      0x7d0 /tmp/ccfM5j8Q.o
+                0x80009f20                static_memblk
+ *(.gnu.linkonce.b.*)
+ *(COMMON)
+                0x8000a6f0                        . = ALIGN (0x4)
+                0x8000a6f0                        __bss_end = .
+                0x8000a6f0                        __end = .
+
+.stack          0x80010000        0x0
+                0x80010000                        __stack_top = .
+
+.intr_stack     0x8000a6f0      0x400
+                0x8000a6f0                        . = ALIGN (0x4)
+                0x8000a6f0                        __intr_stack_bottom = .
+                0x8000aaf0                        . = (. + 0x400)
+ *fill*         0x8000a6f0      0x400 
+                0x8000aaf0                        __intr_stack_top = .
+OUTPUT(riscv.elf elf32-littleriscv)
+
+.riscv.attributes
+                0x00000000       0x37
+ .riscv.attributes
+                0x00000000       0x35 /tmp/ccJPgvCk.o
+ .riscv.attributes
+                0x00000035       0x35 /tmp/ccHEtOBu.o
+ .riscv.attributes
+                0x0000006a       0x35 /tmp/ccQGAZSm.o
+ .riscv.attributes
+                0x0000009f       0x37 /tmp/cc0ulacy.o
+ .riscv.attributes
+                0x000000d6       0x33 /tmp/ccxwwMuw.o
+ .riscv.attributes
+                0x00000109       0x33 /tmp/ccT4PlP5.o
+ .riscv.attributes
+                0x0000013c       0x33 /tmp/ccIEqZut.o
+ .riscv.attributes
+                0x0000016f       0x33 /tmp/ccKYYACJ.o
+ .riscv.attributes
+                0x000001a2       0x33 /tmp/ccjlf9uX.o
+ .riscv.attributes
+                0x000001d5       0x33 /tmp/ccfLAZYe.o
+ .riscv.attributes
+                0x00000208       0x33 /tmp/ccwZxzgn.o
+ .riscv.attributes
+                0x0000023b       0x33 /tmp/ccitLcCH.o
+ .riscv.attributes
+                0x0000026e       0x33 /tmp/ccgUCav1.o
+ .riscv.attributes
+                0x000002a1       0x33 /tmp/ccLqhjnM.o
+ .riscv.attributes
+                0x000002d4       0x33 /tmp/ccUID47o.o
+ .riscv.attributes
+                0x00000307       0x33 /tmp/cchgo7L2.o
+ .riscv.attributes
+                0x0000033a       0x33 /tmp/ccdUH71j.o
+ .riscv.attributes
+                0x0000036d       0x33 /tmp/ccwxf6NA.o
+ .riscv.attributes
+                0x000003a0       0x33 /tmp/ccSTmYux.o
+ .riscv.attributes
+                0x000003d3       0x33 /tmp/ccDWy5k2.o
+ .riscv.attributes
+                0x00000406       0x33 /tmp/cctxGdJL.o
+ .riscv.attributes
+                0x00000439       0x33 /tmp/ccKJvWFo.o
+ .riscv.attributes
+                0x0000046c       0x33 /tmp/ccP0Yg7i.o
+ .riscv.attributes
+                0x0000049f       0x37 /tmp/ccYHJqGX.o
+ .riscv.attributes
+                0x000004d6       0x37 /tmp/ccCkcjeD.o
+ .riscv.attributes
+                0x0000050d       0x33 /tmp/cc0nGwEu.o
+ .riscv.attributes
+                0x00000540       0x33 /tmp/ccxLZAex.o
+ .riscv.attributes
+                0x00000573       0x33 /tmp/ccfM5j8Q.o
+ .riscv.attributes
+                0x000005a6       0x33 /tmp/cceroMa0.o
+ .riscv.attributes
+                0x000005d9       0x33 /tmp/cczlSq7M.o
+ .riscv.attributes
+                0x0000060c       0x33 /tmp/ccyheYaf.o
+ .riscv.attributes
+                0x0000063f       0x33 /tmp/ccKMiEpK.o
+ .riscv.attributes
+                0x00000672       0x33 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strncmp.o)
+ .riscv.attributes
+                0x000006a5       0x31 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memset.o)
+ .riscv.attributes
+                0x000006d6       0x33 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strlen.o)
+
+.comment        0x00000000       0x2b
+ .comment       0x00000000       0x2b /tmp/cc0ulacy.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccxwwMuw.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccT4PlP5.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccIEqZut.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccKYYACJ.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccjlf9uX.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccfLAZYe.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccwZxzgn.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccitLcCH.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccgUCav1.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccLqhjnM.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccUID47o.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/cchgo7L2.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccdUH71j.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccwxf6NA.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccSTmYux.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccDWy5k2.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/cctxGdJL.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccKJvWFo.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccP0Yg7i.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccYHJqGX.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccCkcjeD.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/cc0nGwEu.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccxLZAex.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccfM5j8Q.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/cceroMa0.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/cczlSq7M.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccyheYaf.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /tmp/ccKMiEpK.o
+                                 0x1a (松开之前的大小)
+ .comment       0x0000002b        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strncmp.o)
+                                 0x13 (松开之前的大小)
+ .comment       0x0000002b        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strlen.o)
+                                 0x13 (松开之前的大小)
+
+.note.GNU-stack
+                0x00000000        0x0
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/cc0ulacy.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccxwwMuw.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccT4PlP5.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccIEqZut.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccKYYACJ.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccjlf9uX.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccfLAZYe.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccwZxzgn.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccitLcCH.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccgUCav1.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccLqhjnM.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccUID47o.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/cchgo7L2.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccdUH71j.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccwxf6NA.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccSTmYux.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccDWy5k2.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/cctxGdJL.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccKJvWFo.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccP0Yg7i.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccYHJqGX.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccCkcjeD.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/cc0nGwEu.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccxLZAex.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccfM5j8Q.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/cceroMa0.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/cczlSq7M.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccyheYaf.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccKMiEpK.o
+ .note.GNU-stack
+                0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strncmp.o)
+ .note.GNU-stack
+                0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-strlen.o)

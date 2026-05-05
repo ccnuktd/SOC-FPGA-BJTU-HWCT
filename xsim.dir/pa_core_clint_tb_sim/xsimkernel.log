@@ -1,0 +1,7 @@
+Running: xsim.dir/pa_core_clint_tb_sim/xsimk.exe -runall -simmode gui -wdb pa_core_clint_tb_sim.wdb -simrunnum 0 -socket 55932
+Design successfully loaded
+Design Loading Memory Usage: 9476 KB (Peak: 9476 KB)
+Design Loading CPU Usage: 77 ms
+Simulation completed
+Simulation Memory Usage: 9936 KB (Peak: 9936 KB)
+Simulation CPU Usage: 77 ms
