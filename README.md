@@ -361,25 +361,145 @@ PC Gen → IDU → EXU → MAU → WB
 
 ---
 
-## NEMU模拟器配置
+## NEMU模拟器配置与使用
 
-NEMU使用Kconfig系统进行配置。进入NEMU目录：
+### 1. NEMU简介
+
+NEMU（Native Efficient Machine for Universities）是一个功能级的RISC-V模拟器，用于软件开发和调试。相比RTL仿真，NEMU运行速度更快，适合快速验证程序逻辑。
+
+**项目地址：** https://github.com/fisher2005/NEMU-for-FPGA-Simulation-tools.git
+
+### 2. 环境配置
+
+设置NEMU_HOME环境变量，路径为NEMU项目目录：
 
 ```bash
-cd nemu
+export NEMU_HOME=/home/fisher/2025work/soc-fpga/nemu
+```
+
+### 3. 编译NEMU
+
+进入NEMU目录，编译项目：
+
+```bash
+cd $NEMU_HOME
+make
+```
+
+### 4. Menuconfig配置
+
+运行menuconfig进入配置界面：
+
+```bash
 make menuconfig
 ```
 
-常用配置：
-- **ISA**: 选择 RISC-V 32 或 64 位
-- **Engine**: 选择解释器模式
-- **Device**: 配置支持的外设
-- **Trace**: 配置指令追踪
+#### 4.1 Build Options（构建选项）
 
-保存配置后，重新编译：
+- **监视点功能**：是否开启watchpoint，建议在模拟测试时关闭，调试时再开启
+- **并行监视点**：不建议开启，会严重影响模拟性能
+
+#### 4.2 Testing and Debugging（测试和调试）
+
+- **Instruction Tracer**：显示执行的每条指令
+- **Memory Tracer**：追踪显示每次load/store指令
+- **Function Tracer**：显示程序的每次函数调用
+- **Device Tracer**：显示每次对外设的访问
+- **Exception Tracer**：显示每次ecall指令触发和上下文切换时的CSR寄存器
+- **Diff Test**：用于编写模拟器时验证正确性，不需要开启
+
+#### 4.3 Device（设备选项）
+
+必须开启两个hardware device：
+- Timer（定时器）
+- UART（串口）
+
+#### 4.4 保存配置
+
+点击Save按钮保存配置，保存后重新编译：
 
 ```bash
 make clean && make
+```
+
+### 5. 使用NEMU调试程序
+
+#### 5.1 生成的文件
+
+交叉编译工具会生成以下文件：
+
+| 文件类型 | 说明 |
+|---------|------|
+| `riscv.bin` | NEMU可读取运行的二进制文件 |
+| `riscv.dump` | 反汇编文件，可观察指令地址和汇编语句 |
+| `riscv.elf` | 包含调试信息的可执行文件格式 |
+| `riscv.map` | 链接阶段生成的报告文件 |
+| `rom.coe` | 用于烧录到Vivado存储器IP核的十六进制文件 |
+
+#### 5.2 ELF文件说明
+
+ELF文件是Linux/Unix系统及嵌入式工具链的标准输出格式，包含：
+- **代码段(.text)**：实际机器码
+- **数据段(.data)**：已初始化的全局变量
+- **符号表**：用于调试和ftrace工具
+- **调试信息**：用于源码级调试
+
+#### 5.3 调试命令
+
+进入调试模式：
+
+```bash
+cd sim/simple
+make run          # 进入调试模式
+make run MODE=b   # 直接运行程序（无调试）
+```
+
+调试器提示符为 `(nemu)`，支持以下命令：
+
+| 命令 | 说明 |
+|------|------|
+| `help` | 显示帮助信息 |
+| `c` | 继续运行直到程序退出或发生错误 |
+| `q` | 退出NEMU |
+| `info r` | 输出当前寄存器信息 |
+| `info w` | 输出监视点信息 |
+| `x n address` | 显示地址处开始的n个32位字（如 `x 10 0x80000000`） |
+| `si` | 单步执行一条指令 |
+| `p expr` | 打印表达式值，支持`*地址`解引用 |
+| `w expr` | 设置监视点（如 `w *0x800000A0` 或 `w pc==0x800000F4`） |
+| `d n` | 删除第n号监视点 |
+
+#### 5.4 监视点示例
+
+```bash
+# 监视地址0x800000A0处数据的变化
+w *0x800000A0
+
+# 监视PC运行到0x800000F4处暂停
+w pc==0x800000F4
+
+# 查看监视点
+info w
+
+# 删除监视点
+d 0
+```
+
+#### 5.5 p命令表达式
+
+- 支持基本算术运算（注意乘除号结合顺序）
+- 支持`*地址`解引用
+- 支持打印判断表达式
+
+```bash
+# 打印寄存器值
+p $x1
+
+# 打印内存地址值
+p *0x80000000
+
+# 打印表达式
+p $x1 + $x2
 ```
 
 ---
