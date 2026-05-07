@@ -19,14 +19,14 @@ IS_WINDOWS := $(or $(IS_MSYS),$(IS_CYGWIN),$(findstring MINGW,$(shell uname 2>/d
 ifeq ($(IS_LINUX),)
 ifneq ($(IS_WINDOWS),)
 # Windows (MSYS/CYGWIN) toolchain configuration
-EMBTOOLPATH     = C:/Users/nana4/riscv-related/teacher_training/riscv-none-embed
+EMBTOOLPATH     = the/PATH/TO/YOU/cross-compilation-tools
 
 EMBTOOLPREFIX   = ${EMBTOOLPATH}/bin/riscv-none-embed
 
 CC              = ${EMBTOOLPREFIX}-gcc.exe
 OBJDUMP         = ${EMBTOOLPREFIX}-objdump.exe
 OBJCOPY         = ${EMBTOOLPREFIX}-objcopy.exe
-PYTHON          = C:/Users/nana4/AppData/Local/Programs/Python/Python314/python.exe
+PYTHON          = the/PATH/TO/YOU/PATHON.exe
 
 RM              = rm -f
 CP              = copy

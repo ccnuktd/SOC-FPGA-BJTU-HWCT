@@ -44,8 +44,8 @@ ifneq ($(IS_WINDOWS),)
 	@echo -e ${COLORS}[ERROR] 'clean' is only supported on Linux.${COLORE}
 	@exit 1
 endif
-	$(MAKE) -C /home/fisher/2025work/soc-fpga/nemu clean-all
-	$(MAKE) -C /home/fisher/2025work/soc-fpga/diff-tools/sim_tools_simple clean
+	$(MAKE) -C the/path/to/you/nemu clean-all
+	$(MAKE) -C the/path/to/you/diff-tools/sim_tools_simple clean
 
 	
 #(MAKE) -C后面的路径为你的电脑上nemu目录的绝对路径
@@ -56,7 +56,7 @@ ifneq ($(IS_WINDOWS),)
 	@exit 1
 endif
 	@echo -e ${COLORS}[INFO] Running in nemu ...${COLORE}
-	$(MAKE) -C /home/fisher/2025work/soc-fpga/nemu \
+	$(MAKE) -C the/path/to/you/nemu \
 		SIM_PATH=$(SIM_PATH) \
 		MODE=$(MODE) \
 		run_auto
@@ -68,7 +68,7 @@ ifneq ($(IS_WINDOWS),)
 	@exit 1
 endif
 	@echo -e ${COLORS}[INFO] Running in verilator ...${COLORE}
-	$(MAKE) -C /home/fisher/2025work/soc-fpga/diff-tools/sim_tools_simple \
+	$(MAKE) -C the/path/to/you/diff-tools/sim_tools_simple \
 	BIN_PATH=$(SIM_PATH)/riscv.bin \
 	tracerun
 
@@ -78,6 +78,6 @@ ifneq ($(IS_WINDOWS),)
 	@exit 1
 endif
 	@echo -e ${COLORS}[INFO] Running in verilator ...${COLORE}
-	$(MAKE) -C /home/fisher/2025work/soc-fpga/diff-tools/sim_tools_simple \
+	$(MAKE) -C /the/path/to/you/diff-tools/sim_tools_simple \
 	BIN_PATH=$(SIM_PATH)/riscv.bin \
 	run
