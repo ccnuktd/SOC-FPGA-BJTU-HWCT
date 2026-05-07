@@ -69,6 +69,7 @@ libs/*/*.o
 *:Zone.Identifier
 diff-tools/*/rtl-windows/
 diff-tools/*/rtl-og/
+diff-tools/sim_tools_simple/obj_dir
 
 # Generated files
 *.bak

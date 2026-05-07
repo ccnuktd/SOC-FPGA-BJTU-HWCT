@@ -1,159 +1,225 @@
 Archive member included to satisfy reference by file (symbol)
 
-d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a(_udivdi3.o)
-                              C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o (__udivdi3)
-d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a(_clz.o)
-                              d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a(_udivdi3.o) (__clz_tab)
+/opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+                              /tmp/ccEcFI6H.o (__udivdi3)
+/opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_clz.o)
+                              /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o) (__clz_tab)
 
-Allocating common symbols
-Common symbol       size              file
+Merging object attributes
 
-C1                  0xe10             C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
-trace               0x100             C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
-prime_table         0x2ef4            C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
-A                   0xe10             C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
-arr1                0xfa0             C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
-B                   0xe10             C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
-C2                  0xe10             C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
-crc_buffer          0x800             C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
-arr2                0xfa0             C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
 
 Discarded input sections
 
- .text          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccGDdTDG.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccGDdTDG.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccGDdTDG.o
- .init          0x0000000000000000       0x84 C:\Users\KTD\AppData\Local\Temp\ccGDdTDG.o
- .text          0x0000000000000000      0x17c C:\Users\KTD\AppData\Local\Temp\cc4Y7FUT.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\cc4Y7FUT.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\cc4Y7FUT.o
- .text          0x0000000000000000      0x1cc C:\Users\KTD\AppData\Local\Temp\cce9Jiqp.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\cce9Jiqp.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\cce9Jiqp.o
- .comment       0x0000000000000000       0x3a C:\Users\KTD\AppData\Local\Temp\cce9Jiqp.o
- .text          0x0000000000000000      0x114 C:\Users\KTD\AppData\Local\Temp\cckdqK4e.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\cckdqK4e.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\cckdqK4e.o
- .comment       0x0000000000000000       0x3a C:\Users\KTD\AppData\Local\Temp\cckdqK4e.o
- .text          0x0000000000000000      0x13c C:\Users\KTD\AppData\Local\Temp\ccYgn5Gm.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccYgn5Gm.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccYgn5Gm.o
- .comment       0x0000000000000000       0x3a C:\Users\KTD\AppData\Local\Temp\ccYgn5Gm.o
- .text          0x0000000000000000       0x24 C:\Users\KTD\AppData\Local\Temp\cct3RQKC.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\cct3RQKC.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\cct3RQKC.o
- .abi_section   0x0000000000000000        0xc C:\Users\KTD\AppData\Local\Temp\cct3RQKC.o
- .comment       0x0000000000000000       0x3a C:\Users\KTD\AppData\Local\Temp\cct3RQKC.o
- .text          0x0000000000000000      0x678 C:\Users\KTD\AppData\Local\Temp\ccaiSIQa.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccaiSIQa.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccaiSIQa.o
- .rodata        0x0000000000000000       0x5c C:\Users\KTD\AppData\Local\Temp\ccaiSIQa.o
- .comment       0x0000000000000000       0x3a C:\Users\KTD\AppData\Local\Temp\ccaiSIQa.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
- .text          0x0000000000000000        0x0 d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a(_udivdi3.o)
- .data          0x0000000000000000        0x0 d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a(_udivdi3.o)
- .bss           0x0000000000000000        0x0 d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a(_udivdi3.o)
- .eh_frame      0x0000000000000000       0x28 d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a(_udivdi3.o)
- .text          0x0000000000000000        0x0 d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a(_clz.o)
- .data          0x0000000000000000        0x0 d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a(_clz.o)
- .bss           0x0000000000000000        0x0 d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a(_clz.o)
+ .text          0x00000000        0x0 /tmp/ccNzSufZ.o
+ .data          0x00000000        0x0 /tmp/ccNzSufZ.o
+ .bss           0x00000000        0x0 /tmp/ccNzSufZ.o
+ .init          0x00000000       0x94 /tmp/ccNzSufZ.o
+ .riscv.attributes
+                0x00000000       0x35 /tmp/ccNzSufZ.o
+ .text          0x00000000      0x220 /tmp/cc3u9LSv.o
+ .data          0x00000000        0x0 /tmp/cc3u9LSv.o
+ .bss           0x00000000        0x0 /tmp/cc3u9LSv.o
+ .riscv.attributes
+                0x00000000       0x35 /tmp/cc3u9LSv.o
+ .text          0x00000000      0x1e8 /tmp/ccRiDXKp.o
+ .data          0x00000000        0x0 /tmp/ccRiDXKp.o
+ .bss           0x00000000        0x0 /tmp/ccRiDXKp.o
+ .comment       0x00000000       0x1b /tmp/ccRiDXKp.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccRiDXKp.o
+ .riscv.attributes
+                0x00000000       0x37 /tmp/ccRiDXKp.o
+ .text          0x00000000      0x12c /tmp/ccWNsKmf.o
+ .data          0x00000000        0x0 /tmp/ccWNsKmf.o
+ .bss           0x00000000        0x0 /tmp/ccWNsKmf.o
+ .comment       0x00000000       0x1b /tmp/ccWNsKmf.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccWNsKmf.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/ccWNsKmf.o
+ .text          0x00000000      0x15c /tmp/cci2BtOK.o
+ .data          0x00000000        0x0 /tmp/cci2BtOK.o
+ .bss           0x00000000        0x0 /tmp/cci2BtOK.o
+ .comment       0x00000000       0x1b /tmp/cci2BtOK.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/cci2BtOK.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/cci2BtOK.o
+ .text          0x00000000       0x2c /tmp/ccHz6JRc.o
+ .data          0x00000000        0x0 /tmp/ccHz6JRc.o
+ .bss           0x00000000        0x0 /tmp/ccHz6JRc.o
+ .abi_section   0x00000000        0xc /tmp/ccHz6JRc.o
+ .comment       0x00000000       0x1b /tmp/ccHz6JRc.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccHz6JRc.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/ccHz6JRc.o
+ .text          0x00000000      0x6d0 /tmp/ccmyxeoF.o
+ .data          0x00000000        0x0 /tmp/ccmyxeoF.o
+ .bss           0x00000000        0x0 /tmp/ccmyxeoF.o
+ .comment       0x00000000       0x1b /tmp/ccmyxeoF.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccmyxeoF.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/ccmyxeoF.o
+ .data          0x00000000        0x0 /tmp/ccEcFI6H.o
+ .data          0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+ .bss           0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+ .eh_frame      0x00000000       0x28 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+ .text          0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_clz.o)
+ .data          0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_clz.o)
+ .bss           0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_clz.o)
 
 Memory Configuration
 
 Name             Origin             Length             Attributes
-iap              0x0000000080002000 0x000000000000e000 xrw
-*default*        0x0000000000000000 0xffffffffffffffff
+iap              0x80002000         0x0000e000         xrw
+*default*        0x00000000         0xffffffff
 
 Linker script and memory map
 
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32\libm.a
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32\libc.a
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a
-LOAD C:\Users\KTD\AppData\Local\Temp\ccGDdTDG.o
-LOAD C:\Users\KTD\AppData\Local\Temp\cc4Y7FUT.o
-LOAD C:\Users\KTD\AppData\Local\Temp\cce9Jiqp.o
-LOAD C:\Users\KTD\AppData\Local\Temp\cckdqK4e.o
-LOAD C:\Users\KTD\AppData\Local\Temp\ccYgn5Gm.o
-LOAD C:\Users\KTD\AppData\Local\Temp\cct3RQKC.o
-LOAD C:\Users\KTD\AppData\Local\Temp\ccaiSIQa.o
-LOAD C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a
+LOAD /tmp/ccNzSufZ.o
+LOAD /tmp/cc3u9LSv.o
+LOAD /tmp/ccRiDXKp.o
+LOAD /tmp/ccWNsKmf.o
+LOAD /tmp/cci2BtOK.o
+LOAD /tmp/ccHz6JRc.o
+LOAD /tmp/ccmyxeoF.o
+LOAD /tmp/ccEcFI6H.o
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a
 START GROUP
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32\libg.a
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32\libc.a
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libgloss.a
 END GROUP
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a
 
-.text           0x0000000080002000     0x17c4
+.text           0x80002000     0x183c
  *(.abi_jump)
- .abi_jump      0x0000000080002000      0x3dc C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
-                0x0000000080002000                _jump
+ .abi_jump      0x80002000      0x3e4 /tmp/ccEcFI6H.o
+                0x80002000                _jump
  *(.text*)
- .text          0x00000000800023dc      0xf48 C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
-                0x00000000800023dc                crc16_modbus
-                0x00000000800024ac                init_crc_buffer
-                0x0000000080002548                run_crc_test
-                0x00000000800026cc                fsm_transition
-                0x0000000080002798                run_fsm_test
-                0x000000008000294c                matmul_naive
-                0x0000000080002a7c                matmul_transpose
-                0x0000000080002ca4                verify
-                0x0000000080002d78                init_matrix
-                0x0000000080002e28                is_prime
-                0x0000000080002ea4                validate_prime_calculation
-                0x0000000080003010                sort_insertion
-                0x00000000800030f8                sort_selection
-                0x0000000080003208                array_equal
-                0x0000000080003288                init_array
- .text.__udivdi3
-                0x0000000080003324      0x4a0 d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a(_udivdi3.o)
-                0x0000000080003324                __udivdi3
+ .text          0x800023e4     0x106c /tmp/ccEcFI6H.o
+                0x800023e4                crc16_modbus
+                0x800024b8                init_crc_buffer
+                0x80002560                run_crc_test
+                0x800026e4                fsm_transition
+                0x80002830                run_fsm_test
+                0x800029e4                matmul_naive
+                0x80002b20                matmul_transpose
+                0x80002d54                verify
+                0x80002e30                init_matrix
+                0x80002f08                is_prime
+                0x80002f88                validate_prime_calculation
+                0x800030f4                sort_insertion
+                0x800031e8                sort_selection
+                0x80003304                array_equal
+                0x8000338c                init_array
+ .text          0x80003450      0x3ec /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+                0x80003450                __udivdi3
 
-.data           0x00000000800037c4      0x1bc
-                0x00000000800037c4                __data_lma = LOADADDR (.data)
-                0x00000000800037c4                __data_start = .
+.data           0x8000383c      0x1bc
+                0x8000383c                        __data_lma = LOADADDR (.data)
+                0x8000383c                        __data_start = .
  *(.rodata*)
- .rodata        0x00000000800037c4       0xb9 C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
- *fill*         0x000000008000387d        0x3 
- .rodata.__clz_tab
-                0x0000000080003880      0x100 d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a(_clz.o)
-                0x0000000080003880                __clz_tab
+ .rodata        0x8000383c       0xb9 /tmp/ccEcFI6H.o
+ *fill*         0x800038f5        0x3 
+ .rodata        0x800038f8      0x100 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_clz.o)
+                0x800038f8                __clz_tab
  *(.data*)
  *(.sdata*)
-                0x0000000080003980                __data_end = .
+                0x800039f8                        __data_end = .
 
-.rela.dyn       0x0000000080003980        0x0
- .rela.text     0x0000000080003980        0x0 C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
- .rela.abi_jump
-                0x0000000080003980        0x0 C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
-
-.bss            0x0000000080003980     0x8f74
-                0x0000000080003980                __bss_start = .
+.bss            0x800039f8     0x8f74
+                0x800039f8                        __bss_start = .
  *(.bss .bss.*)
+ .bss           0x800039f8     0x8f74 /tmp/ccEcFI6H.o
+                0x800039f8                crc_buffer
+                0x800041f8                trace
+                0x800042f8                prime_table
+                0x800071ec                A
+                0x80007ffc                B
+                0x80008e0c                C1
+                0x80009c1c                C2
+                0x8000aa2c                arr1
+                0x8000b9cc                arr2
  *(.sbss .sbss.*)
-                0x0000000080003980                __bss_end = .
- COMMON         0x0000000080003980     0x8f74 C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
-                0x0000000080003980                C1
-                0x0000000080004790                trace
-                0x0000000080004890                prime_table
-                0x0000000080007784                A
-                0x0000000080008594                arr1
-                0x0000000080009534                B
-                0x000000008000a344                C2
-                0x000000008000b154                crc_buffer
-                0x000000008000b954                arr2
-                0x000000008000c8f4                . = ALIGN (0x4)
+                0x8000c96c                        __bss_end = .
+                0x8000c96c                        . = ALIGN (0x4)
 
-.stack          0x000000008000c8f4     0x370c
-                0x000000008000c8f4                __stack_bottom = .
-                0x0000000080010000                __stack_top = (ORIGIN (iap) + LENGTH (iap))
-                0x0000000080010000                . = __stack_top
- *fill*         0x000000008000c8f4     0x370c 
-                0x0000000080010000                _end = .
+.stack          0x8000c96c     0x3694
+                0x8000c96c                        __stack_bottom = .
+                0x80010000                        __stack_top = (ORIGIN (iap) + LENGTH (iap))
+                0x80010000                        . = __stack_top
+ *fill*         0x8000c96c     0x3694 
+                0x80010000                        _end = .
 OUTPUT(riscv.elf elf32-littleriscv)
 
-.comment        0x0000000000000000       0x39
- .comment       0x0000000000000000       0x39 C:\Users\KTD\AppData\Local\Temp\cctqnNB0.o
-                                         0x3a (size before relaxing)
+.comment        0x00000000       0x1a
+ .comment       0x00000000       0x1a /tmp/ccEcFI6H.o
+                                 0x1b (size before relaxing)
+ .comment       0x0000001a        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+                                 0x1b (size before relaxing)
+ .comment       0x0000001a        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_clz.o)
+                                 0x1b (size before relaxing)
+
+.note.GNU-stack
+                0x00000000        0x0
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccEcFI6H.o
+ .note.GNU-stack
+                0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+ .note.GNU-stack
+                0x00000000        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_clz.o)
+
+.riscv.attributes
+                0x00000000       0x37
+ .riscv.attributes
+                0x00000000       0x33 /tmp/ccEcFI6H.o
+ .riscv.attributes
+                0x00000033       0x33 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+ .riscv.attributes
+                0x00000066       0x33 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_clz.o)
+
+.debug_info     0x00000000      0x942
+ .debug_info    0x00000000      0x850 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+ .debug_info    0x00000850       0xf2 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_clz.o)
+
+.debug_abbrev   0x00000000      0x223
+ .debug_abbrev  0x00000000      0x1ad /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+ .debug_abbrev  0x000001ad       0x76 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_clz.o)
+
+.debug_loclists
+                0x00000000      0xb98
+ .debug_loclists
+                0x00000000      0xb98 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+
+.debug_aranges  0x00000000       0x38
+ .debug_aranges
+                0x00000000       0x20 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+ .debug_aranges
+                0x00000020       0x18 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_clz.o)
+
+.debug_rnglists
+                0x00000000       0x9c
+ .debug_rnglists
+                0x00000000       0x9c /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+
+.debug_line     0x00000000      0xb70
+ .debug_line    0x00000000      0xb27 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+ .debug_line    0x00000b27       0x49 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_clz.o)
+
+.debug_str      0x00000000      0x2b5
+ .debug_str     0x00000000      0x2b5 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+                                0x26b (size before relaxing)
+ .debug_str     0x000002b5        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_clz.o)
+                                0x1b8 (size before relaxing)
+
+.debug_line_str
+                0x00000000       0x9c
+ .debug_line_str
+                0x00000000       0x9c /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_udivdi3.o)
+                                 0xa6 (size before relaxing)
+ .debug_line_str
+                0x0000009c        0x0 /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a(_clz.o)
+                                 0xa6 (size before relaxing)

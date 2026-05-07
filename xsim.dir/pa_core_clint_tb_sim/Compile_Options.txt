@@ -1,1 +1,0 @@
-"pa_core_clint_tb" -s "pa_core_clint_tb_sim" 

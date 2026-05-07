@@ -1,175 +1,208 @@
 
+Merging object attributes
+
+
 Discarded input sections
 
- .text          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\cceQcsXi.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\cceQcsXi.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\cceQcsXi.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccWEskvm.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccWEskvm.o
- .text          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccxhC3Un.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccxhC3Un.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccxhC3Un.o
+ .text          0x00000000        0x0 /tmp/cceq17zy.o
+ .data          0x00000000        0x0 /tmp/cceq17zy.o
+ .bss           0x00000000        0x0 /tmp/cceq17zy.o
+ .data          0x00000000        0x0 /tmp/ccPhooWd.o
+ .bss           0x00000000        0x0 /tmp/ccPhooWd.o
+ .text          0x00000000        0x0 /tmp/cc4fyBAW.o
+ .data          0x00000000        0x0 /tmp/cc4fyBAW.o
+ .bss           0x00000000        0x0 /tmp/cc4fyBAW.o
+ .text.get_cycle_value
+                0x00000000       0x90 /tmp/cc4fyBAW.o
  .text.get_cyclel_value
-                0x0000000000000000       0x28 C:\Users\KTD\AppData\Local\Temp\ccxhC3Un.o
+                0x00000000       0x30 /tmp/cc4fyBAW.o
  .text.delay_us
-                0x0000000000000000       0xd0 C:\Users\KTD\AppData\Local\Temp\ccxhC3Un.o
+                0x00000000       0xd4 /tmp/cc4fyBAW.o
  .text.delay_ms
-                0x0000000000000000       0x54 C:\Users\KTD\AppData\Local\Temp\ccxhC3Un.o
- .text          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccgOqyzg.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccgOqyzg.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccgOqyzg.o
+                0x00000000       0x54 /tmp/cc4fyBAW.o
+ .comment       0x00000000       0x1b /tmp/cc4fyBAW.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/cc4fyBAW.o
+ .riscv.attributes
+                0x00000000       0x37 /tmp/cc4fyBAW.o
+ .text          0x00000000        0x0 /tmp/ccYyBVdO.o
+ .data          0x00000000        0x0 /tmp/ccYyBVdO.o
+ .bss           0x00000000        0x0 /tmp/ccYyBVdO.o
  .text.timer_init
-                0x0000000000000000       0x7c C:\Users\KTD\AppData\Local\Temp\ccgOqyzg.o
+                0x00000000       0x84 /tmp/ccYyBVdO.o
  .text.timer_control
-                0x0000000000000000       0x68 C:\Users\KTD\AppData\Local\Temp\ccgOqyzg.o
+                0x00000000       0x70 /tmp/ccYyBVdO.o
  .text.timer_clearflag
-                0x0000000000000000       0x30 C:\Users\KTD\AppData\Local\Temp\ccgOqyzg.o
- .comment       0x0000000000000000       0x3a C:\Users\KTD\AppData\Local\Temp\ccgOqyzg.o
- .text          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccU3Pz7S.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccU3Pz7S.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccU3Pz7S.o
+                0x00000000       0x38 /tmp/ccYyBVdO.o
+ .comment       0x00000000       0x1b /tmp/ccYyBVdO.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccYyBVdO.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/ccYyBVdO.o
+ .text          0x00000000        0x0 /tmp/cc4zKbtJ.o
+ .data          0x00000000        0x0 /tmp/cc4zKbtJ.o
+ .bss           0x00000000        0x0 /tmp/cc4zKbtJ.o
  .text.uart_send
-                0x0000000000000000       0x40 C:\Users\KTD\AppData\Local\Temp\ccU3Pz7S.o
+                0x00000000       0x48 /tmp/cc4zKbtJ.o
  .text.uart_read
-                0x0000000000000000       0x58 C:\Users\KTD\AppData\Local\Temp\ccU3Pz7S.o
- .text          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccf92mdf.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccf92mdf.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccf92mdf.o
- .text          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccTlPHwm.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccTlPHwm.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccTlPHwm.o
- .text          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccjBKgip.o
- .data          0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccjBKgip.o
- .bss           0x0000000000000000        0x0 C:\Users\KTD\AppData\Local\Temp\ccjBKgip.o
+                0x00000000       0x60 /tmp/cc4zKbtJ.o
+ .text          0x00000000        0x0 /tmp/cc8PNy14.o
+ .data          0x00000000        0x0 /tmp/cc8PNy14.o
+ .bss           0x00000000        0x0 /tmp/cc8PNy14.o
+ .abi_section   0x00000000        0xc /tmp/cc8PNy14.o
+ .text.get_frequency
+                0x00000000       0x2c /tmp/cc8PNy14.o
+ .comment       0x00000000       0x1b /tmp/cc8PNy14.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/cc8PNy14.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/cc8PNy14.o
+ .text          0x00000000        0x0 /tmp/ccEsf2qS.o
+ .data          0x00000000        0x0 /tmp/ccEsf2qS.o
+ .bss           0x00000000        0x0 /tmp/ccEsf2qS.o
+ .text          0x00000000        0x0 /tmp/cczEebJR.o
+ .data          0x00000000        0x0 /tmp/cczEebJR.o
+ .bss           0x00000000        0x0 /tmp/cczEebJR.o
 
 Memory Configuration
 
 Name             Origin             Length             Attributes
-ram              0x0000000080000000 0x0000000000010000 xrw
-abi              0x0000000080003000 0x0000000000000400 xrw
-iap              0x0000000080008000 0x0000000000008000 xrw
-*default*        0x0000000000000000 0xffffffffffffffff
+ram              0x80000000         0x00010000         xrw
+iap              0x80008000         0x00008000         xrw
+*default*        0x00000000         0xffffffff
 
 Linker script and memory map
 
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32\libm.a
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32\libc.a
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a
-LOAD C:\Users\KTD\AppData\Local\Temp\cceQcsXi.o
-LOAD C:\Users\KTD\AppData\Local\Temp\ccWEskvm.o
-LOAD C:\Users\KTD\AppData\Local\Temp\ccxhC3Un.o
-LOAD C:\Users\KTD\AppData\Local\Temp\ccgOqyzg.o
-LOAD C:\Users\KTD\AppData\Local\Temp\ccU3Pz7S.o
-LOAD C:\Users\KTD\AppData\Local\Temp\ccf92mdf.o
-LOAD C:\Users\KTD\AppData\Local\Temp\ccTlPHwm.o
-LOAD C:\Users\KTD\AppData\Local\Temp\ccjBKgip.o
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a
+LOAD /tmp/cceq17zy.o
+LOAD /tmp/ccPhooWd.o
+LOAD /tmp/cc4fyBAW.o
+LOAD /tmp/ccYyBVdO.o
+LOAD /tmp/cc4zKbtJ.o
+LOAD /tmp/cc8PNy14.o
+LOAD /tmp/ccEsf2qS.o
+LOAD /tmp/cczEebJR.o
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a
 START GROUP
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32\libg.a
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32\libc.a
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libgloss.a
 END GROUP
-LOAD d:/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a
 
-.init           0x0000000080000000       0x84
+.init           0x80000000       0x94
  *(SORT_NONE(.init))
- .init          0x0000000080000000       0x84 C:\Users\KTD\AppData\Local\Temp\cceQcsXi.o
-                0x0000000080000000                _start
-                0x0000000080000074                init
-                0x0000000080000078                entry
+ .init          0x80000000       0x94 /tmp/cceq17zy.o
+                0x80000000                _start
+                0x80000080                init
+                0x80000084                entry
 
-.abi_section    0x0000000080003000        0xc
- *(.abi_section)
- .abi_section   0x0000000080003000        0xc C:\Users\KTD\AppData\Local\Temp\ccf92mdf.o
-                0x0000000080003000                PLATFORM
-
-.text           0x0000000080000084      0xad0
-                0x0000000080000084                . = ALIGN (0x4)
-                0x0000000080000084                __fsymtab_start = .
+.text           0x80000094      0xb40
+                0x80000094                        . = ALIGN (0x4)
+                0x80000094                        __fsymtab_start = .
  *(FSymTab)
-                0x0000000080000084                __fsymtab_end = .
-                0x0000000080000084                . = ALIGN (0x4)
-                0x0000000080000084                __vsymtab_start = .
+                0x80000094                        __fsymtab_end = .
+                0x80000094                        . = ALIGN (0x4)
+                0x80000094                        __vsymtab_start = .
  *(VSymTab)
-                0x0000000080000084                __vsymtab_end = .
-                0x0000000080000084                . = ALIGN (0x4)
+                0x80000094                        __vsymtab_end = .
+                0x80000094                        . = ALIGN (0x4)
  *(.text.unlikely .text.unlikely.*)
  *(.text.startup .text.startup.*)
  *(.text .text.*)
- .text          0x0000000080000084      0x174 C:\Users\KTD\AppData\Local\Temp\ccWEskvm.o
-                0x0000000080000084                interrupt_disable
-                0x000000008000008c                interrupt_enable
-                0x0000000080000094                trap_entry
-                0x00000000800001f4                trap_handler
- .text.get_cycle_value
-                0x00000000800001f8       0x80 C:\Users\KTD\AppData\Local\Temp\ccxhC3Un.o
-                0x00000000800001f8                get_cycle_value
+ .text          0x80000094      0x220 /tmp/ccPhooWd.o
+                0x80000094                interrupt_disable
+                0x8000009c                interrupt_enable
+                0x800000a4                trap_entry
+                0x800002b0                trap_handler
  .text.uart_send_wait
-                0x0000000080000278       0x54 C:\Users\KTD\AppData\Local\Temp\ccU3Pz7S.o
-                0x0000000080000278                uart_send_wait
+                0x800002b4       0x5c /tmp/cc4zKbtJ.o
+                0x800002b4                uart_send_wait
  .text.uart_read_wait
-                0x00000000800002cc       0x50 C:\Users\KTD\AppData\Local\Temp\ccU3Pz7S.o
-                0x00000000800002cc                uart_read_wait
- .text.get_frequency
-                0x000000008000031c       0x24 C:\Users\KTD\AppData\Local\Temp\ccf92mdf.o
-                0x000000008000031c                get_frequency
- .text.xputc    0x0000000080000340       0x5c C:\Users\KTD\AppData\Local\Temp\ccTlPHwm.o
-                0x0000000080000340                xputc
- .text.xputs    0x000000008000039c       0x54 C:\Users\KTD\AppData\Local\Temp\ccTlPHwm.o
-                0x000000008000039c                xputs
+                0x80000310       0x58 /tmp/cc4zKbtJ.o
+                0x80000310                uart_read_wait
+ .text.xputc    0x80000368       0x5c /tmp/ccEsf2qS.o
+                0x80000368                xputc
+ .text.xputs    0x800003c4       0x58 /tmp/ccEsf2qS.o
+                0x800003c4                xputs
  .text.xvprintf
-                0x00000000800003f0      0x54c C:\Users\KTD\AppData\Local\Temp\ccTlPHwm.o
- .text.xprintf  0x000000008000093c       0x7c C:\Users\KTD\AppData\Local\Temp\ccTlPHwm.o
-                0x000000008000093c                xprintf
- .text.main     0x00000000800009b8      0x19c C:\Users\KTD\AppData\Local\Temp\ccjBKgip.o
-                0x00000000800009b8                main
+                0x8000041c      0x598 /tmp/ccEsf2qS.o
+ .text.xprintf  0x800009b4       0x84 /tmp/ccEsf2qS.o
+                0x800009b4                xprintf
+ .text.main     0x80000a38      0x19c /tmp/cczEebJR.o
+                0x80000a38                main
  *(.gnu.linkonce.t.*)
 
-.data           0x0000000080000b54       0xa0
-                0x0000000080000b54                __data_lma = LOADADDR (.data)
-                0x0000000080000b54                __data_start = .
-                0x0000000080000b54                . = ALIGN (0x4)
-                0x0000000080000b54                __rt_init_start = .
+.data           0x80000bd4       0x44
+                0x80000bd4                        __data_lma = LOADADDR (.data)
+                0x80000bd4                        __data_start = .
+                0x80000bd4                        . = ALIGN (0x4)
+                0x80000bd4                        __rt_init_start = .
  *(SORT_BY_NAME(.rti_fn*))
-                0x0000000080000b54                __rt_init_end = .
+                0x80000bd4                        __rt_init_end = .
  *(.rdata)
  *(.rodata .rodata.*)
- .rodata.xvprintf
-                0x0000000080000b54       0x5c C:\Users\KTD\AppData\Local\Temp\ccTlPHwm.o
- .rodata        0x0000000080000bb0       0x41 C:\Users\KTD\AppData\Local\Temp\ccjBKgip.o
+ .rodata        0x80000bd4       0x41 /tmp/cczEebJR.o
  *(.gnu.linkonce.r.*)
  *(.data .data.*)
  *(.gnu.linkonce.d.*)
  *(.sdata .sdata.*)
  *(.sdata*)
  *(.gnu.linkonce.s.*)
-                0x0000000080000bf4                . = ALIGN (0x4)
- *fill*         0x0000000080000bf1        0x3 
-                0x0000000080000bf4                __data_end = .
+                0x80000c18                        . = ALIGN (0x4)
+ *fill*         0x80000c15        0x3 
+                0x80000c18                        __data_end = .
 
-.rela.dyn       0x0000000080000bf4        0x0
- .rela.init     0x0000000080000bf4        0x0 C:\Users\KTD\AppData\Local\Temp\cceQcsXi.o
- .rela.text     0x0000000080000bf4        0x0 C:\Users\KTD\AppData\Local\Temp\cceQcsXi.o
+.rela.dyn       0x80000c18        0x0
+ .rela.init     0x80000c18        0x0 /tmp/cceq17zy.o
 
-.bss            0x0000000080000bf4        0x0
-                0x0000000080000bf4                __bss_start = .
+.bss            0x80000c18        0x0
+                0x80000c18                        __bss_start = .
  *(.sbss .sbss.*)
  *(.gnu.linkonce.sb.*)
  *(.bss .bss.*)
  *(.gnu.linkonce.b.*)
  *(COMMON)
-                0x0000000080000bf4                . = ALIGN (0x4)
-                0x0000000080000bf4                __bss_end = .
-                0x0000000080000bf4                __end = .
+                0x80000c18                        . = ALIGN (0x4)
+                0x80000c18                        __bss_end = .
+                0x80000c18                        __end = .
 
-.stack          0x0000000080010000        0x0
-                0x0000000080010000                __stack_top = .
+.stack          0x80010000        0x0
+                0x80010000                        __stack_top = .
+
+.intr_stack     0x80000c18      0x400
+                0x80000c18                        . = ALIGN (0x4)
+                0x80000c18                        __intr_stack_bottom = .
+                0x80001018                        . = (. + 0x400)
+ *fill*         0x80000c18      0x400 
+                0x80001018                        __intr_stack_top = .
 OUTPUT(riscv.elf elf32-littleriscv)
 
-.comment        0x0000000000000000       0x39
- .comment       0x0000000000000000       0x39 C:\Users\KTD\AppData\Local\Temp\ccxhC3Un.o
-                                         0x3a (size before relaxing)
- .comment       0x0000000000000039       0x3a C:\Users\KTD\AppData\Local\Temp\ccU3Pz7S.o
- .comment       0x0000000000000039       0x3a C:\Users\KTD\AppData\Local\Temp\ccf92mdf.o
- .comment       0x0000000000000039       0x3a C:\Users\KTD\AppData\Local\Temp\ccTlPHwm.o
- .comment       0x0000000000000039       0x3a C:\Users\KTD\AppData\Local\Temp\ccjBKgip.o
+.riscv.attributes
+                0x00000000       0x37
+ .riscv.attributes
+                0x00000000       0x35 /tmp/cceq17zy.o
+ .riscv.attributes
+                0x00000035       0x35 /tmp/ccPhooWd.o
+ .riscv.attributes
+                0x0000006a       0x33 /tmp/cc4zKbtJ.o
+ .riscv.attributes
+                0x0000009d       0x33 /tmp/ccEsf2qS.o
+ .riscv.attributes
+                0x000000d0       0x33 /tmp/cczEebJR.o
+
+.comment        0x00000000       0x1a
+ .comment       0x00000000       0x1a /tmp/cc4zKbtJ.o
+                                 0x1b (size before relaxing)
+ .comment       0x0000001a        0x0 /tmp/ccEsf2qS.o
+                                 0x1b (size before relaxing)
+ .comment       0x0000001a        0x0 /tmp/cczEebJR.o
+                                 0x1b (size before relaxing)
+
+.note.GNU-stack
+                0x00000000        0x0
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/cc4zKbtJ.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccEsf2qS.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/cczEebJR.o

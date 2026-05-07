@@ -11,11 +11,11 @@
 # ============================================
 # 项目路径配置 - 只需修改这里
 # ============================================
-# NEMU模拟器路径（绝对路径）
-NEMU_PATH      = /home/fisher/2025work/soc-fpga/nemu
+# NEMU模拟器路径
+NEMU_PATH      ?= $(abspath $(PROJPATH)/nemu)
 
-# RTL仿真工具路径（绝对路径）
-SIM_TOOLS_PATH = /home/fisher/2025work/soc-fpga/diff-tools/sim_tools_simple
+# RTL仿真工具路径
+SIM_TOOLS_PATH ?= $(abspath $(PROJPATH)/diff-tools/sim_tools_simple)
 # ============================================
 
 # Detect OS for cross-platform compatibility
@@ -80,6 +80,26 @@ endif
 	$(MAKE) -C ${SIM_TOOLS_PATH} \
 	BIN_PATH=$(SIM_PATH)/riscv.bin \
 	tracerun
+
+.PHONY: gtkwave wave
+gtkwave:
+ifneq ($(IS_WINDOWS),)
+	@echo -e ${COLORS}[ERROR] 'gtkwave' is only supported on Linux.${COLORE}
+	@exit 1
+endif
+	$(MAKE) -C ${SIM_TOOLS_PATH} gtkwave
+
+wave: gtkwave
+
+.PHONY: rtl-sync rtl-sync-check rtl-diff-report
+rtl-sync:
+	$(MAKE) -C $(abspath $(PROJPATH)/diff-tools) rtl-sync
+
+rtl-sync-check:
+	$(MAKE) -C $(abspath $(PROJPATH)/diff-tools) rtl-sync-check
+
+rtl-diff-report:
+	$(MAKE) -C $(abspath $(PROJPATH)/diff-tools) rtl-diff-report
 
 rtl_run: build
 ifneq ($(IS_WINDOWS),)

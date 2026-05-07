@@ -37,17 +37,42 @@ add_files [glob $prj_source/rtl/*.v]
 # add Xilinx IP library #
 # ##############################################
 
-set files [list \
- "[file normalize "$prj_source/ipdefs/blk_mem_gen_0/blk_mem_gen_0.xci"]"\
+set ip_names [list \
+    blk_mem_gen_0 \
+    clk_wiz_0 \
 ]
-set imported_files [import_files -fileset sources_1 $files]
 
-set files [list \
- "[file normalize "$prj_source/ipdefs/clk_wiz_0/clk_wiz_0.xci"]"\
-]
-set imported_files [import_files -fileset sources_1 $files]
+set ip_xci_files [list]
+foreach ip_name $ip_names {
+    set ip_xci [file normalize "$prj_source/ipdefs/$ip_name/$ip_name.xci"]
+    if {![file exists $ip_xci]} {
+        error "Cannot find IP definition: $ip_xci"
+    }
+    lappend ip_xci_files $ip_xci
+}
 
-upgrade_ip [get_ips]
+set imported_files [import_files -fileset sources_1 -norecurse $ip_xci_files]
+
+set blk_mem_coe [file normalize "$prj_source/ipdefs/blk_mem_gen_0/rom.coe"]
+if {![file exists $blk_mem_coe]} {
+    error "Cannot find blk_mem_gen_0 COE file: $blk_mem_coe"
+}
+
+set blk_mem_project_dir [file normalize "$prj_path/$prj_name.srcs/sources_1/ip/blk_mem_gen_0"]
+file mkdir $blk_mem_project_dir
+file copy -force $blk_mem_coe [file join $blk_mem_project_dir rom.coe]
+
+set ips [get_ips]
+if {[llength $ips] > 0} {
+    set blk_mem_ip [get_ips blk_mem_gen_0 -quiet]
+    if {[llength $blk_mem_ip] > 0} {
+        set_property CONFIG.Coe_File $blk_mem_coe $blk_mem_ip
+    }
+
+    upgrade_ip $ips
+    generate_target all $ips
+    export_ip_user_files -of_objects $ips -no_script -sync -force -quiet
+}
 
 # ##############################################
 # add constraint file #

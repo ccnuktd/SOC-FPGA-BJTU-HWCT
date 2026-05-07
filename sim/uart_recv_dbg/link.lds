@@ -3,9 +3,8 @@ ENTRY(_start)
 
 MEMORY
 {
-    ram (rwx) : ORIGIN = 0x80000000, LENGTH = 4K
-    abi (rwx) : ORIGIN = 0x80001000, LENGTH = 4K
-    iap (rwx) : ORIGIN = 0x80002000, LENGTH = 56K
+    ram (rwx)  : ORIGIN = 0x80000000, LENGTH = 64K
+    iap (rwx) : ORIGIN = 0x80008000, LENGTH = 32K
 }
 
 SECTIONS
@@ -14,11 +13,6 @@ SECTIONS
     {
         KEEP (*(SORT_NONE(.init)))
     } >ram
-
-    .abi_section   :
-    {
-        KEEP(*(.abi_section))
-    } >abi
 
     .text           :
     {
@@ -80,6 +74,14 @@ SECTIONS
     .stack ORIGIN(ram) + LENGTH(ram):
     {
         __stack_top = .;
+    } >ram
+
+    .intr_stack (NOLOAD) :
+    {
+        . = ALIGN(4);
+        __intr_stack_bottom = .;
+        . = . + 0x400;  /* 1KB interrupt stack */
+        __intr_stack_top = .;
     } >ram
 }
 

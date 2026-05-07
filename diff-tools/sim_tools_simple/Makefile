@@ -7,6 +7,9 @@ BIN_FILE ?= riscv.bin
 SIM_ARGS ?=
 
 BIN_PATH ?= ./riscv.bin
+WAVE_FILE ?= obj_dir/sim.vcd
+WAVE_SAVE ?= debug1.gtkw
+WAVE_VIEWER ?= gtkwave
 
 RTL_DIR = ../rtl
 
@@ -58,6 +61,16 @@ tracerun: all
 
 runtrace: tracerun
 
+gtkwave:
+	@if [ ! -f "$(WAVE_FILE)" ]; then \
+		echo "[ERROR] Waveform file not found: $(WAVE_FILE)"; \
+		echo "[INFO] Run 'make trace_run' in a sim/* example directory first."; \
+		exit 1; \
+	fi
+	$(WAVE_VIEWER) $(WAVE_FILE) $(WAVE_SAVE)
+
+wave: gtkwave
+
 clint-test:
 	iverilog -g2012 -I$(RTL_DIR) -I$(RTL_DIR)/core \
 		-o /tmp/tb_clint.vvp \
@@ -97,4 +110,4 @@ clean:
 	rm -rf obj_dir
 	rm -f sim.vcd
 
-.PHONY: all clean run tracerun runtrace clint-test interrupt-matrix-test pcgen-test exu-control-test unit-test
+.PHONY: all clean run tracerun runtrace gtkwave wave clint-test interrupt-matrix-test pcgen-test exu-control-test unit-test

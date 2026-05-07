@@ -1,174 +1,207 @@
 
+Merging object attributes
+
+
 Discarded input sections
 
- .text          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccCgQ1z1.o
- .data          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccCgQ1z1.o
- .bss           0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccCgQ1z1.o
- .data          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\cc0ogaZt.o
- .bss           0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\cc0ogaZt.o
- .text          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccE3OitY.o
- .data          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccE3OitY.o
- .bss           0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccE3OitY.o
+ .text          0x00000000        0x0 /tmp/ccwqcfDl.o
+ .data          0x00000000        0x0 /tmp/ccwqcfDl.o
+ .bss           0x00000000        0x0 /tmp/ccwqcfDl.o
+ .data          0x00000000        0x0 /tmp/ccI2ZZQF.o
+ .bss           0x00000000        0x0 /tmp/ccI2ZZQF.o
+ .text          0x00000000        0x0 /tmp/cc1n932x.o
+ .data          0x00000000        0x0 /tmp/cc1n932x.o
+ .bss           0x00000000        0x0 /tmp/cc1n932x.o
  .text.get_cycle_value
-                0x0000000000000000       0x80 C:\Users\nana4\AppData\Local\Temp\ccE3OitY.o
+                0x00000000       0x90 /tmp/cc1n932x.o
  .text.get_cyclel_value
-                0x0000000000000000       0x28 C:\Users\nana4\AppData\Local\Temp\ccE3OitY.o
+                0x00000000       0x30 /tmp/cc1n932x.o
  .text.delay_us
-                0x0000000000000000       0xd0 C:\Users\nana4\AppData\Local\Temp\ccE3OitY.o
+                0x00000000       0xd4 /tmp/cc1n932x.o
  .text.delay_ms
-                0x0000000000000000       0x54 C:\Users\nana4\AppData\Local\Temp\ccE3OitY.o
- .comment       0x0000000000000000       0x3a C:\Users\nana4\AppData\Local\Temp\ccE3OitY.o
- .text          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\cc6Rbbmv.o
- .data          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\cc6Rbbmv.o
- .bss           0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\cc6Rbbmv.o
+                0x00000000       0x54 /tmp/cc1n932x.o
+ .comment       0x00000000       0x1b /tmp/cc1n932x.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/cc1n932x.o
+ .riscv.attributes
+                0x00000000       0x37 /tmp/cc1n932x.o
+ .text          0x00000000        0x0 /tmp/ccagXtT4.o
+ .data          0x00000000        0x0 /tmp/ccagXtT4.o
+ .bss           0x00000000        0x0 /tmp/ccagXtT4.o
  .text.timer_init
-                0x0000000000000000       0x7c C:\Users\nana4\AppData\Local\Temp\cc6Rbbmv.o
+                0x00000000       0x84 /tmp/ccagXtT4.o
  .text.timer_control
-                0x0000000000000000       0x68 C:\Users\nana4\AppData\Local\Temp\cc6Rbbmv.o
+                0x00000000       0x70 /tmp/ccagXtT4.o
  .text.timer_clearflag
-                0x0000000000000000       0x30 C:\Users\nana4\AppData\Local\Temp\cc6Rbbmv.o
- .comment       0x0000000000000000       0x3a C:\Users\nana4\AppData\Local\Temp\cc6Rbbmv.o
- .text          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\cciY7UE8.o
- .data          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\cciY7UE8.o
- .bss           0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\cciY7UE8.o
+                0x00000000       0x38 /tmp/ccagXtT4.o
+ .comment       0x00000000       0x1b /tmp/ccagXtT4.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccagXtT4.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/ccagXtT4.o
+ .text          0x00000000        0x0 /tmp/ccuiHfQq.o
+ .data          0x00000000        0x0 /tmp/ccuiHfQq.o
+ .bss           0x00000000        0x0 /tmp/ccuiHfQq.o
  .text.uart_send
-                0x0000000000000000       0x40 C:\Users\nana4\AppData\Local\Temp\cciY7UE8.o
+                0x00000000       0x48 /tmp/ccuiHfQq.o
  .text.uart_read
-                0x0000000000000000       0x58 C:\Users\nana4\AppData\Local\Temp\cciY7UE8.o
+                0x00000000       0x60 /tmp/ccuiHfQq.o
  .text.uart_read_wait
-                0x0000000000000000       0x50 C:\Users\nana4\AppData\Local\Temp\cciY7UE8.o
- .text          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccuYGKhO.o
- .data          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccuYGKhO.o
- .bss           0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccuYGKhO.o
- .abi_section   0x0000000000000000        0xc C:\Users\nana4\AppData\Local\Temp\ccuYGKhO.o
+                0x00000000       0x58 /tmp/ccuiHfQq.o
+ .text          0x00000000        0x0 /tmp/ccuglhPP.o
+ .data          0x00000000        0x0 /tmp/ccuglhPP.o
+ .bss           0x00000000        0x0 /tmp/ccuglhPP.o
+ .abi_section   0x00000000        0xc /tmp/ccuglhPP.o
  .text.get_frequency
-                0x0000000000000000       0x24 C:\Users\nana4\AppData\Local\Temp\ccuYGKhO.o
- .comment       0x0000000000000000       0x3a C:\Users\nana4\AppData\Local\Temp\ccuYGKhO.o
- .text          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccY771Cu.o
- .data          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccY771Cu.o
- .bss           0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccY771Cu.o
- .text          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccgfVh6d.o
- .data          0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccgfVh6d.o
- .bss           0x0000000000000000        0x0 C:\Users\nana4\AppData\Local\Temp\ccgfVh6d.o
+                0x00000000       0x2c /tmp/ccuglhPP.o
+ .comment       0x00000000       0x1b /tmp/ccuglhPP.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccuglhPP.o
+ .riscv.attributes
+                0x00000000       0x33 /tmp/ccuglhPP.o
+ .text          0x00000000        0x0 /tmp/ccfoS7HH.o
+ .data          0x00000000        0x0 /tmp/ccfoS7HH.o
+ .bss           0x00000000        0x0 /tmp/ccfoS7HH.o
+ .text          0x00000000        0x0 /tmp/ccJPBoes.o
+ .data          0x00000000        0x0 /tmp/ccJPBoes.o
+ .bss           0x00000000        0x0 /tmp/ccJPBoes.o
 
 Memory Configuration
 
 Name             Origin             Length             Attributes
-ram              0x0000000080000000 0x0000000000010000 xrw
-iap              0x0000000080008000 0x0000000000008000 xrw
-*default*        0x0000000000000000 0xffffffffffffffff
+ram              0x80000000         0x00010000         xrw
+iap              0x80008000         0x00008000         xrw
+*default*        0x00000000         0xffffffff
 
 Linker script and memory map
 
-LOAD c:/users/nana4/riscv-related/teacher_training/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32\libm.a
-LOAD c:/users/nana4/riscv-related/teacher_training/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32\libc.a
-LOAD c:/users/nana4/riscv-related/teacher_training/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a
-LOAD C:\Users\nana4\AppData\Local\Temp\ccCgQ1z1.o
-LOAD C:\Users\nana4\AppData\Local\Temp\cc0ogaZt.o
-LOAD C:\Users\nana4\AppData\Local\Temp\ccE3OitY.o
-LOAD C:\Users\nana4\AppData\Local\Temp\cc6Rbbmv.o
-LOAD C:\Users\nana4\AppData\Local\Temp\cciY7UE8.o
-LOAD C:\Users\nana4\AppData\Local\Temp\ccuYGKhO.o
-LOAD C:\Users\nana4\AppData\Local\Temp\ccY771Cu.o
-LOAD C:\Users\nana4\AppData\Local\Temp\ccgfVh6d.o
-LOAD c:/users/nana4/riscv-related/teacher_training/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a
+LOAD /tmp/ccwqcfDl.o
+LOAD /tmp/ccI2ZZQF.o
+LOAD /tmp/cc1n932x.o
+LOAD /tmp/ccagXtT4.o
+LOAD /tmp/ccuiHfQq.o
+LOAD /tmp/ccuglhPP.o
+LOAD /tmp/ccfoS7HH.o
+LOAD /tmp/ccJPBoes.o
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a
 START GROUP
-LOAD c:/users/nana4/riscv-related/teacher_training/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a
-LOAD c:/users/nana4/riscv-related/teacher_training/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32\libg.a
-LOAD c:/users/nana4/riscv-related/teacher_training/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32im/ilp32\libc.a
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libc.a
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/../../../../riscv32-unknown-elf/lib/libgloss.a
 END GROUP
-LOAD c:/users/nana4/riscv-related/teacher_training/riscv-none-embed/bin/../lib/gcc/riscv-none-embed/8.2.0/rv32im/ilp32\libgcc.a
+LOAD /opt/riscv32im_zicsr/lib/gcc/riscv32-unknown-elf/15.2.0/libgcc.a
 
-.init           0x0000000080000000       0x94
+.init           0x80000000       0x94
  *(SORT_NONE(.init))
- .init          0x0000000080000000       0x94 C:\Users\nana4\AppData\Local\Temp\ccCgQ1z1.o
-                0x0000000080000000                _start
-                0x0000000080000080                init
-                0x0000000080000084                entry
+ .init          0x80000000       0x94 /tmp/ccwqcfDl.o
+                0x80000000                _start
+                0x80000080                init
+                0x80000084                entry
 
-.text           0x0000000080000094      0x984
-                0x0000000080000094                . = ALIGN (0x4)
-                0x0000000080000094                __fsymtab_start = .
+.text           0x80000094      0x9ec
+                0x80000094                        . = ALIGN (0x4)
+                0x80000094                        __fsymtab_start = .
  *(FSymTab)
-                0x0000000080000094                __fsymtab_end = .
-                0x0000000080000094                . = ALIGN (0x4)
-                0x0000000080000094                __vsymtab_start = .
+                0x80000094                        __fsymtab_end = .
+                0x80000094                        . = ALIGN (0x4)
+                0x80000094                        __vsymtab_start = .
  *(VSymTab)
-                0x0000000080000094                __vsymtab_end = .
-                0x0000000080000094                . = ALIGN (0x4)
+                0x80000094                        __vsymtab_end = .
+                0x80000094                        . = ALIGN (0x4)
  *(.text.unlikely .text.unlikely.*)
  *(.text.startup .text.startup.*)
  *(.text .text.*)
- .text          0x0000000080000094      0x220 C:\Users\nana4\AppData\Local\Temp\cc0ogaZt.o
-                0x0000000080000094                interrupt_disable
-                0x000000008000009c                interrupt_enable
-                0x00000000800000a4                trap_entry
-                0x00000000800002b0                trap_handler
+ .text          0x80000094      0x220 /tmp/ccI2ZZQF.o
+                0x80000094                interrupt_disable
+                0x8000009c                interrupt_enable
+                0x800000a4                trap_entry
+                0x800002b0                trap_handler
  .text.uart_send_wait
-                0x00000000800002b4       0x54 C:\Users\nana4\AppData\Local\Temp\cciY7UE8.o
-                0x00000000800002b4                uart_send_wait
- .text.xputc    0x0000000080000308       0x5c C:\Users\nana4\AppData\Local\Temp\ccY771Cu.o
-                0x0000000080000308                xputc
- .text.xputs    0x0000000080000364       0x54 C:\Users\nana4\AppData\Local\Temp\ccY771Cu.o
-                0x0000000080000364                xputs
+                0x800002b4       0x5c /tmp/ccuiHfQq.o
+                0x800002b4                uart_send_wait
+ .text.xputc    0x80000310       0x5c /tmp/ccfoS7HH.o
+                0x80000310                xputc
+ .text.xputs    0x8000036c       0x58 /tmp/ccfoS7HH.o
+                0x8000036c                xputs
  .text.xvprintf
-                0x00000000800003b8      0x54c C:\Users\nana4\AppData\Local\Temp\ccY771Cu.o
- .text.xprintf  0x0000000080000904       0x7c C:\Users\nana4\AppData\Local\Temp\ccY771Cu.o
-                0x0000000080000904                xprintf
- .text.main     0x0000000080000980       0x98 C:\Users\nana4\AppData\Local\Temp\ccgfVh6d.o
-                0x0000000080000980                main
+                0x800003c4      0x598 /tmp/ccfoS7HH.o
+ .text.xprintf  0x8000095c       0x84 /tmp/ccfoS7HH.o
+                0x8000095c                xprintf
+ .text.main     0x800009e0       0xa0 /tmp/ccJPBoes.o
+                0x800009e0                main
  *(.gnu.linkonce.t.*)
 
-.data           0x0000000080000a18       0x78
-                0x0000000080000a18                __data_lma = LOADADDR (.data)
-                0x0000000080000a18                __data_start = .
-                0x0000000080000a18                . = ALIGN (0x4)
-                0x0000000080000a18                __rt_init_start = .
+.data           0x80000a80       0x1c
+                0x80000a80                        __data_lma = LOADADDR (.data)
+                0x80000a80                        __data_start = .
+                0x80000a80                        . = ALIGN (0x4)
+                0x80000a80                        __rt_init_start = .
  *(SORT_BY_NAME(.rti_fn*))
-                0x0000000080000a18                __rt_init_end = .
+                0x80000a80                        __rt_init_end = .
  *(.rdata)
  *(.rodata .rodata.*)
- .rodata.xvprintf
-                0x0000000080000a18       0x5c C:\Users\nana4\AppData\Local\Temp\ccY771Cu.o
- .rodata        0x0000000080000a74       0x1b C:\Users\nana4\AppData\Local\Temp\ccgfVh6d.o
+ .rodata        0x80000a80       0x1b /tmp/ccJPBoes.o
  *(.gnu.linkonce.r.*)
  *(.data .data.*)
  *(.gnu.linkonce.d.*)
  *(.sdata .sdata.*)
  *(.sdata*)
  *(.gnu.linkonce.s.*)
-                0x0000000080000a90                . = ALIGN (0x4)
- *fill*         0x0000000080000a8f        0x1 
-                0x0000000080000a90                __data_end = .
+                0x80000a9c                        . = ALIGN (0x4)
+ *fill*         0x80000a9b        0x1 
+                0x80000a9c                        __data_end = .
 
-.rela.dyn       0x0000000080000a90        0x0
- .rela.init     0x0000000080000a90        0x0 C:\Users\nana4\AppData\Local\Temp\ccCgQ1z1.o
- .rela.text     0x0000000080000a90        0x0 C:\Users\nana4\AppData\Local\Temp\ccCgQ1z1.o
+.rela.dyn       0x80000a9c        0x0
+ .rela.init     0x80000a9c        0x0 /tmp/ccwqcfDl.o
 
-.bss            0x0000000080000a90        0x0
-                0x0000000080000a90                __bss_start = .
+.bss            0x80000a9c        0x0
+                0x80000a9c                        __bss_start = .
  *(.sbss .sbss.*)
  *(.gnu.linkonce.sb.*)
  *(.bss .bss.*)
  *(.gnu.linkonce.b.*)
  *(COMMON)
-                0x0000000080000a90                . = ALIGN (0x4)
-                0x0000000080000a90                __bss_end = .
-                0x0000000080000a90                __end = .
+                0x80000a9c                        . = ALIGN (0x4)
+                0x80000a9c                        __bss_end = .
+                0x80000a9c                        __end = .
 
-.stack          0x0000000080010000        0x0
-                0x0000000080010000                __stack_top = .
+.stack          0x80010000        0x0
+                0x80010000                        __stack_top = .
 
-.intr_stack     0x0000000080000a90      0x400
-                0x0000000080000a90                . = ALIGN (0x4)
-                0x0000000080000a90                __intr_stack_bottom = .
-                0x0000000080000e90                . = (. + 0x400)
- *fill*         0x0000000080000a90      0x400 
-                0x0000000080000e90                __intr_stack_top = .
+.intr_stack     0x80000a9c      0x400
+                0x80000a9c                        . = ALIGN (0x4)
+                0x80000a9c                        __intr_stack_bottom = .
+                0x80000e9c                        . = (. + 0x400)
+ *fill*         0x80000a9c      0x400 
+                0x80000e9c                        __intr_stack_top = .
 OUTPUT(riscv.elf elf32-littleriscv)
 
-.comment        0x0000000000000000       0x39
- .comment       0x0000000000000000       0x39 C:\Users\nana4\AppData\Local\Temp\cciY7UE8.o
-                                         0x3a (size before relaxing)
- .comment       0x0000000000000039       0x3a C:\Users\nana4\AppData\Local\Temp\ccY771Cu.o
- .comment       0x0000000000000039       0x3a C:\Users\nana4\AppData\Local\Temp\ccgfVh6d.o
+.riscv.attributes
+                0x00000000       0x37
+ .riscv.attributes
+                0x00000000       0x35 /tmp/ccwqcfDl.o
+ .riscv.attributes
+                0x00000035       0x35 /tmp/ccI2ZZQF.o
+ .riscv.attributes
+                0x0000006a       0x33 /tmp/ccuiHfQq.o
+ .riscv.attributes
+                0x0000009d       0x33 /tmp/ccfoS7HH.o
+ .riscv.attributes
+                0x000000d0       0x33 /tmp/ccJPBoes.o
+
+.comment        0x00000000       0x1a
+ .comment       0x00000000       0x1a /tmp/ccuiHfQq.o
+                                 0x1b (size before relaxing)
+ .comment       0x0000001a        0x0 /tmp/ccfoS7HH.o
+                                 0x1b (size before relaxing)
+ .comment       0x0000001a        0x0 /tmp/ccJPBoes.o
+                                 0x1b (size before relaxing)
+
+.note.GNU-stack
+                0x00000000        0x0
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccuiHfQq.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccfoS7HH.o
+ .note.GNU-stack
+                0x00000000        0x0 /tmp/ccJPBoes.o

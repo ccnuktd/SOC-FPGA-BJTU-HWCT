@@ -3,8 +3,8 @@ ENTRY(_start)
 
 MEMORY
 {
-    rom (rx)  : ORIGIN = 0x80000000, LENGTH = 32K
-    ram (rwx) : ORIGIN = 0x80008000, LENGTH = 32K
+    ram (rwx)  : ORIGIN = 0x80000000, LENGTH = 64K
+    iap (rwx) : ORIGIN = 0x80008000, LENGTH = 32K
 }
 
 SECTIONS
@@ -12,7 +12,7 @@ SECTIONS
     .init           :
     {
         KEEP (*(SORT_NONE(.init)))
-    } >rom
+    } >ram
 
     .text           :
     {
@@ -31,7 +31,7 @@ SECTIONS
         *(.text.startup .text.startup.*)
         *(.text .text.*)
         *(.gnu.linkonce.t.*)
-    } >rom
+    } >ram
 
     .data          :
     {
@@ -54,7 +54,7 @@ SECTIONS
 
         . = ALIGN(4);
         __data_end = .;
-    } >ram AT>rom
+    } >ram
 
     .bss            :
     {
@@ -71,6 +71,11 @@ SECTIONS
         __end = .;
     } >ram
 
+    .stack ORIGIN(ram) + LENGTH(ram):
+    {
+        __stack_top = .;
+    } >ram
+
     .intr_stack (NOLOAD) :
     {
         . = ALIGN(4);
@@ -78,9 +83,5 @@ SECTIONS
         . = . + 0x400;  /* 1KB interrupt stack */
         __intr_stack_top = .;
     } >ram
-
-    .stack ORIGIN(ram) + LENGTH(ram):
-    {
-        __stack_top = .;
-    } >ram
 }
+

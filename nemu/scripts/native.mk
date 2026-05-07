@@ -38,7 +38,7 @@ run_test: run-env
 ifneq ($(SIM_PATH),)
   IMG_DETECTED = $(SIM_PATH)/riscv.bin
   ELF_DETECTED = $(SIM_PATH)/riscv.elf
-  NEMU_AUTO := $(BINARY)  -f $(ELF_DETECTED) $(IMG_DETECTED) $(ARGS)
+  NEMU_AUTO := $(BINARY) $(if $(filter b batch,$(MODE)),-b,) -f $(ELF_DETECTED) $(IMG_DETECTED) $(ARGS)
   
   run_auto: $(BINARY) $(DIFF_REF_SO)
 	@echo "Running with SIM_PATH=$(SIM_PATH)"
