@@ -8,6 +8,16 @@
 # * 2022-04-04   Lyons           first version
 # */
 
+# ============================================
+# 项目路径配置 - 只需修改这里
+# ============================================
+# NEMU模拟器路径（绝对路径）
+NEMU_PATH      = /home/fisher/2025work/soc-fpga/nemu
+
+# RTL仿真工具路径（绝对路径）
+SIM_TOOLS_PATH = /home/fisher/2025work/soc-fpga/diff-tools/sim_tools_simple
+# ============================================
+
 # Detect OS for cross-platform compatibility
 DETECTED_OS := $(shell echo $$OSTYPE)
 IS_LINUX := $(filter %linux%,$(DETECTED_OS))
@@ -44,11 +54,10 @@ ifneq ($(IS_WINDOWS),)
 	@echo -e ${COLORS}[ERROR] 'clean' is only supported on Linux.${COLORE}
 	@exit 1
 endif
-	$(MAKE) -C the/path/to/you/nemu clean-all
-	$(MAKE) -C the/path/to/you/diff-tools/sim_tools_simple clean
+	$(MAKE) -C ${NEMU_PATH} clean-all
+	$(MAKE) -C ${SIM_TOOLS_PATH} clean
 
 	
-#(MAKE) -C后面的路径为你的电脑上nemu目录的绝对路径
 .PHONY: run
 run: build
 ifneq ($(IS_WINDOWS),)
@@ -56,7 +65,7 @@ ifneq ($(IS_WINDOWS),)
 	@exit 1
 endif
 	@echo -e ${COLORS}[INFO] Running in nemu ...${COLORE}
-	$(MAKE) -C the/path/to/you/nemu \
+	$(MAKE) -C ${NEMU_PATH} \
 		SIM_PATH=$(SIM_PATH) \
 		MODE=$(MODE) \
 		run_auto
@@ -68,7 +77,7 @@ ifneq ($(IS_WINDOWS),)
 	@exit 1
 endif
 	@echo -e ${COLORS}[INFO] Running in verilator ...${COLORE}
-	$(MAKE) -C the/path/to/you/diff-tools/sim_tools_simple \
+	$(MAKE) -C ${SIM_TOOLS_PATH} \
 	BIN_PATH=$(SIM_PATH)/riscv.bin \
 	tracerun
 
@@ -78,6 +87,6 @@ ifneq ($(IS_WINDOWS),)
 	@exit 1
 endif
 	@echo -e ${COLORS}[INFO] Running in verilator ...${COLORE}
-	$(MAKE) -C /the/path/to/you/diff-tools/sim_tools_simple \
+	$(MAKE) -C ${SIM_TOOLS_PATH} \
 	BIN_PATH=$(SIM_PATH)/riscv.bin \
 	run
