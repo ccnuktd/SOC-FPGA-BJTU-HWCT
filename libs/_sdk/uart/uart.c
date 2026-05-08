@@ -12,40 +12,32 @@
 
 void uart_send(UART_Type *uart, uint8_t data)
 {
-    uart->sr = UART_SR_CLR_TXE;
-    uart->txd = data;
+    (void)uart;
+    (void)data;
+
+    /* TODO: Start one UART transmit according to uart.h and the RTL. */
 }
 
 void uart_send_wait(UART_Type *uart, uint8_t data)
 {
-    uart->txd = data;
-    while ( !(uart->sr & UART_SR_FLAG_TXE) );
-    uart->sr = UART_SR_CLR_TXE;
+    (void)uart;
+    (void)data;
+
+    /* TODO: Send one byte and wait until the transmit-done flag is set. */
 }
 
 uint8_t uart_read(UART_Type *uart)
 {
-    uint8_t dummy;
+    (void)uart;
 
-    if (uart->sr & UART_SR_FLAG_RXNE)
-    {
-        dummy = uart->rxd;
-        uart->sr = UART_SR_CLR_RXNE;
-    } else {
-        dummy = 0xFF; //0xFF is -1
-    }
-    
-    return dummy;
+    /* TODO: Return one received byte, or 0xFF when no byte is available. */
+    return 0xFF;
 }
 
 uint8_t uart_read_wait(UART_Type *uart)
 {
-    uint8_t dummy;
+    (void)uart;
 
-    while ( !(uart->sr & UART_SR_FLAG_RXNE) );
-
-    dummy = uart->rxd;
-    uart->sr = UART_SR_CLR_RXNE;
-
-    return dummy;
+    /* TODO: Wait until one byte is received, then return it. */
+    return 0xFF;
 }

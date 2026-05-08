@@ -22,13 +22,11 @@ INCLUDES       += -I. \
                   -I${PROJPATH}/libs/_kernel/components/finsh \
                   -I${PROJPATH}/libs/_kernel/include \
                   -I${PROJPATH}/libs/_kernel/include/libc \
-                  -I${PROJPATH}/libs/_kernel/libcpu/risc-v/common \
-                  -I${WORKPATH}/coremark
+                  -I${PROJPATH}/libs/_kernel/libcpu/risc-v/common
 
 INCFILES       += 
 
 CFLAGS         += -O3 -ffunction-sections -fdata-sections
-CFLAGS         += -DITERATIONS=10 -DPERFORMANCE_RUN=1
 #CFLAGS         += -g
 CFLAGS         += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
 CFLAGS         += -DOS_ENABLE_RT_THREAD
@@ -66,13 +64,7 @@ CFILES         += ${PROJPATH}/libs/_kernel/bsp/board.c \
 
 CFILES         += ${WORKPATH}/init.c \
                   ${WORKPATH}/interrupt.c \
-                  ${WORKPATH}/main.c \
-                  ${WORKPATH}/coremark/core_list_join.c \
-                  ${WORKPATH}/coremark/core_main.c \
-                  ${WORKPATH}/coremark/core_matrix.c \
-                  ${WORKPATH}/coremark/core_portme.c \
-                  ${WORKPATH}/coremark/core_state.c \
-                  ${WORKPATH}/coremark/core_util.c
+                  ${WORKPATH}/main.c
 
 include ../build.mk
 

@@ -1,0 +1,25 @@
+[*]
+[*] GTKWave save file for Lab 4 UART
+[*]
+[dumpfile] "uart.vcd"
+[savefile] "uart.gtkw"
+[timestart] 0
+[size] 1200 800
+@28
+uart_tb.clk_i
+uart_tb.rst_n_i
+uart_tb.data_rd_i
+uart_tb.data_we_i
+uart_tb.pad_rxd
+uart_tb.pad_txd
+@22
+uart_tb.addr_i[7:0]
+uart_tb.data_i[31:0]
+uart_tb.data_o[31:0]
+uart_tb.read_data[31:0]
+uart_tb.captured_tx_data[7:0]
+uart_tb.captured_rx_data[7:0]
+@200
+-
+@22
+uart_tb.dut.*

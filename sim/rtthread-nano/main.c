@@ -14,7 +14,6 @@
 #include "rtthread.h"
 #include "timer.h"
 
-int ext_exec_coremark();
 void simple_add(void);
 
 int main()
@@ -24,8 +23,7 @@ int main()
 
     while (1) {
         // rt_kprintf("Hello RT-Thread!\n");
-        // ext_exec_coremark();
-        simple_add();
+        // simple_add();
         rt_thread_mdelay(1000);
     }
 

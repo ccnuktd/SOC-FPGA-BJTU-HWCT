@@ -12,31 +12,25 @@
 
 void timer_init(TIM_Type *tim, uint32_t psc, uint32_t value)
 {
-    tim->cr &= ~TIM_CR_EN; //close first
+    (void)tim;
+    (void)psc;
+    (void)value;
 
-    tim->sr |=  TIM_SR_CLR_TUF;
-
-    tim->psc = (0 == psc) ? 0 : (psc+1);
-    tim->load = value;
+    /* TODO: Configure timer registers according to timer.h and the RTL. */
 }
 
 void timer_control(TIM_Type *tim, uint8_t en)
 {
-    uint32_t dummy;
+    (void)tim;
+    (void)en;
 
-    dummy = tim->cr;
-
-    if (TIM_EN == en)
-    {
-        dummy |=  TIM_CR_EN;
-    } else {
-        dummy &= ~TIM_CR_EN;
-    }
-
-    tim->cr = dummy;
+    /* TODO: Enable or disable the timer by updating the control register. */
 }
 
 void timer_clearflag(TIM_Type *tim, uint32_t flag)
 {
-    tim->sr = flag;
+    (void)tim;
+    (void)flag;
+
+    /* TODO: Clear timer status flags with the RTL-defined write-one rule. */
 }

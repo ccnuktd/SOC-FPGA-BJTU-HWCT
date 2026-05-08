@@ -1,0 +1,23 @@
+[*]
+[*] GTKWave save file for Lab 2 Timer
+[*]
+[dumpfile] "timer.vcd"
+[savefile] "timer.gtkw"
+[timestart] 0
+[size] 1200 800
+@28
+timer_tb.clk_i
+timer_tb.rst_n_i
+timer_tb.data_rd_i
+timer_tb.data_we_i
+timer_tb.irq_o
+@22
+timer_tb.addr_i[7:0]
+timer_tb.data_i[31:0]
+timer_tb.data_o[31:0]
+timer_tb.read_data[31:0]
+timer_tb.actual_cycles
+@200
+-
+@22
+timer_tb.dut.*

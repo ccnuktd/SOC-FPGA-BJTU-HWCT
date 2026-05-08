@@ -43,6 +43,10 @@ tb/work/
 tb/*.vvp
 tb/*.out
 
+# Local teacher reference answers
+teacher-lab1-4/
+hardware_training/
+
 # NEMU (keep as external submodule)
 nemu/.git
 

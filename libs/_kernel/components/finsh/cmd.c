@@ -34,7 +34,6 @@
 #include <rtthread.h>
 #include <finsh_config.h>
 
-extern int ext_exec_coremark();
 extern void simple_add(void);
 
 #ifdef RT_USING_FINSH
@@ -60,14 +59,6 @@ long version(void)
 }
 FINSH_FUNCTION_EXPORT(version, show RT-Thread version information);
 MSH_CMD_EXPORT(version, show RT-Thread version information);
-
-extern void rt_exec_coremark(void);
-void exec_coremark(void)
-{
-    ext_exec_coremark();
-}
-FINSH_FUNCTION_EXPORT(exec_coremark, execute coremark);
-MSH_CMD_EXPORT(exec_coremark, execute coremark);
 
 extern void simple_add(void);
 void simple_add(void)
@@ -1164,4 +1155,3 @@ FINSH_VAR_EXPORT(dummy, finsh_type_int, dummy variable for finsh)
 #endif
 
 #endif /* RT_USING_FINSH */
-

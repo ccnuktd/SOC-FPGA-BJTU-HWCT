@@ -1,0 +1,30 @@
+[*]
+[*] GTKWave save file for Lab 3 CLINT
+[*]
+[dumpfile] "clint.vcd"
+[savefile] "clint.gtkw"
+[timestart] 0
+[size] 1200 800
+@28
+clint_tb.clk_i
+clint_tb.rst_n_i
+clint_tb.irq_i
+clint_tb.jump_flag_i
+clint_tb.hold_flag_i
+clint_tb.hold_flag_o
+clint_tb.jump_flag_o
+clint_tb.csr_waddr_vld_o
+@22
+clint_tb.inst_func_i[2:0]
+clint_tb.pc_i[31:0]
+clint_tb.jump_addr_i[31:0]
+clint_tb.jump_addr_o[31:0]
+clint_tb.csr_mtvec_i[31:0]
+clint_tb.csr_mepc_i[31:0]
+clint_tb.csr_mstatus_i[31:0]
+clint_tb.csr_waddr_o[11:0]
+clint_tb.csr_wdata_o[31:0]
+@200
+-
+@22
+clint_tb.clint_inst.*

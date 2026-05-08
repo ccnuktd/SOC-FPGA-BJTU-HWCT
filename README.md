@@ -63,7 +63,20 @@ soc-fpga/
 
 Windows 用户如果要直接使用 Vivado，请参考后面的 “FPGA 与 Vivado” 章节。
 
-### 1.2 安装基础工具
+### 1.2 推荐编辑器
+
+强烈建议大家使用 VS Code 或 Cursor 进行代码编写、阅读和调试。这个项目同时包含 C、Makefile、Verilog/SystemVerilog、Markdown 文档和仿真波形相关文件，使用 VS Code/Cursor 可以更方便地做全局搜索、跳转定义、查看 Git 修改、预览 Markdown，并配合 AI 工具理解代码。
+
+推荐安装以下插件：
+
+| 插件 | 发布者 | 推荐用途 |
+|------|--------|----------|
+| Codex - OpenAI's coding agent | OpenAI | 辅助阅读代码、解释报错、生成修改建议；适合在不熟悉代码结构时快速定位问题 |
+| Markdown All in One | Yu Zhang | 编写 README 和实验报告，支持 Markdown 快捷键、目录、列表和格式化 |
+| Markdown Preview Enhanced | Yiyi Wang | 预览复杂 Markdown 文档，查看表格、代码块和排版效果 |
+| Verilog-HDL/SystemVerilog/Bluespec SystemVerilog | Masahiro Hiramori | 提供 Verilog/SystemVerilog 语法高亮、代码跳转、格式辅助和基础检查 |
+
+### 1.3 安装基础工具
 
 建议先换国内 apt 源，然后安装基础工具：
 
@@ -75,7 +88,7 @@ sudo apt install -y iverilog verilator gtkwave
 
 GTKWave 用于查看 `make trace_run` 生成的 VCD 波形。
 
-### 1.3 安装 RISC-V 交叉编译工具链
+### 1.4 安装 RISC-V 交叉编译工具链
 
 安装工具链构建依赖：
 
@@ -118,7 +131,7 @@ source ~/.bashrc
 riscv32-unknown-elf-gcc --version
 ```
 
-### 1.4 检查 `sim/config.mk`
+### 1.5 检查 `sim/config.mk`
 
 Linux 下默认使用：
 
@@ -403,38 +416,28 @@ PC Gen → IDU → EXU → MAU → WB
 
 ## 6. RTL 同步维护
 
-本仓库有两份 RTL：
+本仓库只把外层 `rtl/` 作为主 RTL 源码：
 
 - `rtl/`：综合和上板使用的主 RTL 源码
-- `diff-tools/rtl/`：Verilator 仿真和 trace 使用的 RTL 源码
+- `diff-tools/rtl/`：Verilator 仿真使用的 RTL 入口，其中大部分通用文件是指向外层 `rtl/` 的软链接
 
-两者大部分文件应保持一致，但 `diff-tools/rtl/` 中有少量文件包含仿真专用逻辑，例如 DPI-C 调试接口、`riscv.bin` 加载、UART 标准输出、仿真参数等，这些文件不能直接覆盖。
+`diff-tools/rtl/` 只保留少量仿真专用实体文件，例如 DPI-C 调试接口、`riscv.bin` 加载、UART 标准输出、仿真参数等。其余通用 RTL 文件通过软链接复用外层 `rtl/`，避免维护两份几乎相同的代码。
 
-修改外层 `rtl/` 中的通用核心逻辑后，可以在 `diff-tools/` 目录运行：
-
-```bash
-cd diff-tools
-make rtl-sync
-```
-
-也可以在任意 `sim/*` 示例目录中直接运行同名命令：
+软链接已经在仓库中生成，平时不需要手动维护。如果软链接被破坏，或新增了需要复用的通用 RTL 文件，可以在任意 `sim/*` 示例目录中运行：
 
 ```bash
 cd sim/simple
 make rtl-sync
 ```
 
-相关命令：
+这个命令会创建或修复 `diff-tools/rtl` 中指向外层 `rtl/` 的软链接。也可以在 `diff-tools/` 目录中运行同名命令：
 
-| 命令 | 作用 |
-|------|------|
-| `make rtl-sync` | 把白名单中的通用 RTL 从 `rtl/` 同步到 `diff-tools/rtl/` |
-| `make rtl-sync-check` | 检查应同步文件是否一致 |
-| `make rtl-diff-report` | 打印应同步但未同步文件的具体 diff |
+```bash
+cd diff-tools
+make rtl-sync
+```
 
-`rtl-diff-report` 只展开应该同步但尚未同步的文件差异。受保护的仿真特化文件只显示状态，不展开差异内容。
-
-目前不会自动覆盖的仿真特化文件包括：
+目前保留为实体文件、不会被软链接替换的仿真特化文件包括：
 
 ```text
 diff-tools/rtl/pa_chip_param.v
@@ -525,7 +528,6 @@ make wave
 
 ```bash
 make rtl-sync
-make rtl-sync-check
 ```
 
 ### 8.4 上板

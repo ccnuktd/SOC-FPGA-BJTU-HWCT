@@ -1,0 +1,1 @@
+../../rtl/pa_chip_param.v

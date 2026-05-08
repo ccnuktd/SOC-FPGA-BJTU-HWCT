@@ -1,0 +1,1 @@
+../../rtl/perips/pa_perips_uart.v

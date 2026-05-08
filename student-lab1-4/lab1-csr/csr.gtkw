@@ -1,0 +1,23 @@
+[*]
+[*] GTKWave save file for Lab 1 CSR
+[*]
+[dumpfile] "csr.vcd"
+[savefile] "csr.gtkw"
+[timestart] 0
+[size] 1200 800
+@28
+csr_tb.clk_i
+csr_tb.rst_n_i
+@22
+csr_tb.csr_raddr_i[11:0]
+csr_tb.csr_rdata_o[31:0]
+csr_tb.csr_waddr_i[11:0]
+csr_tb.csr_waddr_vld_i
+csr_tb.csr_wdata_i[31:0]
+csr_tb.csr_mtvec_o[31:0]
+csr_tb.csr_mepc_o[31:0]
+csr_tb.csr_mstatus_o[31:0]
+@200
+-
+@22
+csr_tb.dut.*

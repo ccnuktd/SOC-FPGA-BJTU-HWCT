@@ -91,15 +91,9 @@ endif
 
 wave: gtkwave
 
-.PHONY: rtl-sync rtl-sync-check rtl-diff-report
+.PHONY: rtl-sync
 rtl-sync:
 	$(MAKE) -C $(abspath $(PROJPATH)/diff-tools) rtl-sync
-
-rtl-sync-check:
-	$(MAKE) -C $(abspath $(PROJPATH)/diff-tools) rtl-sync-check
-
-rtl-diff-report:
-	$(MAKE) -C $(abspath $(PROJPATH)/diff-tools) rtl-diff-report
 
 rtl_run: build
 ifneq ($(IS_WINDOWS),)
