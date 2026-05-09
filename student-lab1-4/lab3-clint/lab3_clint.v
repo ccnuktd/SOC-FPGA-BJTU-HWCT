@@ -24,6 +24,15 @@ module pa_core_clint (
     input  wire [`DATA_BUS_WIDTH-1:0]   jump_addr_i,
     input  wire                         hold_flag_i,
 
+    // PC of the instruction that should run after the current EX-stage
+    // instruction retires. TOP drives this as jump target for taken jumps,
+    // otherwise exu_pc + 4.
+    input  wire [`ADDR_BUS_WIDTH-1:0]   next_pc_i,
+
+    // Asserted by TOP on a precise interrupt boundary: the EX-stage
+    // instruction is completing and no multi-cycle work is in flight.
+    input  wire                         inst_retire_i,
+
     output wire [`CSR_BUS_WIDTH-1:0]    csr_waddr_o,
     output wire                         csr_waddr_vld_o,
     output wire [`DATA_BUS_WIDTH-1:0]   csr_wdata_o,
@@ -43,7 +52,6 @@ localparam INT_TYPE_EXCEPTION  = 2'b01;
 localparam INT_TYPE_INTERRUPT  = 2'b10;
 
 localparam CSR_STATE_IDLE      = 3'd0;
-localparam CSR_STATE_WAIT      = 3'd1;
 localparam CSR_STATE_MEPC      = 3'd2;
 localparam CSR_STATE_MSTATUS   = 3'd3;
 localparam CSR_STATE_MCAUSE    = 3'd4;
@@ -127,7 +135,8 @@ wire [`DATA_BUS_WIDTH-1:0]             exception_addr;
 wire [`DATA_BUS_WIDTH-1:0]             interrupt_addr;
 
 // TODO-5: Calculate the address written into mepc.
-// Exception uses current pipeline convention pc_i - 8; interrupt uses jump_addr_i.
+// Exception uses current pipeline convention pc_i - 8.
+// Interrupt uses next_pc_i from TOP's precise-retire boundary.
 assign exception_addr = `ZERO_WORD;
 assign interrupt_addr = `ZERO_WORD;
 
@@ -154,28 +163,17 @@ assign break_cause_next = break_cause_soft | break_cause_ext;
 
 wire                                   trap_capture;
 wire                                   trap_ready;
-reg                                    jump_trap_captured;
 
 // TODO-8: Decide when the return address/cause can be captured.
 // Exception can be captured in IDLE when there is no jump/hold conflict.
-// Interrupt can be captured only when jump_flag_i gives a stable next PC.
+// Interrupt can be captured in IDLE when inst_retire_i marks a precise
+// retire boundary.
 assign trap_capture = `INVALID;
 
 // TODO-9: Decide when CSR state machine may enter MEPC write.
-// Interrupts must wait for hold_flag_i to drop after jump has been captured.
+// The new TOP only asserts inst_retire_i at a safe boundary, so trap_ready
+// can follow trap_capture directly.
 assign trap_ready = `INVALID;
-
-always @(posedge clk_i or negedge rst_n_i) begin
-    if (!rst_n_i) begin
-        jump_trap_captured <= `INVALID;
-    end
-    else if (csr_state == CSR_STATE_IDLE && int_state != INT_STATE_MCALL) begin
-        jump_trap_captured <= `INVALID;
-    end
-    else if (trap_capture && jump_flag_i && int_type == INT_TYPE_INTERRUPT) begin
-        jump_trap_captured <= `VALID;
-    end
-end
 
 pa_dff_rst_0 #(`DATA_BUS_WIDTH) dff_break_addr (
     clk_i,
@@ -199,23 +197,10 @@ always @(posedge clk_i or negedge rst_n_i) begin
     end
     else begin
         case (csr_state)
-            CSR_STATE_IDLE,
-            CSR_STATE_WAIT: begin
+            CSR_STATE_IDLE: begin
                 case (int_state)
                     INT_STATE_MCALL: begin
                         if (trap_ready) begin
-                            csr_state <= CSR_STATE_MEPC;
-                        end
-                        else if (int_type == INT_TYPE_INTERRUPT && csr_state == CSR_STATE_IDLE) begin
-                            csr_state <= CSR_STATE_WAIT;
-                        end
-                        else if (int_type == INT_TYPE_INTERRUPT && csr_state == CSR_STATE_WAIT && !trap_capture) begin
-                            csr_state <= CSR_STATE_WAIT;
-                        end
-                        else if (jump_flag_i || hold_flag_i) begin
-                            csr_state <= CSR_STATE_WAIT;
-                        end
-                        else begin
                             csr_state <= CSR_STATE_MEPC;
                         end
                     end
@@ -230,7 +215,7 @@ always @(posedge clk_i or negedge rst_n_i) begin
                 endcase
             end
 
-            CSR_STATE_MEPC:    csr_state <= (jump_flag_i ? CSR_STATE_MEPC : CSR_STATE_MSTATUS);
+            CSR_STATE_MEPC:    csr_state <= CSR_STATE_MSTATUS;
             CSR_STATE_MSTATUS: csr_state <= CSR_STATE_MCAUSE;
             CSR_STATE_MCAUSE:  csr_state <= CSR_STATE_IDLE;
             CSR_STATE_MRET:    csr_state <= CSR_STATE_IDLE;
@@ -318,8 +303,7 @@ assign csr_waddr_o     = csr_waddr;
 assign csr_waddr_vld_o = csr_waddr_vld;
 assign csr_wdata_o     = csr_wdata;
 
-assign hold_flag_o = (csr_state != CSR_STATE_IDLE)
-                  && (csr_state != CSR_STATE_WAIT);
+assign hold_flag_o = (csr_state != CSR_STATE_IDLE);
 
 assign jump_flag_o = int_jump_flag;
 assign jump_addr_o = int_jump_addr;

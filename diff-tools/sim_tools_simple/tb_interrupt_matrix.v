@@ -17,6 +17,8 @@ reg                         irq;
 reg                         jump_flag;
 reg  [`DATA_BUS_WIDTH-1:0]  jump_addr;
 reg                         hold_flag;
+reg  [`ADDR_BUS_WIDTH-1:0]  next_pc;
+reg                         inst_retire;
 
 wire [`CSR_BUS_WIDTH-1:0]   csr_waddr;
 wire                        csr_waddr_vld;
@@ -41,6 +43,8 @@ pa_core_clint dut (
     .jump_flag_i            (jump_flag),
     .jump_addr_i            (jump_addr),
     .hold_flag_i            (hold_flag),
+    .next_pc_i              (next_pc),
+    .inst_retire_i          (inst_retire),
     .csr_waddr_o            (csr_waddr),
     .csr_waddr_vld_o        (csr_waddr_vld),
     .csr_wdata_o            (csr_wdata),
@@ -79,6 +83,8 @@ task reset_case;
         jump_flag   = 1'b0;
         jump_addr   = 32'h8000_1000;
         hold_flag   = 1'b0;
+        next_pc     = 32'h8000_0104;
+        inst_retire = 1'b0;
         repeat (3) cycle();
         rst_n       = 1'b1;
         repeat (2) cycle();
@@ -109,13 +115,27 @@ task assert_no_trap_cycles;
     end
 endtask
 
-task pulse_jump;
+task retire_seq;
     input [`DATA_BUS_WIDTH-1:0] target;
     begin
-        jump_addr = target;
-        jump_flag = 1'b1;
+        next_pc     = target;
+        inst_retire = 1'b1;
+        jump_flag   = 1'b0;
         cycle();
-        jump_flag = 1'b0;
+        inst_retire = 1'b0;
+    end
+endtask
+
+task retire_jump;
+    input [`DATA_BUS_WIDTH-1:0] target;
+    begin
+        next_pc     = target;
+        jump_addr   = target;
+        jump_flag   = 1'b1;
+        inst_retire = 1'b1;
+        cycle();
+        inst_retire = 1'b0;
+        jump_flag   = 1'b0;
     end
 endtask
 
@@ -177,11 +197,11 @@ task expect_mtvec_jump;
     end
 endtask
 
-task complete_pending_on_jump;
+task complete_pending_on_retire;
     input [`DATA_BUS_WIDTH-1:0] target;
     input [1023:0] label;
     begin
-        pulse_jump(target);
+        retire_seq(target);
         expect_csr_now_or_later(`CSR_MEPC, target, label);
         expect_csr_now_or_later(`CSR_MSTATUS, 32'h0000_1880, "mstatus");
         expect_csr_now_or_later(`CSR_MCAUSE, 32'h8000_0003, "mcause");
@@ -189,18 +209,18 @@ task complete_pending_on_jump;
     end
 endtask
 
-task jump_waits_for_side_effect_case;
+task retire_waits_for_side_effect_case;
     begin
-        $display("[TEST] irq plus jump waits until older side effect is drained");
+        $display("[TEST] irq waits until older side effect is drained");
         reset_case();
         pulse_irq();
-        jump_addr = 32'h8000_5000;
-        jump_flag = 1'b1;
         hold_flag = 1'b1;
+        next_pc = 32'h8000_5000;
+        inst_retire = 1'b0;
         cycle();
-        jump_flag = 1'b0;
-        assert_no_trap_cycles(4, "jump with older side effect");
+        assert_no_trap_cycles(4, "older side effect");
         hold_flag = 1'b0;
+        retire_seq(32'h8000_5000);
         expect_csr_now_or_later(`CSR_MEPC, 32'h8000_5000, "drained jump mepc");
         expect_csr_now_or_later(`CSR_MSTATUS, 32'h0000_1880, "drained jump mstatus");
         expect_csr_now_or_later(`CSR_MCAUSE, 32'h8000_0003, "drained jump mcause");
@@ -208,33 +228,35 @@ task jump_waits_for_side_effect_case;
     end
 endtask
 
-task pending_until_jump_case;
+task pending_until_retire_case;
     input [1023:0] label;
-    input [2:0] func;
-    input no_side_effect_hold;
     input [`DATA_BUS_WIDTH-1:0] target;
     begin
         $display("[TEST] %0s", label);
         reset_case();
-        inst_set = 1'b1;
-        inst_func = func;
-        hold_flag = no_side_effect_hold;
         pulse_irq();
+        hold_flag = 1'b1;
         assert_no_trap_cycles(6, label);
         hold_flag = 1'b0;
         assert_no_trap_cycles(2, label);
-        complete_pending_on_jump(target, label);
+        complete_pending_on_retire(target, label);
     end
 endtask
 
-task immediate_jump_case;
+task immediate_retire_case;
     input [1023:0] label;
     input [`DATA_BUS_WIDTH-1:0] target;
+    input is_jump;
     begin
         $display("[TEST] %0s", label);
         reset_case();
         pulse_irq();
-        pulse_jump(target);
+        if (is_jump) begin
+            retire_jump(target);
+        end
+        else begin
+            retire_seq(target);
+        end
         expect_csr_now_or_later(`CSR_MEPC, target, label);
         expect_csr_now_or_later(`CSR_MSTATUS, 32'h0000_1880, "mstatus");
         expect_csr_now_or_later(`CSR_MCAUSE, 32'h8000_0003, "mcause");
@@ -246,21 +268,22 @@ initial begin
     clk = 1'b0;
     errors = 0;
 
-    pending_until_jump_case("irq during ALU/add waits for later control-flow boundary",
-                            3'b000, 1'b0, 32'h8000_1100);
-    pending_until_jump_case("irq during CSR instruction waits for later control-flow boundary",
-                            3'b000, 1'b0, 32'h8000_1200);
-    pending_until_jump_case("irq during load/store busy waits for later control-flow boundary",
-                            3'b000, 1'b1, 32'h8000_1300);
-    pending_until_jump_case("irq during multicycle div/rem busy waits for later control-flow boundary",
-                            3'b000, 1'b1, 32'h8000_1400);
-    pending_until_jump_case("irq during branch-not-taken waits for later taken control-flow boundary",
-                            3'b000, 1'b0, 32'h8000_1500);
+    pending_until_retire_case("irq during ALU/add waits for later precise retire",
+                              32'h8000_1100);
+    pending_until_retire_case("irq during CSR instruction waits for later precise retire",
+                              32'h8000_1200);
+    pending_until_retire_case("irq during load/store busy waits for later precise retire",
+                              32'h8000_1300);
+    pending_until_retire_case("irq during multicycle div/rem busy waits for later precise retire",
+                              32'h8000_1400);
+    pending_until_retire_case("irq during branch-not-taken waits for later precise retire",
+                              32'h8000_1500);
 
-    immediate_jump_case("irq then branch-taken saves target PC", 32'h8000_2000);
-    immediate_jump_case("irq then jal saves target PC", 32'h8000_3000);
-    immediate_jump_case("irq then jalr saves target PC", 32'h8000_4000);
-    jump_waits_for_side_effect_case();
+    immediate_retire_case("irq then sequential retire saves next PC", 32'h8000_1804, 1'b0);
+    immediate_retire_case("irq then branch-taken saves target PC", 32'h8000_2000, 1'b1);
+    immediate_retire_case("irq then jal saves target PC", 32'h8000_3000, 1'b1);
+    immediate_retire_case("irq then jalr saves target PC", 32'h8000_4000, 1'b1);
+    retire_waits_for_side_effect_case();
 
     if (errors == 0) begin
         $display("[PASS] tb_interrupt_matrix");

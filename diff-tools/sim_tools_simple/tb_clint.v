@@ -17,6 +17,8 @@ reg                         irq;
 reg                         jump_flag;
 reg  [`DATA_BUS_WIDTH-1:0]  jump_addr;
 reg                         hold_flag;
+reg  [`ADDR_BUS_WIDTH-1:0]  next_pc;
+reg                         inst_retire;
 
 wire [`CSR_BUS_WIDTH-1:0]   csr_waddr;
 wire                        csr_waddr_vld;
@@ -41,6 +43,8 @@ pa_core_clint dut (
     .jump_flag_i            (jump_flag),
     .jump_addr_i            (jump_addr),
     .hold_flag_i            (hold_flag),
+    .next_pc_i              (next_pc),
+    .inst_retire_i          (inst_retire),
     .csr_waddr_o            (csr_waddr),
     .csr_waddr_vld_o        (csr_waddr_vld),
     .csr_wdata_o            (csr_wdata),
@@ -103,6 +107,8 @@ task reset_case;
         jump_flag   = 1'b0;
         jump_addr   = 32'h8000_1000;
         hold_flag   = 1'b0;
+        next_pc     = 32'h8000_0104;
+        inst_retire = 1'b0;
         repeat (3) cycle();
         rst_n       = 1'b1;
         repeat (2) cycle();
@@ -199,13 +205,27 @@ task pulse_irq;
     end
 endtask
 
-task pulse_jump;
+task retire_seq;
     input [`DATA_BUS_WIDTH-1:0] target;
     begin
-        jump_addr = target;
-        jump_flag = 1'b1;
+        next_pc     = target;
+        inst_retire = 1'b1;
+        jump_flag   = 1'b0;
         cycle();
-        jump_flag = 1'b0;
+        inst_retire = 1'b0;
+    end
+endtask
+
+task retire_jump;
+    input [`DATA_BUS_WIDTH-1:0] target;
+    begin
+        next_pc     = target;
+        jump_addr   = target;
+        jump_flag   = 1'b1;
+        inst_retire = 1'b1;
+        cycle();
+        inst_retire = 1'b0;
+        jump_flag   = 1'b0;
     end
 endtask
 
@@ -213,16 +233,25 @@ initial begin
     clk = 1'b0;
     errors = 0;
 
-    $display("[TEST] interrupt waits for completed jump and saves target PC");
+    $display("[TEST] interrupt waits for precise retire and saves next PC");
     reset_case();
     pulse_irq();
     expect_no_csr_for(5);
     check_eq1("wait state must not hold the pipe before trap entry", hold_flag_o, 1'b0);
-    pulse_jump(32'h8000_0738);
-    expect_csr(`CSR_MEPC, 32'h8000_0738, "interrupt mepc");
+    retire_seq(32'h8000_0104);
+    expect_csr(`CSR_MEPC, 32'h8000_0104, "interrupt mepc");
     expect_csr(`CSR_MSTATUS, 32'h0000_1880, "interrupt mstatus");
     expect_csr(`CSR_MCAUSE, 32'h8000_0003, "interrupt mcause");
     expect_jump(32'h8000_017c, "interrupt mtvec jump");
+
+    $display("[TEST] interrupt after taken jump saves target PC");
+    reset_case();
+    pulse_irq();
+    retire_jump(32'h8000_0738);
+    expect_csr(`CSR_MEPC, 32'h8000_0738, "interrupt jump mepc");
+    expect_csr(`CSR_MSTATUS, 32'h0000_1880, "interrupt jump mstatus");
+    expect_csr(`CSR_MCAUSE, 32'h8000_0003, "interrupt jump mcause");
+    expect_jump(32'h8000_017c, "interrupt jump mtvec jump");
 
     $display("[TEST] ecall exception saves current EX PC");
     reset_case();

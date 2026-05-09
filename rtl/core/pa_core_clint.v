@@ -36,6 +36,20 @@ module pa_core_clint (
     input  wire [`DATA_BUS_WIDTH-1:0]   jump_addr_i,
     input  wire                         hold_flag_i,
 
+    // PRECISE-INT: PC of the next instruction that should run after the
+    // currently-completing one in EX. Computed by TOP as:
+    //     exu_jump_flag ? exu_jump_addr : (ifu_inst_addr - 4)
+    // i.e. taken jump target if EX is jumping, otherwise the inst sitting
+    // in ID (which is exu_pc + 4 = ifu_inst_addr - 4).
+    input  wire [`ADDR_BUS_WIDTH-1:0]   next_pc_i,
+
+    // PRECISE-INT: high on cycles where EX has a valid (non-flushed) single-
+    // cycle instruction completing and no multi-cycle work (mem / div / mul)
+    // is in flight. This is the precise-interrupt safe boundary: any pending
+    // writeback this cycle WILL commit at the next posedge, and the inst
+    // currently in ID can be cleanly squashed by int_hold.
+    input  wire                         inst_retire_i,
+
     output wire [`CSR_BUS_WIDTH-1:0]    csr_waddr_o,
     output wire                         csr_waddr_vld_o,
     output wire [`DATA_BUS_WIDTH-1:0]   csr_wdata_o,
@@ -62,7 +76,6 @@ localparam INT_TYPE_INTERRUPT           = 2'b10;
 // value of 'csr_state'
 
 localparam CSR_STATE_IDLE               = 3'd0;
-localparam CSR_STATE_WAIT               = 3'd1;
 localparam CSR_STATE_MEPC               = 3'd2;
 localparam CSR_STATE_MSTATUS            = 3'd3;
 localparam CSR_STATE_MCAUSE             = 3'd4;
@@ -160,7 +173,14 @@ wire [`DATA_BUS_WIDTH-1:0]              exception_addr;
 wire [`DATA_BUS_WIDTH-1:0]              interrupt_addr;
 
 assign exception_addr[`DATA_BUS_WIDTH-1:0] = pc_i[`DATA_BUS_WIDTH-1:0] + 32'hffff_fff8; // -8
-assign interrupt_addr[`DATA_BUS_WIDTH-1:0] = jump_addr_i[`DATA_BUS_WIDTH-1:0];
+// PRECISE-INT: mepc for an interrupt = address of the next instruction that
+// should run after the interrupt returns. PCGEN's _pc, surfaced as next_pc_i,
+// already accounts for both sequential PC+4 and any jump that just retired:
+//   - last EX inst was sequential  -> next_pc_i = retired_pc + 4
+//   - last EX inst was a taken jmp -> next_pc_i = jump_target (PCGEN updated)
+// The trap_capture condition below requires !hold_flag_i && !jump_flag_i so
+// next_pc_i is guaranteed to be settled to that "next" instruction.
+assign interrupt_addr[`DATA_BUS_WIDTH-1:0] = next_pc_i[`DATA_BUS_WIDTH-1:0];
 
 wire [`DATA_BUS_WIDTH-1:0]              break_addr_soft;
 wire [`DATA_BUS_WIDTH-1:0]              break_addr_ext;
@@ -181,7 +201,6 @@ wire [`DATA_BUS_WIDTH-1:0]              break_cause_next;
 wire [`DATA_BUS_WIDTH-1:0]              break_cause;
 wire                                    trap_capture;
 wire                                    trap_ready;
-reg                                     jump_trap_captured;
 
 assign break_cause_soft[`DATA_BUS_WIDTH-1:0] = {32{int_type[0] &  op_ecall   }} & 32'd11
                                              | {32{int_type[0] &  op_ebreak  }} & 32'd3;
@@ -191,31 +210,35 @@ assign break_cause_ext[`DATA_BUS_WIDTH-1:0]  = {32{int_type[1] & ~int_type[0]}} 
 assign break_cause_next[`DATA_BUS_WIDTH-1:0] = break_cause_soft
                                              | break_cause_ext;
 
-assign trap_capture = !jump_trap_captured
-                   && (int_state == INT_STATE_MCALL)
-                   && ((int_type == INT_TYPE_EXCEPTION && csr_state == CSR_STATE_IDLE && !jump_flag_i && !hold_flag_i)
-                    || (int_type == INT_TYPE_INTERRUPT && jump_flag_i
-                     && (csr_state == CSR_STATE_IDLE || csr_state == CSR_STATE_WAIT)));
+// PRECISE-INT trap entry condition.
+//
+// EXCEPTION (ecall/ebreak): same precise-boundary rule. ecall/ebreak only
+// reach EX as a real instruction with no pending mem op, so requiring
+// !jump_flag_i && !hold_flag_i is naturally satisfied; we keep that gate
+// for safety.
+//
+// INTERRUPT (external): the trap is captured on ANY instruction-retire
+// cycle, not just on jumps. inst_retire_i is asserted by TOP exactly on
+// cycles where the EX-stage instruction is committing (any of: reg
+// writeback, store, taken jump, or just a "valid single-cycle inst that
+// finishes this cycle"), and no multi-cycle work is pending.
+//
+// At that moment:
+//   * The completing inst's writeback (if any) WILL latch at posedge,
+//     because int_hold_flag is still 0 this cycle (rtu_reg_waddr_vld
+//     gating in TOP only kicks in once int_hold_flag rises).
+//   * next_pc_i is the PC of the instruction that should run next:
+//        - if EX is a taken jump  -> jump target
+//        - otherwise              -> exu_pc + 4 = ifu_inst_addr - 4
+//   * That value gets latched into break_addr (== mepc) here, so when the
+//     handler executes mret we resume exactly at the inst that did NOT
+//     commit yet -- precise-interrupt semantics.
+assign trap_capture = (int_state == INT_STATE_MCALL)
+                   && (csr_state == CSR_STATE_IDLE)
+                   && ((int_type == INT_TYPE_EXCEPTION && !jump_flag_i && !hold_flag_i)
+                    || (int_type == INT_TYPE_INTERRUPT && inst_retire_i));
 
-assign trap_ready = (int_state == INT_STATE_MCALL)
-                 && ((int_type == INT_TYPE_EXCEPTION && trap_capture)
-                  || (int_type == INT_TYPE_INTERRUPT && !hold_flag_i
-                   && (trap_capture || (csr_state == CSR_STATE_WAIT && jump_trap_captured))));
-
-always @ (posedge clk_i or negedge rst_n_i) begin
-    if (!rst_n_i) begin
-        jump_trap_captured <= `INVALID;
-    end
-    else if (csr_state == CSR_STATE_IDLE && int_state != INT_STATE_MCALL) begin
-        jump_trap_captured <= `INVALID;
-    end
-    else if (trap_capture && jump_flag_i && int_type == INT_TYPE_INTERRUPT) begin
-        jump_trap_captured <= `VALID;
-    end
-    else begin
-        jump_trap_captured <= jump_trap_captured;
-    end
-end
+assign trap_ready   = trap_capture;
 
 pa_dff_rst_0 #(`DATA_BUS_WIDTH)         dff_break_addr (clk_i, rst_n_i,
                                                         trap_capture,
@@ -227,31 +250,25 @@ pa_dff_rst_0 #(`DATA_BUS_WIDTH)         dff_break_cause (clk_i, rst_n_i,
                                                          break_cause_next,
                                                          break_cause);
 
+// PRECISE-INT csr_state FSM.
+//
+// The "wait for jump" state from the old design is gone. Interrupt entry is
+// now driven by inst_retire_i, so the trap is only taken at a precise
+// pipeline boundary.
+//
+// Once we leave IDLE we walk the deterministic CSR-write sequence:
+//     MEPC -> MSTATUS -> MCAUSE -> IDLE       (trap entry)
+//     MRET  -> IDLE                            (mret retire)
 always @ (posedge clk_i or negedge rst_n_i) begin
     if (!rst_n_i) begin
         csr_state   <= CSR_STATE_IDLE;
     end
     else begin
     case (csr_state)
-        CSR_STATE_IDLE    ,
-        CSR_STATE_WAIT    : begin
+        CSR_STATE_IDLE    : begin
         case (int_state)
             INT_STATE_MCALL : begin
-                if (trap_ready) begin
-                    csr_state <= CSR_STATE_MEPC;
-                end
-                else if (int_type == INT_TYPE_INTERRUPT && csr_state == CSR_STATE_IDLE) begin
-                    csr_state <= CSR_STATE_WAIT;
-                end
-                else if (int_type == INT_TYPE_INTERRUPT && csr_state == CSR_STATE_WAIT && !trap_capture) begin
-                    csr_state <= CSR_STATE_WAIT;
-                end
-                else if (jump_flag_i || hold_flag_i) begin
-                    csr_state <= CSR_STATE_WAIT;
-                end
-                else begin
-                    csr_state <= CSR_STATE_MEPC;
-                end
+                if (trap_ready) csr_state <= CSR_STATE_MEPC;
             end
             INT_STATE_MRET  : begin
                 csr_state <= CSR_STATE_MRET;
@@ -259,7 +276,7 @@ always @ (posedge clk_i or negedge rst_n_i) begin
         endcase
         end
 
-        CSR_STATE_MEPC    : csr_state <= (jump_flag_i ? CSR_STATE_MEPC : CSR_STATE_MSTATUS);
+        CSR_STATE_MEPC    : csr_state <= CSR_STATE_MSTATUS;
         CSR_STATE_MSTATUS : csr_state <= CSR_STATE_MCAUSE;
         CSR_STATE_MCAUSE  : csr_state <= CSR_STATE_IDLE;
 
@@ -347,8 +364,7 @@ assign csr_waddr_o[`CSR_BUS_WIDTH-1:0]  = csr_waddr[`CSR_BUS_WIDTH-1:0];
 assign csr_waddr_vld_o = csr_waddr_vld;
 assign csr_wdata_o[`DATA_BUS_WIDTH-1:0] = csr_wdata[`DATA_BUS_WIDTH-1:0];
 
-assign hold_flag_o = (csr_state != CSR_STATE_IDLE)
-                  && (csr_state != CSR_STATE_WAIT);
+assign hold_flag_o = (csr_state != CSR_STATE_IDLE);
 
 assign jump_flag_o = int_jump_flag;
 assign jump_addr_o[`DATA_BUS_WIDTH-1:0] = int_jump_addr[`DATA_BUS_WIDTH-1:0];

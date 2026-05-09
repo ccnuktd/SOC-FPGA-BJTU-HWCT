@@ -2,7 +2,7 @@
 
 本实验测试 `pa_core_clint` 的异常和中断控制逻辑。测试参考 `diff-tools/sim_tools_simple` 中的 `tb_clint.v` 和 `tb_interrupt_matrix.v`，重点检查 CLINT 是否能在正确时机写 CSR、请求流水线 hold，并输出正确跳转地址。
 
-CLINT 不是简单地“看到中断就立刻跳转”。外部中断可能发生在普通指令、访存、多周期运算或控制流指令附近，CLINT 需要等到合适的控制流边界，再保存正确的 `mepc` 并进入 trap。
+CLINT 不是简单地“看到中断就立刻跳转”。外部中断可能发生在普通指令、访存、多周期运算或控制流指令附近，CLINT 需要等到顶层给出的精确 retire 边界，再保存正确的 `mepc` 并进入 trap。
 
 ## 运行
 
@@ -25,8 +25,10 @@ make clean
 - `csr_mepc_i`: `mret` 返回地址
 - `csr_mstatus_i`: 机器状态寄存器，`csr_mstatus_i[3]` 是全局中断使能 `MIE`
 - `irq_i`: 外部中断请求
-- `jump_flag_i` / `jump_addr_i`: 后级确认的控制流边界和目标地址
-- `hold_flag_i`: 表示前面还有未完成副作用，CLINT 需要等待
+- `jump_flag_i` / `jump_addr_i`: 当前 EX 指令是否为已完成的跳转及其目标地址，异常路径会用它避开冲突
+- `hold_flag_i`: 表示前面还有未完成副作用
+- `next_pc_i`: 顶层计算好的中断返回 PC；顺序指令为 `exu_pc + 4`，已完成跳转为跳转目标
+- `inst_retire_i`: 顶层给出的精确 retire 边界，中断只能在这个信号有效时进入 trap
 - `csr_waddr_o` / `csr_wdata_o`: CLINT 要写入的 CSR 地址和值
 - `hold_flag_o`: CLINT 请求暂停流水线
 - `jump_flag_o` / `jump_addr_o`: CLINT 请求跳转到 trap 入口或 `mepc`
@@ -45,20 +47,20 @@ make clean
 
 如果这里失败，通常说明状态机复位不完整，或者输出默认值没有处理好。
 
-### 2. Interrupt Waits for Completed Jump
+### 2. Interrupt Waits for Precise Retire
 
-测试先产生 `irq_i`，但暂时不给 `jump_flag_i`。随后检查 CLINT 不应提前写 CSR。等到 `jump_flag_i=1` 且 `jump_addr_i=32'h8000_0738` 后，CLINT 才进入 trap。
+测试先产生 `irq_i`，但暂时不给 `inst_retire_i`。随后检查 CLINT 不应提前写 CSR。等到 `inst_retire_i=1` 且 `next_pc_i=32'h8000_0104` 后，CLINT 才进入 trap。
 
 期望行为：
 
 - 中断先进入 pending 状态
-- 在控制流边界出现前不写 CSR
-- 出现 `jump_flag_i` 后，`mepc` 写入 `jump_addr_i`
+- 在精确 retire 边界出现前不写 CSR
+- 出现 `inst_retire_i` 后，`mepc` 写入 `next_pc_i`
 - `mstatus` 写入关中断后的值 `32'h0000_1880`
 - `mcause` 写入 `32'h8000_0003`
 - 最后跳转到 `mtvec`
 
-这个测试说明：中断保存的不是随便一个当前 PC，而是后级确认的目标 PC。
+这个测试说明：中断保存的不是随便一个当前 PC，而是顶层在 retire 边界确认的下一条应执行 PC。
 
 ### 3. ECALL Exception
 
@@ -102,7 +104,7 @@ make clean
 
 ### 6. IRQ Masked When MIE=0
 
-测试把 `csr_mstatus_i[3]` 置 0，再产生 `irq_i` 和后续 `jump_flag_i`。
+测试把 `csr_mstatus_i[3]` 置 0，再产生 `irq_i` 和后续 `inst_retire_i`。
 
 期望行为：
 
@@ -112,41 +114,41 @@ make clean
 
 如果这里失败，说明全局中断使能判断没有正确接入。
 
-### 7. Pending IRQ Until Control-Flow Boundary
+### 7. Pending IRQ Until Precise Retire Boundary
 
-测试多种“中断先到，但控制流边界稍后才到”的情况：
+测试多种“中断先到，但精确 retire 边界稍后才到”的情况：
 
 - 普通 ALU 指令附近
 - load/store busy
 - 多周期 div/rem busy
-- branch-not-taken，直到后续 taken 边界
+- branch-not-taken，直到后续 retire 边界
 
 期望行为：
 
 - `irq_i` 来时先记录 pending
-- `hold_flag_i=1` 或没有 `jump_flag_i` 时，不应提前写 CSR
-- 后续 `jump_flag_i` 出现后，保存对应 `jump_addr_i`
+- `hold_flag_i=1` 或没有 `inst_retire_i` 时，不应提前写 CSR
+- 后续 `inst_retire_i` 出现后，保存对应 `next_pc_i`
 - 之后按 `mepc`、`mstatus`、`mcause` 的顺序写 CSR，并跳转 `mtvec`
 
-### 8. Immediate Control-Flow Boundary
+### 8. Immediate Retire Boundary
 
-测试中断后马上遇到 branch taken、jal、jalr 这类控制流边界。
+测试中断后马上遇到顺序 retire、branch taken、jal、jalr 这类 retire 边界。
 
 期望行为：
 
-- CLINT 保存对应目标 PC 到 `mepc`
+- CLINT 保存 `next_pc_i` 到 `mepc`
 - 不丢失中断
 - 不把旧 PC 错写进 `mepc`
 
-### 9. Jump Waits for Older Side Effect
+### 9. Retire Waits for Older Side Effect
 
-测试 `jump_flag_i` 已经出现，但 `hold_flag_i=1` 表示前面还有旧副作用没处理完。
+测试 `hold_flag_i=1` 表示前面还有旧副作用没处理完。
 
 期望行为：
 
 - CLINT 继续等待
-- 等 `hold_flag_i` 变 0 后再进入 trap
-- 保存之前捕获到的 `jump_addr_i`
+- 等 `hold_flag_i` 变 0 且 `inst_retire_i` 出现后再进入 trap
+- 保存此时的 `next_pc_i`
 
 这个测试能发现“太早进入 trap，导致旧指令副作用丢失”的问题。
 
@@ -156,7 +158,7 @@ make clean
 
 - `inst_func_i` 到 `ecall` / `ebreak` / `mret` 的译码
 - `irq_i` 与 `csr_mstatus_i[3]` 的中断使能关系
-- `jump_flag_i` / `jump_addr_i` 是否被正确捕获
+- `next_pc_i` / `inst_retire_i` 是否按顶层语义接入
 - `hold_flag_i` 拉高时是否阻止 trap 提前进入
 - `csr_waddr_o` 是否按 `mepc`、`mstatus`、`mcause` 顺序输出
 - `csr_wdata_o` 是否写入了正确的 PC、状态值和 cause
@@ -164,7 +166,7 @@ make clean
 
 常见错误：
 
-- IRQ 一来就直接进入 trap，没有等待 `jump_flag_i`
+- IRQ 一来就直接进入 trap，没有等待 `inst_retire_i`
 - `mepc` 保存了错误 PC
 - ecall/ebreak 的 cause 写反
 - `mstatus` 保存和恢复位处理错误

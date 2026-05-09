@@ -198,7 +198,7 @@ void run_cycles(uint64_t max_cycles, bool verbose) {
         }
         
         clock_cycle(verbose);
-        
+
         if (hit_breakpoint) {
             hit_breakpoint = false;  // Clear for next run
             break;

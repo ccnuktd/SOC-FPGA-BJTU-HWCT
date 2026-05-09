@@ -285,6 +285,31 @@ wire [`DATA_BUS_WIDTH-1:0]              int_csr_wdata;
 wire                                    int_jump_flag;
 wire [`ADDR_BUS_WIDTH-1:0]              int_jump_addr;
 
+// PRECISE-INT: signals fed to CLINT to enable any-instruction-boundary
+// interrupt capture with a correct mepc value.
+//
+// next_pc_to_clint is the PC of the instruction that should run AFTER the
+// one currently in EX. For a taken jump in EX, that is exu_jump_addr; for
+// any other inst, EX_PC = ifu_inst_addr - 8, so next_pc = EX_PC + 4 =
+// ifu_inst_addr - 4 (i.e. the inst sitting in ID this cycle).
+//
+// inst_retire_to_clint marks cycles at which the precise-interrupt boundary
+// holds: EX has a real (non-flushed) instruction, EX is not stalling for a
+// multi-cycle op (mul/div), and no memory transaction is in flight. On such
+// a cycle CLINT may safely sample mepc from next_pc_to_clint and start the
+// trap entry; the EX-stage writeback (if any) still latches at the next
+// posedge before int_hold_flag rises.
+wire [`ADDR_BUS_WIDTH-1:0]              next_pc_to_clint;
+wire                                    inst_retire_to_clint;
+
+assign next_pc_to_clint = exu_jump_flag ? exu_jump_addr
+                                        : (ifu_inst_addr - 32'd4);
+
+assign inst_retire_to_clint = (|exu_inst_func)      // EX has a decoded inst
+                           && !exu_hold_flag        // not multi-cycle stall
+                           && !mem_en_flag          // no mem fired this cycle
+                           && !mem_en_flag_1r;      // no mem in writeback cycle
+
 pa_core_clint u_pa_core_clint (
     .clk_i                              (clk_i),
     .rst_n_i                            (rst_n_i),
@@ -304,6 +329,15 @@ pa_core_clint u_pa_core_clint (
     .jump_flag_i                        (exu_jump_flag),
     .jump_addr_i                        (exu_jump_addr),
     .hold_flag_i                        (exu_hold_flag || reg_waddr_wb_vld || reg_waddr_wb_vld_1r || mem_en_flag),
+
+    // PRECISE-INT: see clint port descriptions.
+    //   next_pc_to_clint = jump target (if EX is jumping)
+    //                    | exu_pc + 4   (= ifu_inst_addr - 4, the inst in ID)
+    //   inst_retire_to_clint = EX has a real, single-cycle instruction
+    //                          completing this cycle and no multi-cycle
+    //                          work (mem / div / mul) is in flight.
+    .next_pc_i                          (next_pc_to_clint),
+    .inst_retire_i                      (inst_retire_to_clint),
 
     .csr_waddr_o                        (int_csr_waddr),
     .csr_waddr_vld_o                    (int_csr_waddr_vld),
@@ -327,7 +361,11 @@ assign jump_addr = exu_jump_flag ? exu_jump_addr
 assign idu_flush_flag = (jump_flag)
                      || (int_hold_flag_1r);
 
+// FIX H6: include int_hold_flag in EX flush. While CLINT processes a trap
+// (int_hold_flag asserted), the EX-stage instruction must be cleared, otherwise
+// it keeps re-firing memory accesses, register writebacks, jumps, etc.
 assign exu_flush_flag = (jump_flag || jump_flag_1r)
+                     || (int_hold_flag || int_hold_flag_1r)
                      || (exu_hold_flag);
 
 pa_dff_rst_0 #(1)                       dff_int_hold_flag_1r (clk_i, rst_n_i, `VALID, int_hold_flag, int_hold_flag_1r);
@@ -337,14 +375,16 @@ wire [`CSR_BUS_WIDTH-1:0]               csr_waddr;
 wire                                    csr_waddr_vld;
 wire [`DATA_BUS_WIDTH-1:0]              csr_wdata;
 
-assign csr_waddr[`CSR_BUS_WIDTH-1:0] = exu_csr_addr[`CSR_BUS_WIDTH-1:0]
-                                     | int_csr_waddr[`CSR_BUS_WIDTH-1:0];
+// FIX H1: replace the OR-merge with a mux + gating so EXU CSR writes never
+// collide with CLINT trap-entry CSR writes (CLINT takes priority).
+assign csr_waddr[`CSR_BUS_WIDTH-1:0] = int_csr_waddr_vld ? int_csr_waddr[`CSR_BUS_WIDTH-1:0]
+                                                         : exu_csr_addr[`CSR_BUS_WIDTH-1:0];
 
-assign csr_waddr_vld = exu_csr_waddr_vld
-                     | int_csr_waddr_vld;
+assign csr_waddr_vld = int_csr_waddr_vld
+                    || (exu_csr_waddr_vld && !int_hold_flag);
 
-assign csr_wdata[`DATA_BUS_WIDTH-1:0] = exu_csr_wdata[`DATA_BUS_WIDTH-1:0]
-                                      | int_csr_wdata[`DATA_BUS_WIDTH-1:0];
+assign csr_wdata[`DATA_BUS_WIDTH-1:0] = int_csr_waddr_vld ? int_csr_wdata[`DATA_BUS_WIDTH-1:0]
+                                                          : exu_csr_wdata[`DATA_BUS_WIDTH-1:0];
 
 // mem store generate address in EX state, write under next clock
 // mem load generate address in EX state, return data after next clock
@@ -414,8 +454,10 @@ pa_core_mau u_pa_core_mau (
 assign dbus_addr_o[`ADDR_BUS_WIDTH-1:0] = {32{mem_en_flag || mem_en_flag_1r}} & mem_addr[`ADDR_BUS_WIDTH-1:0];
 assign dbus_data_o[`DATA_BUS_WIDTH-1:0] = {32{mem_en_flag}} & mem_data[`DATA_BUS_WIDTH-1:0];
 assign dbus_size_o[2:0] = {3{mem_en_flag}} & mem_size[2:0];
-assign dbus_rd_o = mem_en_flag & op_load;
-assign dbus_we_o = mem_en_flag & op_store;
+// FIX H3: gate dbus_rd/we with !int_hold_flag so an in-flight load/store
+// does not keep firing memory transactions while CLINT is taking a trap.
+assign dbus_rd_o = mem_en_flag & op_load  & !int_hold_flag;
+assign dbus_we_o = mem_en_flag & op_store & !int_hold_flag;
 
 wire [`REG_BUS_WIDTH-1:0]                   mau_reg_addr;
 pa_dff_rst_0 #(`REG_BUS_WIDTH)          dff_mau_reg_addr (clk_i, rst_n_i, `VALID, reg_waddr_wb, mau_reg_addr);
@@ -443,8 +485,14 @@ wire [`DATA_BUS_WIDTH-1:0]              rtu_csr_wdata;
 
 assign rtu_reg_waddr[`REG_BUS_WIDTH-1:0]   = mau_mem_data_vld ?  mau_reg_addr[`REG_BUS_WIDTH-1:0] // from memory
                                                               :  reg_waddr_wb[`REG_BUS_WIDTH-1:0]; // from exu
-assign rtu_reg_waddr_vld                   = mau_mem_data_vld ? (mau_reg_addr_vld && !mem_en_flag) // from memory
-                                                              :  reg_waddr_wb_vld; // from exu
+// FIX H2: gate register writeback with !int_hold_flag so an in-flight
+// instruction (e.g. a load whose result is not yet meaningful) does not
+// clobber the architectural register file while CLINT is taking a trap.
+// After mret the squashed instruction will re-execute from mepc and write
+// the correct value.
+assign rtu_reg_waddr_vld                   = !int_hold_flag &&
+                                              (mau_mem_data_vld ? (mau_reg_addr_vld && !mem_en_flag) // from memory
+                                                                :  reg_waddr_wb_vld); // from exu
 
 assign rtu_reg_wdata[`DATA_BUS_WIDTH-1:0]  = mau_mem_data_vld ?  mau_mem_data[`DATA_BUS_WIDTH-1:0] // from memory, data
                                                               :  iresult[`DATA_BUS_WIDTH-1:0]; // from exu, data
