@@ -16,7 +16,6 @@ reg  [`DATA_BUS_WIDTH-1:0]  csr_mstatus_i;
 reg                         irq_i;
 reg                         jump_flag_i;
 reg  [`DATA_BUS_WIDTH-1:0]  jump_addr_i;
-reg                         branch_flag_i;
 reg                         hold_flag_i;
 
 wire [`CSR_BUS_WIDTH-1:0]   csr_waddr_o;
@@ -43,7 +42,6 @@ pa_core_clint dut (
     .irq_i                  (irq_i),
     .jump_flag_i            (jump_flag_i),
     .jump_addr_i            (jump_addr_i),
-    .branch_flag_i          (branch_flag_i),
     .hold_flag_i            (hold_flag_i),
     .csr_waddr_o            (csr_waddr_o),
     .csr_waddr_vld_o        (csr_waddr_vld_o),
@@ -79,7 +77,6 @@ task reset_case;
         irq_i         = 1'b0;
         jump_flag_i   = 1'b0;
         jump_addr_i   = 32'h8000_1000;
-        branch_flag_i = 1'b0;
         hold_flag_i   = 1'b0;
         repeat (3) cycle();
         rst_n_i       = 1'b1;

@@ -167,7 +167,6 @@ wire                                    mem_en_flag;
 
 wire                                    exu_jump_flag;
 wire [`ADDR_BUS_WIDTH-1:0]              exu_jump_addr;
-wire                                    exu_branch_flag;
 
 wire [`REG_BUS_WIDTH-1:0]               reg_waddr_wb;
 wire                                    reg_waddr_wb_vld;
@@ -212,8 +211,6 @@ pa_core_exu u_pa_core_exu (
     .iresult_vld_o                      (iresult_vld)
 );
 
-assign exu_branch_flag = exu_inst_set[0] && exu_inst_func[11];
-
 pa_dff_rst_0 #(1)                       dff_reg_waddr_wb_vld_1r (clk_i, rst_n_i, `VALID, reg_waddr_wb_vld, reg_waddr_wb_vld_1r);
 
 // clint module generate "int_hold_flag" signal if interrupt valid
@@ -247,7 +244,6 @@ pa_core_clint u_pa_core_clint (
 
     .jump_flag_i                        (exu_jump_flag),
     .jump_addr_i                        (exu_jump_addr),
-    .branch_flag_i                      (exu_branch_flag),
     .hold_flag_i                        (exu_hold_flag || reg_waddr_wb_vld || reg_waddr_wb_vld_1r || mem_en_flag),
 
 

@@ -22,7 +22,6 @@ module pa_core_clint (
 
     input  wire                         jump_flag_i,
     input  wire [`DATA_BUS_WIDTH-1:0]   jump_addr_i,
-    input  wire                         branch_flag_i,
     input  wire                         hold_flag_i,
 
     output wire [`CSR_BUS_WIDTH-1:0]    csr_waddr_o,
