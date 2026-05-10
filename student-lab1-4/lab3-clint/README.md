@@ -4,6 +4,22 @@
 
 CLINT 不是简单地“看到中断就立刻跳转”。外部中断可能发生在普通指令、访存、多周期运算或控制流指令附近，CLINT 需要等到顶层给出的精确 retire 边界，再保存正确的 `mepc` 并进入 trap。
 
+## 代码骨架说明
+
+`lab3_clint.v` 的学生版应当和教师版保持同构：学生版保留教师版的状态机、信号命名、CSR 写回顺序、精确中断说明和输出连接，只把关键表达式替换成 TODO 占位。
+
+也就是说，补齐 TODO 后，学生实现应该自然收敛到教师版逻辑，而不是写成另一套结构相近但细节不同的 CLINT。
+
+本实验需要补齐的内容包括：
+
+- `TODO-1`: 译码 `ecall`、`ebreak`、`mret`
+- `TODO-2` 到 `TODO-4`: 产生 IRQ 事件、记录 pending，并选择当前 trap 类型
+- `TODO-5` 到 `TODO-8`: 计算并选择写入 `mepc` 的异常/中断返回地址
+- `TODO-9` 到 `TODO-10`: 选择写入 `mcause` 的异常/中断原因
+- `TODO-11` 到 `TODO-12`: 判断何时捕获 trap 信息并进入 CSR 写状态机
+- `TODO-13` 到 `TODO-14`: trap 入口和 `mret` 时更新 `mstatus`
+- `TODO-15` 到 `TODO-16`: trap 完成后跳转到 `mtvec`，`mret` 后跳转到 `mepc`
+
 ## 运行
 
 ```bash

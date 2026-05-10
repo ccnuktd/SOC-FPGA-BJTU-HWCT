@@ -23,10 +23,17 @@ DETECTED_OS := $(shell echo $$OSTYPE)
 IS_LINUX := $(filter %linux%,$(DETECTED_OS))
 IS_MSYS := $(filter %msys%,$(DETECTED_OS))
 IS_CYGWIN := $(filter %cygwin%,$(DETECTED_OS))
-IS_WINDOWS := $(or $(IS_MSYS),$(IS_CYGWIN),$(findstring MINGW,$(shell uname 2>/dev/null)))
+IS_WINDOWS := $(or $(filter Windows_NT,$(OS)),$(IS_MSYS),$(IS_CYGWIN),$(findstring MINGW,$(shell uname 2>NUL)))
 
+ifneq ($(IS_WINDOWS),)
+ECHO_INFO = @echo [INFO]
+ECHO_ERROR = @echo [ERROR]
+else
 COLORS = "\033[32m"
 COLORE = "\033[0m"
+ECHO_INFO = @echo -e ${COLORS}[INFO]
+ECHO_ERROR = @echo -e ${COLORS}[ERROR]
+endif
 SIM_PATH=$(PWD)
 
 .PHONY: help
@@ -36,14 +43,14 @@ help:
 
 .PHONY: build
 build:
-	@echo -e ${COLORS}[INFO] compile c/asm file ...${COLORE}
+	$(ECHO_INFO) compile c/asm file ...${COLORE}
 	${Q}${CC} ${INCLUDES} ${INCFILES} ${CFLAGS} ${LDFLAGS} ${LDLIBS} ${ASMFILES} ${CFILES} -o ${TARGET}.elf
-	@echo -e ${COLORS}[INFO] create dump file ...${COLORE}
+	$(ECHO_INFO) create dump file ...${COLORE}
 	${Q}${OBJDUMP} -D -S ${TARGET}.elf > ${TARGET}.dump
-	@echo -e ${COLORS}[INFO] create image file ...${COLORE}
+	$(ECHO_INFO) create image file ...${COLORE}
 	${Q}${OBJCOPY} -S -O binary -j .init -j .text -j .data -j .bss -j .abi_section -j .abi_jump ${TARGET}.elf ${TARGET}.bin
-	${Q}${PYTHON} ${PROJPATH}/scripts/bin2coe.py ${TARGET}.bin
-	@echo -e ${COLORS}[INFO] execute done${COLORE}
+	${Q}${BIN2COE} ${TARGET}.bin
+	$(ECHO_INFO) execute done${COLORE}
 
 .PHONY: clean
 clean:
