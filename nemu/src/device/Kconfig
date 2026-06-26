@@ -1,7 +1,7 @@
 menuconfig DEVICE
   depends on !TARGET_SHARE
   bool "Devices"
-  default n
+  default y
   help
     Provide device support for NEMU.
 
@@ -116,7 +116,7 @@ endif # HAS_VGA
 if !TARGET_AM
 menuconfig HAS_AUDIO
   bool "Enable audio"
-  default y
+  default n
 
 if HAS_AUDIO
 config SB_ADDR
@@ -139,7 +139,7 @@ endif # HAS_AUDIO
 
 menuconfig HAS_DISK
   bool "Enable disk"
-  default y
+  default n
 
 if HAS_DISK
 config DISK_CTL_PORT

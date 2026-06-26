@@ -61,7 +61,14 @@ ifneq ($(IS_WINDOWS),)
 	@echo -e ${COLORS}[ERROR] 'clean' is only supported on Linux.${COLORE}
 	@exit 1
 endif
+
+.PHONY: clean-all
+clean-all: clean
 	$(MAKE) -C ${NEMU_PATH} clean-all
+	$(MAKE) -C ${SIM_TOOLS_PATH} clean
+
+.PHONY: clean-sim-tools
+clean-sim-tools:
 	$(MAKE) -C ${SIM_TOOLS_PATH} clean
 
 	

@@ -14,13 +14,13 @@
 #**************************************************************************************/
 
 REPO_PATH = repo
-ifeq ($(wildcard repo/spike_main),)
-  $(shell git clone --depth=1 git@github.com:NJU-ProjectN/riscv-isa-sim $(REPO_PATH))
-endif
 
 REPO_BUILD_PATH = $(REPO_PATH)/build
 REPO_MAKEFILE = $(REPO_BUILD_PATH)/Makefile
 $(REPO_MAKEFILE):
+	@if [ ! -f $(REPO_PATH)/spike_main/spike.cc ]; then \
+		git clone --depth=1 git@github.com:NJU-ProjectN/riscv-isa-sim $(REPO_PATH); \
+	fi
 	@mkdir -p $(@D)
 	cd $(@D) && $(abspath $(REPO_PATH))/configure
 	sed -i -e 's/-g -O2/-O2/' $@

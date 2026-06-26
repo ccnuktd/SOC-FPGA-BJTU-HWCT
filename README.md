@@ -78,7 +78,7 @@ Windows 用户如果要直接使用 Vivado，请参考后面的 “FPGA 与 Viva
 
 ### 1.3 安装基础工具
 
-建议先换国内 apt 源，然后安装基础工具：
+建议先换国内 apt 源：[清华大学 Ubuntu 镜像使用帮助](https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/)，然后安装基础工具：
 
 ```bash
 sudo apt update
@@ -99,7 +99,7 @@ sudo apt install -y bison flex texinfo gperf libtool patchutils
 sudo apt install -y bc zlib1g-dev libexpat-dev ninja-build cmake libglib2.0-dev
 ```
 
-下载并编译 `riscv-gnu-toolchain`：
+下载并编译 `riscv-gnu-toolchain`（通常而言这个步骤需要比较久，可能要1-2小时）：
 
 ```bash
 git clone --recursive https://github.com/riscv/riscv-gnu-toolchain
@@ -154,35 +154,40 @@ cd nemu
 export NEMU_HOME=$(pwd)
 make menuconfig
 ```
+![alt text](pic/image_0.png)
+`make menuconfig` 会打开终端图形配置界面。假如报错如上图所示，说明你的终端窗口的长和宽不够，建议先把终端放大后再运行。
 
-`make menuconfig` 会打开终端图形配置界面。终端窗口必须足够大，否则可能报错或菜单显示异常；建议先把终端放大后再运行。
 
 #### Build Options（构建选项）
 
-监视点功能：是否开启watchpoint，建议在模拟测试时关闭，调试时再开启
+![alt text](pic/image_1.png)
+在上述界面中，选择Build Options后，Enter确认，你可以看到一些调试选项
+
+监视点功能：是否开启watchpoint，（默认关闭）
 并行监视点：不建议开启，会严重影响模拟性能
 
 #### Testing and Debugging（测试和调试）
-Instruction Tracer：显示执行的每条指令
-Memory Tracer：追踪显示每次load/store指令
-Function Tracer：显示程序的每次函数调用
-Device Tracer：显示每次对外设的访问
-Exception Tracer：显示每次ecall指令触发和上下文切换时的CSR寄存器
-Diff Test：用于编写模拟器时验证正确性，不需要开启
+在上述界面中，选择Testing and Debugging后，Enter确认，你可以看到一些调试选项
+
+Instruction Tracer：显示执行的每条指令（默认开启）
+Memory Tracer：追踪显示每次load/store指令（默认关闭）
+Function Tracer：显示程序的每次函数调用（默认关闭）
+Device Tracer：显示每次对外设的访问（默认关闭）
+Exception Tracer：显示每次ecall指令触发和上下文切换时的CSR寄存器（默认关闭）
+Diff Test：用于编写模拟器时验证正确性，暂时没完全实现请关闭（默认关闭）
 
 #### Device（设备选项）
-必须开启两个hardware device：
+在上述界面中，选择Device后，Enter确认，你可以看到一些调试选项
+Device默认全部关闭，如果要运行RT-thread nano必须开启两个hardware device：
 
 + Timer（定时器）
 + UART（串口）
 
 新手推荐配置：
 
-- Base ISA：选择 RISC-V 32 位
-- Build target：选择 Native ELF，不要选择 Abstract-Machine
+- Build Options：保持默认选项
+- Testing and Debugging：保持默认选项
 - Device：开启 Timer 和 UART
-- Diff Test：初学使用时不需要开启
-- Trace 相关选项：调试时再开启，平时关闭以减少输出和开销
 
 
 #### 保存配置
@@ -228,6 +233,7 @@ make build
 
 ### 3.2 使用 NEMU 运行
 
+在simple目录下执行
 ```bash
 make run
 ```
@@ -238,6 +244,10 @@ make run
 2. 启动 NEMU
 3. 加载 `riscv.elf` 和 `riscv.bin`
 4. 进入 NEMU 交互调试界面
+
+需要注意的是，由于simple的main函数调用了xprintf函数，这个函数当前还没有实现，因此虽然执行最后会显示`HIT GOOD TRAP at pc = 0x8000008c`，但并不会有任何输出
+
+看到`HIT GOOD TRAP at pc = 0x8000008c`说明nemu可以正常工作
 
 常用 NEMU 命令：
 
@@ -250,18 +260,29 @@ make run
 | `info r` | 查看寄存器 |
 | `info w` | 查看监视点 |
 | `x n address` | 查看内存，例如 `x 10 0x80000000` |
-| `p expr` | 计算表达式，例如 `p $x1 + $x2` |
-| `w expr` | 设置监视点，例如 `w pc==0x800000F4` |
+| `p expr` | 计算表达式（必须开启watchpoint），例如 `p $x1 + $x2` |
+| `w expr` | 设置监视点（必须开启watchpoint），例如 `w pc==0x800000F4` |
 | `d n` | 删除第 n 个监视点 |
 
-如果希望不进入交互界面，直接批处理运行：
+请你找到同目录下的riscv.dump文件，当你在nemu中输入si执行单步指令时，你会发现执行的指令就是riscv.dump的第一条指令
+
+同样你可以通过`w pc==0x8000028`然后输入`c`让pc跳转到指定的指令处，然后通过`info r`查看寄存器是否符合预期，具体操作可以参考[实验五：启动操作系统](https://my.feishu.cn/docx/AzRUdyQ8DoXEdvxAVaJcozXAnhh)
+
+对了，你会发现你可能弹出了黑框框，这是nemu的vga，虽然当前CPU并不支持vga，但是nemu作为模拟器是支持vga显示的，该部分的驱动代码暂时还没有提供。
+
+要想关闭nemu只需要在命令行界面输入q即可
+
+如果希望不进入交互界面，只想要直接执行程序看结果，直接批处理运行：
 
 ```bash
 make run MODE=b
 ```
 
+如果你开启了各种Tracer，你会在终端中看到指令执行的中间过程，你也可以修改框架代码将输出重定向到文件中，这部分留给你探索！
+
 ### 3.3 使用 RTL 仿真运行
 
+在simple目录下执行
 ```bash
 make rtl_run
 ```
@@ -288,8 +309,13 @@ RTL 仿真器常用命令：
 
 `make rtl_run` 适合快速验证 RTL 能否运行程序。
 
+你需要注意nemu只是一个CPU的模拟器，而当你执行`make rtl_run`时，则会调用Verilator工具，将你用verilog代码实现的CPU编译出linux上的可执行文件，并设置simple程序生成的bin文件，这是模拟的是实际的硬件启动方式。
+
+换而言之，如果你的rtl目录下的代码不正确，你在执行`make rtl_run`大概率会跑飞，只有当`make run`执行的结果和`make rtl_run`相同，才能说你实现的CPU是功能上正常的CPU。
+
 ### 3.4 生成波形并调试
 
+在simple目录下执行
 ```bash
 make trace_run
 ```
@@ -466,6 +492,8 @@ Windows 下主要用于 Vivado 工程、综合、实现和烧录。
 
 如果命令行提示 `make` 不是内部或外部命令，请安装 GnuWin32 Make，并把下面目录加入系统 `Path`：
 
+其中我们提供Windows下GnuWin32和RISC-V的编译工具，[下载网址](https://github.com/ccnuktd/SOC-FPGA-BJTU-HWCT/releases/tag/ToolsV1.0)
+
 ```text
 C:\Program Files (x86)\GnuWin32\bin
 ```
@@ -551,10 +579,6 @@ make menuconfig
 ```
 
 保存配置后再重新运行 `make run`。
-
-### `make menuconfig` 报窗口太小或显示异常
-
-把终端窗口放大后重新运行 `make menuconfig`。
 
 ### `make run` 报 `only supported on Linux`
 
