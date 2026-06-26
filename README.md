@@ -169,7 +169,7 @@ make menuconfig
 #### Testing and Debugging（测试和调试）
 在上述界面中，选择Testing and Debugging后，Enter确认，你可以看到一些调试选项
 
-Instruction Tracer：显示执行的每条指令（默认开启）
+Instruction Tracer：显示执行的每条指令（默认关闭）
 Memory Tracer：追踪显示每次load/store指令（默认关闭）
 Function Tracer：显示程序的每次函数调用（默认关闭）
 Device Tracer：显示每次对外设的访问（默认关闭）

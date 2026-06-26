@@ -13,7 +13,12 @@ DETECTED_OS := $(shell echo $$OSTYPE)
 IS_LINUX := $(filter %linux%,$(DETECTED_OS))
 IS_MSYS := $(filter %msys%,$(DETECTED_OS))
 IS_CYGWIN := $(filter %cygwin%,$(DETECTED_OS))
-IS_WINDOWS := $(or $(filter Windows_NT,$(OS)),$(IS_MSYS),$(IS_CYGWIN),$(findstring MINGW,$(shell uname 2>NUL)))
+ifeq ($(OS),Windows_NT)
+IS_WINDOWS := Windows_NT
+else
+UNAME_S := $(shell uname 2>/dev/null)
+IS_WINDOWS := $(or $(IS_MSYS),$(IS_CYGWIN),$(findstring MINGW,$(UNAME_S)))
+endif
 
 # Linux/Unix toolchain configuration
 ifeq ($(IS_LINUX),)

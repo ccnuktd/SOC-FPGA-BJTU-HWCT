@@ -23,7 +23,12 @@ DETECTED_OS := $(shell echo $$OSTYPE)
 IS_LINUX := $(filter %linux%,$(DETECTED_OS))
 IS_MSYS := $(filter %msys%,$(DETECTED_OS))
 IS_CYGWIN := $(filter %cygwin%,$(DETECTED_OS))
-IS_WINDOWS := $(or $(filter Windows_NT,$(OS)),$(IS_MSYS),$(IS_CYGWIN),$(findstring MINGW,$(shell uname 2>NUL)))
+ifeq ($(OS),Windows_NT)
+IS_WINDOWS := Windows_NT
+else
+UNAME_S := $(shell uname 2>/dev/null)
+IS_WINDOWS := $(or $(IS_MSYS),$(IS_CYGWIN),$(findstring MINGW,$(UNAME_S)))
+endif
 
 ifneq ($(IS_WINDOWS),)
 ECHO_INFO = @echo [INFO]
@@ -36,10 +41,32 @@ ECHO_ERROR = @echo -e ${COLORS}[ERROR]
 endif
 SIM_PATH=$(PWD)
 
+.DEFAULT_GOAL := help
+
 .PHONY: help
 help:
-	@echo "help     - help menu             "
-	@echo "build    - compile c/asm file    "
+	@printf "\n"
+	@printf "Usage: make <target> [MODE=b]\n"
+	@printf "\n"
+	@printf "Main targets:\n"
+	@printf "  %-16s %s\n" "run" "Build and run with NEMU"
+	@printf "  %-16s %s\n" "rtl_run" "Build and run with Verilator RTL simulation"
+	@printf "  %-16s %s\n" "trace_run" "Build and run RTL simulation with waveform trace"
+	@printf "  %-16s %s\n" "build" "Build riscv.elf, riscv.dump, riscv.bin and riscv.coe"
+	@printf "\n"
+	@printf "Utility targets:\n"
+	@printf "  %-16s %s\n" "wave" "Open waveform viewer"
+	@printf "  %-16s %s\n" "gtkwave" "Open waveform viewer"
+	@printf "  %-16s %s\n" "rtl-sync" "Sync RTL files into diff-tools"
+	@printf "  %-16s %s\n" "clean" "Clean this app and RTL simulation outputs"
+	@printf "  %-16s %s\n" "clean-sim-tools" "Clean only RTL simulation outputs"
+	@printf "  %-16s %s\n" "clean-all" "Clean this app, RTL simulation outputs, and NEMU"
+	@printf "\n"
+	@printf "Examples:\n"
+	@printf "  make run\n"
+	@printf "  make run MODE=b\n"
+	@printf "  make rtl_run\n"
+	@printf "\n"
 
 .PHONY: build
 build:
