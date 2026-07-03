@@ -44,6 +44,31 @@ SIM_PATH=$(PWD)
 .DEFAULT_GOAL := help
 
 .PHONY: help
+ifneq ($(IS_WINDOWS),)
+help:
+	@cmd /C echo.
+	@echo Usage: make ^<target^> [MODE=b]
+	@cmd /C echo.
+	@echo Main targets:
+	@echo   run              Build and run with NEMU
+	@echo   rtl_run          Build and run with Verilator RTL simulation
+	@echo   trace_run        Build and run RTL simulation with waveform trace
+	@echo   build            Build riscv.elf, riscv.dump, riscv.bin and riscv.coe
+	@cmd /C echo.
+	@echo Utility targets:
+	@echo   wave             Open waveform viewer
+	@echo   gtkwave          Open waveform viewer
+	@echo   rtl-sync         Sync RTL files into diff-tools
+	@echo   clean            Clean this app and RTL simulation outputs
+	@echo   clean-sim-tools  Clean only RTL simulation outputs
+	@echo   clean-all        Clean this app, RTL simulation outputs, and NEMU
+	@cmd /C echo.
+	@echo Examples:
+	@echo   make run
+	@echo   make run MODE=b
+	@echo   make rtl_run
+	@cmd /C echo.
+else
 help:
 	@printf "\n"
 	@printf "Usage: make <target> [MODE=b]\n"
@@ -67,6 +92,7 @@ help:
 	@printf "  make run MODE=b\n"
 	@printf "  make rtl_run\n"
 	@printf "\n"
+endif
 
 .PHONY: build
 build:

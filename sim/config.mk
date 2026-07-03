@@ -50,7 +50,7 @@ CC              = $(TOOLCHAIN_BINDIR)$(TOOLCHAIN_PREFIX)-gcc$(EXEEXT)
 OBJDUMP         = $(TOOLCHAIN_BINDIR)$(TOOLCHAIN_PREFIX)-objdump$(EXEEXT)
 OBJCOPY         = $(TOOLCHAIN_BINDIR)$(TOOLCHAIN_PREFIX)-objcopy$(EXEEXT)
 PYTHON          ?= python
-BIN2COE         = powershell -NoProfile -ExecutionPolicy Bypass -File ${PROJPATH}/scripts/bin2coe.ps1
+BIN2COE         = $(PYTHON) ${PROJPATH}/scripts/bin2coe.py
 
 RM              = del /Q
 CP              = copy
