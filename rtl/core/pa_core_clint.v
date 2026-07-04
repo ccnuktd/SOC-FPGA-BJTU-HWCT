@@ -168,13 +168,15 @@ wire [`DATA_BUS_WIDTH-1:0]              interrupt_addr;
 // The current pipeline convention uses pc_i - 8.
 assign exception_addr[`DATA_BUS_WIDTH-1:0] = `ZERO_WORD;
 // PRECISE-INT: mepc for an interrupt = address of the next instruction that
-// should run after the interrupt returns. PCGEN's _pc, surfaced as next_pc_i,
-// already accounts for both sequential PC+4 and any jump that just retired:
+// should run after the interrupt returns. TOP computes this value and provides
+// it as next_pc_i. It already accounts for both sequential PC+4 and any jump
+// that just retired:
 //   - last EX inst was sequential  -> next_pc_i = retired_pc + 4
 //   - last EX inst was a taken jmp -> next_pc_i = jump_target (PCGEN updated)
-// The trap_capture condition below requires !hold_flag_i && !jump_flag_i so
-// next_pc_i is guaranteed to be settled to that "next" instruction.
-// TODO-6: Calculate the interrupt return address written into mepc.
+// Do not use jump_addr_i directly here: a non-jump retiring instruction also
+// needs a correct resume PC, and TOP has already normalized both cases into
+// next_pc_i.
+// TODO-6: Calculate the interrupt return address written into mepc from next_pc_i.
 assign interrupt_addr[`DATA_BUS_WIDTH-1:0] = `ZERO_WORD;
 
 wire [`DATA_BUS_WIDTH-1:0]              break_addr_soft;
@@ -231,9 +233,12 @@ assign break_cause_next[`DATA_BUS_WIDTH-1:0] = break_cause_soft
 //     handler executes mret we resume exactly at the inst that did NOT
 //     commit yet -- precise-interrupt semantics.
 // TODO-11: Decide when the return address/cause can be captured.
+// Exception side: capture only when there is no jump/hold conflict.
+// Interrupt side: capture only when inst_retire_i marks a precise boundary.
 assign trap_capture = `INVALID;
 
 // TODO-12: Decide when CSR state machine may enter MEPC write.
+// In this precise-interrupt design, trap_ready should follow trap_capture.
 assign trap_ready   = `INVALID;
 
 pa_dff_rst_0 #(`DATA_BUS_WIDTH)         dff_break_addr (clk_i, rst_n_i,
@@ -344,11 +349,15 @@ always @ (posedge clk_i or negedge rst_n_i) begin
     case (csr_state)
         CSR_STATE_MCAUSE : begin
             // TODO-15: Jump to mtvec after trap CSR writes.
+            // This happens in CSR_STATE_MCAUSE, after mepc/mstatus/mcause
+            // have all been presented to the CSR file.
             int_jump_flag <= `INVALID;
             int_jump_addr <= `ZERO_WORD;
         end
         CSR_STATE_MRET   : begin
             // TODO-16: Jump to mepc on mret.
+            // Use csr_mepc_i, because CSR has already saved the handler's
+            // return address before mret reaches CLINT.
             int_jump_flag <= `INVALID;
             int_jump_addr <= `ZERO_WORD;
         end

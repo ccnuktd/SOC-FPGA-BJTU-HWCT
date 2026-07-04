@@ -1,11 +1,13 @@
 .PHONY: all compile run clean wave
 
+CLINT_SRC ?= ../../rtl/core/pa_core_clint.v
+
 # 默认目标：编译并运行
 all: compile run
 
 # 编译目标
 compile:
-	iverilog -DTESTBENCH_VCS -o clint_tb clint_tb.sv lab3_clint.v pa_dff.v pa_chip_param.v
+	iverilog -DTESTBENCH_VCS -o clint_tb clint_tb.sv $(CLINT_SRC) pa_dff.v pa_chip_param.v
 
 # 运行目标
 run: compile

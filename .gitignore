@@ -87,3 +87,6 @@ sim/*/riscv.map
 
 # NEMU source (will be submodule)
 nemu/.gitignore
+
+# wave file
+*.vcd
