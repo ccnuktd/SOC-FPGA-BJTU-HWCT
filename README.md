@@ -99,9 +99,10 @@ sudo apt install -y autoconf automake autotools-dev curl
 sudo apt install -y libmpc-dev libmpfr-dev libgmp-dev gawk
 sudo apt install -y bison flex texinfo gperf libtool patchutils
 sudo apt install -y bc zlib1g-dev libexpat-dev ninja-build cmake libglib2.0-dev
+sudo apt install -y build-essential libncurses-dev bison flex
 ```
 
-下载并编译 `riscv-gnu-toolchain`（通常这个步骤耗时较久，可能需要 1～2 小时）：
+下载并编译 `riscv-gnu-toolchain`（通常这个步骤耗时较久，可能需要 3-4 小时）：
 
 ```bash
 git clone --recursive https://github.com/riscv/riscv-gnu-toolchain
@@ -133,6 +134,14 @@ source ~/.bashrc
 riscv32-unknown-elf-gcc --version
 ```
 
+如果成功会输出：
+
+```bash
+riscv32-unknown-elf-gcc (g5115c7e44) 15.2.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+```
 ### 1.5 检查 `sim/config.mk`
 
 Linux 下默认使用：
@@ -156,6 +165,8 @@ cd nemu
 export NEMU_HOME=$(pwd)
 make menuconfig
 ```
+
+**注意：执行`make menuconfig`的时候如果报错，可能是有某一些包没有被补充，你需要自己网络搜索，或者使用ai，对一些可能缺失的库进行补充**
 
 ![alt text](pic/image_0.png)
 
