@@ -121,6 +121,10 @@ cd build
 sudo make -j $(nproc)
 ```
 
+如果你没有办法科学上网，下载`git clone --recursive https://github.com/riscv/riscv-gnu-toolchain`会非常慢，甚至失败。我们推荐你使用镜像站下载
+`git clone --recursive https://githubfast.com/riscv/riscv-gnu-toolchain`
+如果这个方法也不行，你可以向老师要一份已经下好的riscv-gnu-toolchain。
+
 配置环境变量：
 
 ```bash
