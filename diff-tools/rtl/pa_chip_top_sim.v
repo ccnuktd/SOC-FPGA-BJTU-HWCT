@@ -22,6 +22,11 @@ module pa_chip_top_sim (
     input  wire                         clk_i,
     input  wire                         rst_n_i,
 
+    // Uart interface
+    input  wire                         uart_rxd,
+    output wire                         uart_txd,
+
+
     // Debug interface for difftest
     output wire [`ADDR_BUS_WIDTH-1:0]   debug_wb_pc,
     output wire                         debug_wb_valid,
@@ -120,7 +125,6 @@ wire                                    s6_rd;
 wire                                    s6_we;
 wire [`DATA_BUS_WIDTH-1:0]              s6_data;
 
-wire                                    uart_txd;
 
 wire                                    clk_50m;
 wire                                    rst_n;
@@ -307,7 +311,7 @@ pa_perips_uart u_pa_perips_uart (
     .data_i                             (m1_wdata),
     .data_o                             (s3_data),
 
-    .pad_rxd                            (1'b1),
+    .pad_rxd                            (uart_rxd),
     .pad_txd                            (uart_txd)
 );
 
