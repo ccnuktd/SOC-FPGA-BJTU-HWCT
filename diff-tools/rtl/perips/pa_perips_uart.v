@@ -291,7 +291,7 @@ always @(posedge clk_i) begin
         prev_tx_data <= 8'h0;
     end else if (_uart_cr[0] && (addr_i[7:0] == UART_REG_TXD) && data_we_i) begin
         // Print character when TX register is written
-        $write("%c", data_i[7:0]);
+        // $write("%c", data_i[7:0]);
         prev_tx_data <= data_i[7:0];
         // Flush for real-time output
         if (data_i[7:0] == 8'h3e) $fflush(1);  // Flush on newline

@@ -232,11 +232,70 @@ static void uart_rx_update(Vpa_chip_top_sim *top) {
 
 
 
+
+
+
+
+// ---- Serial TX monitor (CPU → host) ----
+struct UartTxMon {
+    bool    prev_txd;
+    bool    in_frame;
+    int     bit_count;    // 0=start, 1-8=data, 9=stop
+    int     cycle_count;
+    uint8_t shift_reg;
+};
+static UartTxMon tx_mon;
+
+// Sample uart_txd and reconstruct output bytes.
+// Called after each rising-edge eval() in clock_cycle().
+static void uart_tx_update(Vpa_chip_top_sim *top) {
+    bool txd = (top->uart_txd != 0);
+
+    if (!tx_mon.in_frame) {
+        // Wait for start bit: falling edge (prev=1, cur=0)
+        if (tx_mon.prev_txd && !txd) {
+            tx_mon.in_frame    = true;
+            tx_mon.bit_count   = 0;
+            tx_mon.cycle_count = 0;
+            tx_mon.shift_reg   = 0;
+        }
+    } else {
+        tx_mon.cycle_count++;
+
+        // Sample at mid-bit
+        if (tx_mon.cycle_count == UART_BAUD_DIV/2) {
+            if (tx_mon.bit_count >= 1 && tx_mon.bit_count <= 8) {
+                if (txd)
+                    tx_mon.shift_reg |= (uint8_t)(1 << (tx_mon.bit_count - 1));
+            }
+        }
+
+        // Advance to next bit after full bit period
+        if (tx_mon.cycle_count >= UART_BAUD_DIV) {
+            tx_mon.cycle_count = 0;
+            tx_mon.bit_count++;
+
+            if (tx_mon.bit_count > 9) {
+                // Frame complete — output the byte
+                putchar(tx_mon.shift_reg);
+                fflush(stdout);
+                tx_mon.in_frame = false;
+            }
+        }
+    }
+
+    tx_mon.prev_txd = txd;
+}
+
+
+
+
 void clock_cycle(bool verbose) {
     update_trace_window();
 
     // Drive UART RX serial bit stream on uart_rxd
     uart_rx_update(top);
+    uart_tx_update(top);
 
     top->clk_i = 0;
     top->eval();
