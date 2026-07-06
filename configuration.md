@@ -46,13 +46,20 @@ wsl --install --web-download -d Ubuntu-22.04
 
 ## 2. 操作流程
 
-推荐流程适用于大多数 Windows 10 新版本和 Windows 11 电脑。所有命令都在 Windows PowerShell 或 Windows Terminal 中执行。
+推荐流程适用于大多数 Windows 10 新版本和 Windows 11 电脑。所有命令都在 VS Code terminal 的 PowerShell 中执行。
 
-### 2.1 以管理员身份打开 PowerShell
 
-在开始菜单中搜索 `PowerShell`，右键选择“以管理员身份运行”。如果你使用 Windows Terminal，也可以右键选择“以管理员身份运行”，再打开 PowerShell 标签页。
+### 2.1 下载 VScode 并在 VScode terminal 中启动wsl
 
-后续命令需要修改 Windows 可选组件，普通权限可能会失败。
+先在 Windows 侧下载并安装 VS Code。打开 VS Code 官网：
+
+```text
+https://code.visualstudio.com/
+```
+
+下载 Windows 稳定版安装包并完成安装。安装时建议勾选 `Add to PATH`，这样后续可以在 WSL 终端中使用 `code .` 打开当前目录。
+
+安装完成后，以管理员身份启动 VS Code。按 `` Ctrl + ` `` 打开 VS Code terminal，并确认当前终端为 PowerShell。后续命令需要修改 Windows 可选组件，普通权限可能会失败。
 
 ### 2.2 查看可安装的 Linux 发行版
 

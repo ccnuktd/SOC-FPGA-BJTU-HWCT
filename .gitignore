@@ -90,3 +90,6 @@ nemu/.gitignore
 
 # wave file
 *.vcd
+
+*.zip
+docs

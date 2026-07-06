@@ -103,7 +103,9 @@ wire                                    op_ebreak;
 wire                                    op_mret;
 
 // TODO-1: Decode trap-related instructions.
-// inst_func_i[2] -> ecall, inst_func_i[1] -> ebreak, inst_func_i[0] -> mret.
+// Use inst_set_rvi as the common enable for all three decoded ops:
+// inst_func_i[2] selects ecall, inst_func_i[1] selects ebreak,
+// and inst_func_i[0] selects mret.
 assign op_ecall  = `INVALID;
 assign op_ebreak = `INVALID;
 assign op_mret   = `INVALID;
@@ -132,7 +134,8 @@ always @ (posedge clk_i or negedge rst_n_i) begin
 end
 
 // TODO-2: Generate a valid IRQ event.
-// It should become valid on irq_i rising edge, and stay valid while CLINT is handling it.
+// irq_vld should be true when a previous IRQ event is kept in irq_vld_t,
+// or when irq_i has a rising edge detected by ~irq_1r[1] && irq_1r[0].
 assign irq_vld = `INVALID;
 
 always @ (posedge clk_i or negedge rst_n_i) begin
@@ -144,6 +147,8 @@ always @ (posedge clk_i or negedge rst_n_i) begin
     end
     else if (global_int_en && irq_vld) begin
         // TODO-3: Latch an enabled external interrupt as pending.
+        // This branch already means global_int_en && irq_vld is true, so
+        // set irq_pending to the valid value.
         irq_pending <= `INVALID;
     end
 end
@@ -155,7 +160,11 @@ always @ (*) begin
     end
     else begin
         // TODO-4: Choose current interrupt state/type.
-        // Priority: mret > ecall/ebreak > pending/new external interrupt > idle.
+        // Implement this priority chain exactly:
+        // mret -> INT_STATE_MRET with exception type;
+        // ecall/ebreak -> INT_STATE_MCALL with exception type;
+        // irq_pending or an enabled new IRQ -> INT_STATE_MCALL with interrupt type;
+        // otherwise -> idle with no interrupt type.
         int_state = INT_STATE_IDLE;
         int_type  = INT_TYPE_NONE;
     end
@@ -165,7 +174,8 @@ wire [`DATA_BUS_WIDTH-1:0]              exception_addr;
 wire [`DATA_BUS_WIDTH-1:0]              interrupt_addr;
 
 // TODO-5: Calculate the exception address written into mepc.
-// The current pipeline convention uses pc_i - 8.
+// The current pipeline convention uses pc_i - 8; express it as
+// pc_i + 32'hffff_fff8 so the result stays DATA_BUS_WIDTH wide.
 assign exception_addr[`DATA_BUS_WIDTH-1:0] = `ZERO_WORD;
 // PRECISE-INT: mepc for an interrupt = address of the next instruction that
 // should run after the interrupt returns. TOP computes this value and provides
@@ -176,7 +186,8 @@ assign exception_addr[`DATA_BUS_WIDTH-1:0] = `ZERO_WORD;
 // Do not use jump_addr_i directly here: a non-jump retiring instruction also
 // needs a correct resume PC, and TOP has already normalized both cases into
 // next_pc_i.
-// TODO-6: Calculate the interrupt return address written into mepc from next_pc_i.
+// TODO-6: Calculate the interrupt return address written into mepc.
+// Use next_pc_i directly. Do not use jump_addr_i here.
 assign interrupt_addr[`DATA_BUS_WIDTH-1:0] = `ZERO_WORD;
 
 wire [`DATA_BUS_WIDTH-1:0]              break_addr_soft;
@@ -185,9 +196,13 @@ wire [`DATA_BUS_WIDTH-1:0]              break_addr_next;
 wire [`DATA_BUS_WIDTH-1:0]              break_addr;
 
 // TODO-7: Select mepc write data for exceptions.
+// Output exception_addr when int_type[0] is set and either op_ecall or
+// op_ebreak is active. Use DATA_BUS_WIDTH-wide masking for each case.
 assign break_addr_soft[`DATA_BUS_WIDTH-1:0]  = `ZERO_WORD;
 
 // TODO-8: Select mepc write data for external interrupts.
+// Output interrupt_addr when this is an interrupt, not an exception:
+// int_type[1] & ~int_type[0].
 assign break_addr_ext[`DATA_BUS_WIDTH-1:0]   = `ZERO_WORD;
 
 assign break_addr_next[`DATA_BUS_WIDTH-1:0] = break_addr_soft
@@ -201,9 +216,13 @@ wire                                    trap_capture;
 wire                                    trap_ready;
 
 // TODO-9: Select mcause write data for ecall and ebreak.
+// For exception type, ecall writes 32'd11 and ebreak writes 32'd3.
+// Guard both values with int_type[0].
 assign break_cause_soft[`DATA_BUS_WIDTH-1:0] = `ZERO_WORD;
 
 // TODO-10: Select mcause write data for external machine interrupt.
+// External machine interrupt writes 32'h8000_0003 when
+// int_type[1] & ~int_type[0] is true.
 assign break_cause_ext[`DATA_BUS_WIDTH-1:0]  = `ZERO_WORD;
 
 assign break_cause_next[`DATA_BUS_WIDTH-1:0] = break_cause_soft
@@ -233,12 +252,14 @@ assign break_cause_next[`DATA_BUS_WIDTH-1:0] = break_cause_soft
 //     handler executes mret we resume exactly at the inst that did NOT
 //     commit yet -- precise-interrupt semantics.
 // TODO-11: Decide when the return address/cause can be captured.
-// Exception side: capture only when there is no jump/hold conflict.
-// Interrupt side: capture only when inst_retire_i marks a precise boundary.
+// First require INT_STATE_MCALL and CSR_STATE_IDLE.
+// For exceptions, also require no jump or hold conflict.
+// For interrupts, require inst_retire_i as the precise boundary.
 assign trap_capture = `INVALID;
 
 // TODO-12: Decide when CSR state machine may enter MEPC write.
-// In this precise-interrupt design, trap_ready should follow trap_capture.
+// In this precise-interrupt design, trap_ready should directly follow
+// trap_capture without adding another condition.
 assign trap_ready   = `INVALID;
 
 pa_dff_rst_0 #(`DATA_BUS_WIDTH)         dff_break_addr (clk_i, rst_n_i,
@@ -305,7 +326,9 @@ case (csr_state)
     CSR_STATE_MSTATUS : begin
         csr_waddr     = {20'h0, `CSR_MSTATUS};
         csr_waddr_vld = `VALID;
-        // TODO-13: Save mstatus on trap entry. Move MIE into MPIE and clear MIE.
+        // TODO-13: Save mstatus on trap entry.
+        // Preserve the other mstatus bits, copy old MIE bit [3] into MPIE
+        // bit [7], and clear MIE bit [3].
         csr_wdata     = `ZERO_WORD;
     end
 
@@ -318,7 +341,9 @@ case (csr_state)
     CSR_STATE_MRET    : begin
         csr_waddr     = {20'h0, `CSR_MSTATUS};
         csr_waddr_vld = `VALID;
-        // TODO-14: Restore mstatus on mret. Restore MIE from MPIE and clear MPIE.
+        // TODO-14: Restore mstatus on mret.
+        // Preserve the other mstatus bits, restore MIE bit [3] from MPIE
+        // bit [7], and clear MPIE bit [7].
         csr_wdata     = `ZERO_WORD;
     end
 
@@ -349,15 +374,15 @@ always @ (posedge clk_i or negedge rst_n_i) begin
     case (csr_state)
         CSR_STATE_MCAUSE : begin
             // TODO-15: Jump to mtvec after trap CSR writes.
-            // This happens in CSR_STATE_MCAUSE, after mepc/mstatus/mcause
-            // have all been presented to the CSR file.
+            // In CSR_STATE_MCAUSE, assert the interrupt jump and set the
+            // jump address to csr_mtvec.
             int_jump_flag <= `INVALID;
             int_jump_addr <= `ZERO_WORD;
         end
         CSR_STATE_MRET   : begin
             // TODO-16: Jump to mepc on mret.
-            // Use csr_mepc_i, because CSR has already saved the handler's
-            // return address before mret reaches CLINT.
+            // In CSR_STATE_MRET, assert the return jump and set the jump
+            // address to csr_mepc.
             int_jump_flag <= `INVALID;
             int_jump_addr <= `ZERO_WORD;
         end

@@ -1,6 +1,6 @@
 .PHONY: all compile run clean wave
 
-CLINT_SRC ?= ../../rtl/core/pa_core_clint.v
+CLINT_SRC ?= lab3_clint.v
 
 # 默认目标：编译并运行
 all: compile run
