@@ -15,6 +15,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <verilated.h>
 #include <verilated_vcd_c.h>
 #include "Vpa_chip_top_sim.h"
@@ -149,8 +151,151 @@ void close_trace() {
     printf("[INFO] Waveform saved: %s\n", trace_file);
 }
 
+
+// Baud rate: clk_i = 50MHz.  Student UART uses XTAL_FREQ/BAUD = 434.
+static const int UART_BAUD_DIV = 434;
+
+// ---- stdin non-blocking helper ----
+static bool try_read_stdin(char *ch) {
+    int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+    bool got = (read(STDIN_FILENO, ch, 1) == 1);
+    fcntl(STDIN_FILENO, F_SETFL, flags);
+    return got;
+}
+
+
+
+struct UartRxDrv {
+    bool    in_frame;
+    int     bit_count;    // 0=start, 1-8=data, 9-15=stop
+    int     cycle_count;
+    uint8_t byte;
+};
+static UartRxDrv rx_drv;
+static bool sim_running = false;
+
+// Drive uart_rxd with proper serial bit stream.
+// Called before each eval() in clock_cycle().
+static void uart_rx_update(Vpa_chip_top_sim *top) {
+    if (!sim_running) {
+        top->uart_rxd = 1;
+        return;
+    }
+
+    // Try to start a new frame when idle
+    if (!rx_drv.in_frame) {
+        char ch;
+        bool got = false;
+        got = try_read_stdin(&ch);
+
+        if (got) {
+            rx_drv.in_frame    = true;
+            rx_drv.bit_count   = 0;
+            rx_drv.cycle_count = 0;
+            rx_drv.byte        = (uint8_t)ch;
+        }
+    }
+
+
+    // Determine current bit value
+    if (rx_drv.in_frame) {
+        int bit_val;
+
+        if (rx_drv.bit_count == 0)
+            bit_val = 0;  // start bit
+
+        else if (rx_drv.bit_count >= 1 && rx_drv.bit_count <= 8)
+            bit_val = (rx_drv.byte >> (rx_drv.bit_count - 1)) & 1;
+
+        else
+            bit_val = 1;  // stop bit
+
+        top->uart_rxd = bit_val;
+
+
+        rx_drv.cycle_count++;
+
+
+        if (rx_drv.cycle_count >= UART_BAUD_DIV) {
+            rx_drv.cycle_count = 0;
+            rx_drv.bit_count++;
+            if (rx_drv.bit_count > 14) { 
+                rx_drv.in_frame = false;
+            }
+        }
+
+    } else {
+        top->uart_rxd = 1;
+    }
+}
+
+
+
+
+
+
+
+// ---- Serial TX monitor (CPU → host) ----
+struct UartTxMon {
+    bool    prev_txd;
+    bool    in_frame;
+    int     bit_count;    // 0=start, 1-8=data, 9=stop
+    int     cycle_count;
+    uint8_t shift_reg;
+};
+static UartTxMon tx_mon;
+
+// Sample uart_txd and reconstruct output bytes.
+// Called after each rising-edge eval() in clock_cycle().
+static void uart_tx_update(Vpa_chip_top_sim *top) {
+    bool txd = (top->uart_txd != 0);
+
+    if (!tx_mon.in_frame) {
+        // Wait for start bit: falling edge (prev=1, cur=0)
+        if (tx_mon.prev_txd && !txd) {
+            tx_mon.in_frame    = true;
+            tx_mon.bit_count   = 0;
+            tx_mon.cycle_count = 0;
+            tx_mon.shift_reg   = 0;
+        }
+    } else {
+        tx_mon.cycle_count++;
+
+        // Sample at mid-bit
+        if (tx_mon.cycle_count == UART_BAUD_DIV/2) {
+            if (tx_mon.bit_count >= 1 && tx_mon.bit_count <= 8) {
+                if (txd)
+                    tx_mon.shift_reg |= (uint8_t)(1 << (tx_mon.bit_count - 1));
+            }
+        }
+
+        // Advance to next bit after full bit period
+        if (tx_mon.cycle_count >= UART_BAUD_DIV) {
+            tx_mon.cycle_count = 0;
+            tx_mon.bit_count++;
+
+            if (tx_mon.bit_count > 9) {
+                // Frame complete — output the byte
+                putchar(tx_mon.shift_reg);
+                fflush(stdout);
+                tx_mon.in_frame = false;
+            }
+        }
+    }
+
+    tx_mon.prev_txd = txd;
+}
+
+
+
+
 void clock_cycle(bool verbose) {
     update_trace_window();
+
+    // Drive UART RX serial bit stream on uart_rxd
+    uart_rx_update(top);
+    uart_tx_update(top);
 
     top->clk_i = 0;
     top->eval();
@@ -165,7 +310,7 @@ void clock_cycle(bool verbose) {
     top->clk_i = 1;
     top->eval();
     main_time++;
-    
+
     if (trace_active) tfp->dump(main_time);
 
     if (trace_active && trace_cycle_count > 0 &&
@@ -273,7 +418,8 @@ int main(int argc, char** argv) {
     for (int i = 0; i < 10; i++) clock_cycle(true);
     top->rst_n_i = 1;
     clock_cycle(true);
-    
+
+    sim_running = true;  // UART input now active
     printf("\n--- Start Simulation ---\n");
     
     if (auto_run_cycles > 0) {

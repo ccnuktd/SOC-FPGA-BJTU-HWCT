@@ -13,10 +13,10 @@
 //`define MEMORY_MODEL_REG
 `define MEMORY_MODEL_BRAM
 
-`define FPGA_BOARD_FREQ_HZ            32'd50_000_000
+`define FPGA_BOARD_FREQ_HZ            32'd200_000_000
 
 // xtal cpu clock freq*2 define(cpu clock may be divided)
-`define XTAL_FREQ_HZ            32'd115200*4
+`define XTAL_FREQ_HZ            32'd50_000_000
 
 // bus width
 `define ADDR_BUS_WIDTH          8'd32
