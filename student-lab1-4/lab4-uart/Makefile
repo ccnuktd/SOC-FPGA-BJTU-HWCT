@@ -1,11 +1,13 @@
 .PHONY: all compile run clean wave
 
+UART_SRC ?= lab4_uart.v
+
 # 默认目标：编译并运行
 all: compile run
 
 # 编译目标
 compile:
-	iverilog -DTESTBENCH_VCS -o uart_tb uart_tb.sv lab4_uart.v pa_dff.v pa_chip_param.v
+	iverilog -DTESTBENCH_VCS -o uart_tb uart_tb.sv $(UART_SRC) pa_dff.v pa_chip_param.v
 
 # 运行目标
 run: compile

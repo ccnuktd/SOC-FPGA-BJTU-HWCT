@@ -47,6 +47,10 @@ tb/*.out
 teacher-lab1-4/
 hardware_training/
 
+# Local mutation-test helper
+student-lab1-4/run-mutation-tests.sh
+student-lab1-4/mutation-tests.md
+
 # NEMU (keep as external submodule)
 nemu/.git
 

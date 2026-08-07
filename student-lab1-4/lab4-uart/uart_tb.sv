@@ -1,342 +1,529 @@
-`timescale 1ns / 1ps
-
+`timescale 1ns/1ps
+`define TESTBENCH_VCS
 `include "pa_chip_param.v"
 
 module uart_tb;
 
-    // 时钟和复位
-    reg clk_i;
-    reg rst_n_i;
+localparam UART_BAUD      = 32'd115200;
+localparam UART_CR        = 8'h00;
+localparam UART_SR        = 8'h04;
+localparam UART_BAUD_REG  = 8'h08;
+localparam UART_RXD       = 8'h0c;
+localparam UART_TXD       = 8'h10;
+localparam STATE_IDLE     = 2'b00;
+localparam STATE_START    = 2'b01;
+localparam STATE_RUN      = 2'b10;
+localparam STATE_END      = 2'b11;
+localparam BIT_LIMIT      = (`XTAL_FREQ_HZ) / UART_BAUD;
+localparam BIT_TICKS      = BIT_LIMIT + 1;
+localparam HALF_LIMIT     = BIT_LIMIT / 2;
 
-    // 总线接口
-    reg [7:0] addr_i;
-    reg data_rd_i;
-    reg data_we_i;
-    reg [`DATA_BUS_WIDTH-1:0] data_i;
-    wire [`DATA_BUS_WIDTH-1:0] data_o;
+reg                         clk_i;
+reg                         rst_n_i;
+reg  [7:0]                  addr_i;
+reg                         data_rd_i;
+reg                         data_we_i;
+reg  [`DATA_BUS_WIDTH-1:0]  data_i;
+wire [`DATA_BUS_WIDTH-1:0]  data_o;
+reg                         pad_rxd;
+wire                        pad_txd;
 
-    // UART引脚
-    reg pad_rxd;
-    wire pad_txd;
+integer tests;
+integer failures;
+integer checked_cycles;
+integer i;
+integer j;
+reg [31:0] read_data;
+reg [31:0] lfsr;
 
-    // 测试统计变量
-    integer test_count = 0;
-    integer pass_count = 0;
-    integer fail_count = 0;
-    reg [256*8-1:0] current_case;
+// Cycle-accurate reference model. Only public DUT outputs are compared; the
+// model exists to make every bit boundary and bus-visible state transition an
+// assertion instead of accepting a byte that happens to decode eventually.
+reg [31:0] ref_cr;
+reg [31:0] ref_sr;
+reg [31:0] ref_baud;
+reg [31:0] ref_rxd;
+reg [31:0] ref_txd;
+reg [31:0] ref_tx_clk_cnt;
+reg [31:0] ref_rx_clk_cnt;
+reg [19:0] ref_tx_pipe;
+reg [7:0]  ref_rx_pipe;
+reg [1:0]  ref_tx_state;
+reg [1:0]  ref_rx_state;
+reg        ref_tx_start;
+reg [31:0] ref_data;
 
-    // 实例化UART模块
-    pa_perips_uart dut (
-        .clk_i(clk_i),
-        .rst_n_i(rst_n_i),
-        .addr_i(addr_i),
-        .data_rd_i(data_rd_i),
-        .data_we_i(data_we_i),
-        .data_i(data_i),
-        .data_o(data_o),
-        .pad_rxd(pad_rxd),
-        .pad_txd(pad_txd)
-    );
+wire ref_tx_clk_timeup = (ref_tx_clk_cnt == BIT_LIMIT);
+wire ref_rx_clk_timeup = (ref_rx_state == STATE_START)
+                       ? (ref_rx_clk_cnt == HALF_LIMIT)
+                       : (ref_rx_clk_cnt == BIT_LIMIT);
+wire ref_tx_idle = (ref_tx_state == STATE_IDLE);
+wire ref_rx_idle = (ref_rx_state == STATE_IDLE);
+wire ref_pad_txd = ref_tx_pipe[10];
 
-    // 时钟生成：50MHz
-    initial begin
-        clk_i = 0;
-        forever #10 clk_i = ~clk_i; // 20ns周期
+pa_perips_uart dut (
+    .clk_i(clk_i),
+    .rst_n_i(rst_n_i),
+    .addr_i(addr_i),
+    .data_rd_i(data_rd_i),
+    .data_we_i(data_we_i),
+    .data_i(data_i),
+    .data_o(data_o),
+    .pad_rxd(pad_rxd),
+    .pad_txd(pad_txd)
+);
+
+always #5 clk_i = ~clk_i;
+
+initial begin
+    $dumpfile("uart.vcd");
+    $dumpvars(0, uart_tb);
+end
+
+initial ref_data = `ZERO_WORD;
+
+always @(posedge clk_i or negedge rst_n_i) begin
+    if (!rst_n_i)
+        ref_tx_clk_cnt <= `ZERO_WORD;
+    else if (ref_tx_clk_timeup)
+        ref_tx_clk_cnt <= `ZERO_WORD;
+    else
+        ref_tx_clk_cnt <= ref_tx_clk_cnt + 32'h1;
+end
+
+always @(posedge clk_i or negedge rst_n_i) begin
+    if (!rst_n_i)
+        ref_tx_start <= 1'b0;
+    else if (ref_tx_state == STATE_IDLE) begin
+        if (ref_cr[0] && addr_i == UART_TXD && data_we_i)
+            ref_tx_start <= 1'b1;
     end
+    else if (ref_tx_state == STATE_RUN)
+        ref_tx_start <= 1'b0;
+end
 
-    // 复位
-    initial begin
-        rst_n_i = 0;
-        #100 rst_n_i = 1;
+always @(posedge clk_i or negedge rst_n_i) begin
+    if (!rst_n_i)
+        ref_tx_state <= STATE_IDLE;
+    else if (ref_tx_clk_timeup) begin
+        if (ref_tx_state == STATE_START)
+            ref_tx_state <= STATE_RUN;
+        else if (ref_tx_start)
+            ref_tx_state <= STATE_START;
+        else if (ref_tx_state == STATE_RUN) begin
+            if (!ref_tx_pipe[0]) ref_tx_state <= STATE_END;
+        end
+        else if (ref_tx_state == STATE_END)
+            ref_tx_state <= STATE_IDLE;
     end
+end
 
-    // 任务：写寄存器
-    task write_reg(input [7:0] addr, input [31:0] data);
-        begin
-            @(posedge clk_i);
-            addr_i = addr;
-            data_i = data;
-            data_we_i = 1;
-            data_rd_i = 0;
-            @(posedge clk_i);
-            data_we_i = 0;
+always @(posedge clk_i or negedge rst_n_i) begin
+    if (!rst_n_i)
+        ref_tx_pipe <= 20'hf_ffff;
+    else if (ref_tx_clk_timeup && ref_cr[0]) begin
+        case (ref_tx_state)
+            STATE_IDLE:  ref_tx_pipe <= 20'hf_ffff;
+            STATE_START: ref_tx_pipe <= {1'b1, ref_txd[7:0], 1'b0, 10'h3ff};
+            STATE_RUN:   ref_tx_pipe <= {1'b1, ref_tx_pipe[19:1]};
+            STATE_END:   ref_tx_pipe <= 20'hf_ffff;
+        endcase
+    end
+end
+
+always @(posedge clk_i or negedge rst_n_i) begin
+    if (!rst_n_i)
+        ref_rx_clk_cnt <= `ZERO_WORD;
+    else if (ref_rx_state == STATE_IDLE)
+        ref_rx_clk_cnt <= `ZERO_WORD;
+    else if (ref_rx_clk_timeup)
+        ref_rx_clk_cnt <= `ZERO_WORD;
+    else
+        ref_rx_clk_cnt <= ref_rx_clk_cnt + 32'h1;
+end
+
+always @(posedge clk_i or negedge rst_n_i) begin
+    if (!rst_n_i)
+        ref_rx_state <= STATE_IDLE;
+    else if (ref_rx_state == STATE_IDLE) begin
+        if (!pad_rxd) ref_rx_state <= STATE_START;
+    end
+    else if (ref_rx_state == STATE_START) begin
+        if (!pad_rxd && ref_rx_clk_timeup) ref_rx_state <= STATE_RUN;
+    end
+    else if (ref_rx_clk_timeup) begin
+        if (ref_rx_state == STATE_RUN) begin
+            if (!ref_rx_pipe[0]) ref_rx_state <= STATE_END;
         end
-    endtask
+        else if (ref_rx_state == STATE_END)
+            ref_rx_state <= STATE_IDLE;
+    end
+end
 
-    // 任务：读寄存器
-    task read_reg(input [7:0] addr, output [31:0] data);
-        begin
-            @(posedge clk_i);
-            addr_i = addr;
-            data_rd_i = 1;
-            data_we_i = 0;
-            @(posedge clk_i);
-            #1; // 等待组合逻辑
-            data = data_o;
-            data_rd_i = 0;
-        end
-    endtask
+always @(posedge clk_i or negedge rst_n_i) begin
+    if (!rst_n_i)
+        ref_rx_pipe <= 8'hff;
+    else if (ref_cr[1] && ref_rx_clk_timeup) begin
+        case (ref_rx_state)
+            STATE_IDLE:  ref_rx_pipe <= 8'hff;
+            STATE_START: ref_rx_pipe <= {pad_rxd, ref_rx_pipe[7:1]};
+            STATE_RUN:   ref_rx_pipe <= {pad_rxd, ref_rx_pipe[7:1]};
+            STATE_END:   ref_rx_pipe <= 8'hff;
+        endcase
+    end
+end
 
-    // 任务：发送UART数据（模拟外部设备发送到RXD）
-    task send_uart_data(input [7:0] data);
-        integer i;
-        begin
-            // 起始位
-            pad_rxd = 0;
-            #(8680); // 115200波特率，位周期约8.68us
+always @(posedge clk_i or negedge rst_n_i) begin
+    if (!rst_n_i) begin
+        ref_cr   <= 32'h0000_0003;
+        ref_sr   <= 32'h0000_0000;
+        ref_baud <= UART_BAUD;
+        ref_rxd  <= 32'hffff_ffff;
+        ref_txd  <= 32'hffff_ffff;
+    end
+    else if (ref_cr[0] && ref_tx_state == STATE_END) begin
+        if (addr_i == UART_SR)
+            ref_sr <= {data_i[31:2], (ref_sr[1] & ~data_i[1]), 1'b1};
+        else
+            ref_sr <= {ref_sr[31:1], 1'b1};
+    end
+    else if (ref_cr[1] && ref_rx_state == STATE_END) begin
+        if (addr_i == UART_SR)
+            ref_sr <= {data_i[31:2], 1'b1, (ref_sr[0] & ~data_i[0])};
+        else
+            ref_sr <= {ref_sr[31:2], 1'b1, ref_sr[0]};
+        ref_rxd <= {24'b0, ref_rx_pipe};
+    end
+    else if (data_we_i) begin
+        case (addr_i)
+            UART_CR:  ref_cr  <= data_i;
+            UART_SR:  ref_sr  <= {data_i[31:2], (ref_sr[1] & ~data_i[1]),
+                                  (ref_sr[0] & ~data_i[0])};
+            UART_TXD: ref_txd <= {24'b0, data_i[7:0]};
+        endcase
+    end
+end
 
-            // 数据位（LSB first）
-            for (i = 0; i < 8; i = i + 1) begin
-                pad_rxd = data[i];
-                #(8680);
-            end
+always @(posedge clk_i) begin
+    if (data_rd_i) begin
+        case (addr_i)
+            UART_CR:       ref_data <= ref_cr;
+            UART_SR:       ref_data <= {ref_sr[31:2], (ref_rx_idle & ref_sr[1]),
+                                        (ref_tx_idle & ref_sr[0])};
+            UART_BAUD_REG: ref_data <= ref_baud;
+            UART_RXD:      ref_data <= {24'b0, ref_rxd[7:0]};
+            UART_TXD:      ref_data <= {24'b0, ref_txd[7:0]};
+            default:       ref_data <= `ZERO_WORD;
+        endcase
+    end
+end
 
-            // 停止位
-            pad_rxd = 1;
-            #(8680);
-        end
-    endtask
+task check32;
+    input [1023:0] name;
+    input [31:0] expected;
+    input [31:0] actual;
+begin
+    tests = tests + 1;
+    if (actual !== expected) begin
+        failures = failures + 1;
+        $display("[FAIL] %0s expected=%08h actual=%08h time=%0t", name, expected, actual, $time);
+        $display("       addr=%02h rd=%b we=%b wdata=%08h rxd=%b txd=%b ref_tx_state=%b ref_rx_state=%b",
+                 addr_i, data_rd_i, data_we_i, data_i, pad_rxd, pad_txd,
+                 ref_tx_state, ref_rx_state);
+    end
+end
+endtask
 
-    // 任务：接收UART数据（从TXD捕获）
-    task receive_uart_data(output [7:0] data);
-        integer i;
-        begin
-            // 等待起始位
-            wait(pad_txd == 0);
-            #(4340); // 半位周期
+always @(posedge clk_i) begin
+    #1;
+    if (rst_n_i) begin
+        checked_cycles = checked_cycles + 1;
+        check32("cycle-accurate UART bus output", ref_data, data_o);
+        check32("cycle-accurate TX pin", {31'b0, ref_pad_txd}, {31'b0, pad_txd});
+    end
+end
 
-            // 数据位
-            for (i = 0; i < 8; i = i + 1) begin
-                #(8680);
-                data[i] = pad_txd;
-            end
+task idle_bus;
+begin
+    addr_i    = 8'h00;
+    data_rd_i = 1'b0;
+    data_we_i = 1'b0;
+    data_i    = `ZERO_WORD;
+end
+endtask
 
-            // 停止位
-            #(8680);
-        end
-    endtask
+task reset_dut;
+begin
+    @(negedge clk_i);
+    rst_n_i = 1'b0;
+    idle_bus();
+    pad_rxd = 1'b1;
+    repeat (3) @(negedge clk_i);
+    #1;
+    check32("reset keeps TX pin high", 32'h1, {31'b0, pad_txd});
+    rst_n_i = 1'b1;
+end
+endtask
 
-    // 任务：等待RX完成
-    task wait_rx_done;
-        reg [31:0] sr;
-        begin
-            sr = 0;
-            while (sr[1] == 0) begin
-                read_reg(8'h04, sr); // 读SR
-                #1000; // 短延迟
-            end
-        end
-    endtask
+task bus_write;
+    input [7:0] addr;
+    input [31:0] data;
+begin
+    @(negedge clk_i);
+    addr_i    = addr;
+    data_i    = data;
+    data_we_i = 1'b1;
+    data_rd_i = 1'b0;
+    @(negedge clk_i);
+    idle_bus();
+end
+endtask
 
-    // 辅助任务：检查值并记录结果
-    task check_value;
-        input [31:0] expected;
-        input [31:0] actual;
-        
-        begin
-            test_count = test_count + 1;
-            if (actual === expected) begin
-                pass_count = pass_count + 1;
-                $display("  [PASS] %0s | expected=%h actual=%h", current_case, expected, actual);
-            end else begin
-                fail_count = fail_count + 1;
-                $display("  [FAIL] %0s | expected=%h actual=%h", current_case, expected, actual);
-                $display("    Debug: addr=%h rd=%b we=%b wdata=%h rdata=%h rxd=%b txd=%b", addr_i, data_rd_i, data_we_i, data_i, data_o, pad_rxd, pad_txd);
-                $display("    Hint : inspect CR/SR/BAUD/TXD/RXD register behavior and UART bit timing in the waveform.");
-            end
-        end
-    endtask
+task bus_read;
+    input [7:0] addr;
+    output [31:0] data;
+begin
+    @(negedge clk_i);
+    addr_i    = addr;
+    data_rd_i = 1'b1;
+    data_we_i = 1'b0;
+    @(negedge clk_i);
+    #1 data = data_o;
+    data_rd_i = 1'b0;
+end
+endtask
 
-    // 辅助任务：显示测试摘要
-    task show_summary;
-        begin
-            $display("");
-            $display("========================================================");
-            $display("UART TEST SUMMARY");
-            $display("Total : %0d", test_count);
-            $display("Passed: %0d", pass_count);
-            $display("Failed: %0d", fail_count);
-            $display("========================================================");
-            if (fail_count == 0) begin
-                $display("[PASS] uart_tb");
-            end else begin
-                $display("[FAIL] uart_tb errors=%0d", fail_count);
-            end
-        end
-    endtask
+task idle_cycles;
+    input integer count;
+begin
+    @(negedge clk_i);
+    idle_bus();
+    repeat (count) @(negedge clk_i);
+end
+endtask
 
-    // 测试序列
-    reg [31:0] read_data;
-    reg [7:0] captured_tx_data;
-    reg [7:0] captured_rx_data;
-    initial begin
-        // 初始化
-        addr_i = 0;
-        data_rd_i = 0;
-        data_we_i = 0;
-        data_i = 0;
-        pad_rxd = 1; // 默认高电平
-        current_case = "initial";
-
-        // 等待复位完成
-        #200;
-
-        $display("Starting UART Testbench...");
-
-        // 测试1：检查默认控制寄存器
-        $display("\nTest 1: Check default Control Register");
-        current_case = "Default Control Register should be 0x00000003";
-        read_reg(8'h00, read_data); // 读CR
-        check_value(32'h00000003, read_data);
-
-        // 测试2：检查默认状态寄存器
-        $display("\nTest 2: Check default Status Register");
-        current_case = "Default Status Register should be 0x00000000";
-        read_reg(8'h04, read_data); // 读SR
-        check_value(32'h00000000, read_data);
-
-        // 测试3：检查波特率寄存器
-        $display("\nTest 3: Check Baud Rate Register");
-        current_case = "Baud register should be 115200";
-        read_reg(8'h08, read_data); // 读BAUD
-        check_value(32'd115200, read_data);
-
-        // 测试4：写控制寄存器
-        $display("\nTest 4: Write Control Register");
-        current_case = "Control Register write/read should keep TX and RX enabled";
-        write_reg(8'h00, 32'h00000003); // 启用TX/RX
-        read_reg(8'h00, read_data);
-        check_value(32'h00000003, read_data);
-
-        // 测试5：发送单个字节并验证TXD
-        $display("\nTest 5: Send single byte and verify TXD");
-        current_case = "TX should transmit byte 0x41";
-        write_reg(8'h10, 32'h00000041); // 写TXD: 'A' (0x41)
-        #1000; // 等待一点时间
-        receive_uart_data(captured_tx_data);
-        check_value(8'h41, captured_tx_data);
-
-        // 等待TX完成
-        #100000;
-
-        // 测试6：接收单个字节并验证RXD
-        $display("\nTest 6: Receive single byte and verify RXD");
-        current_case = "RX should receive byte 0x42";
-        fork
-            send_uart_data(8'h42); // 发送'B'
-            begin
-                // 等待接收完成
-                #200000;
-                read_reg(8'h0c, read_data); // 读RXD
-                check_value(8'h42, read_data[7:0]);
-            end
-        join
-        // 清除RX flag
-        write_reg(8'h04, 32'h00000002);
-
-        // 测试7：发送多个字节
-        $display("\nTest 7: Send multiple bytes");
-        current_case = "TX should transmit byte 0x48";
-        write_reg(8'h10, 32'h00000048); // 'H'
-        #1000;
-        receive_uart_data(captured_tx_data);
-        check_value(8'h48, captured_tx_data);
-        #100000;
-
-        current_case = "TX should transmit byte 0x65";
-        write_reg(8'h10, 32'h00000065); // 'e'
-        #1000;
-        receive_uart_data(captured_tx_data);
-        check_value(8'h65, captured_tx_data);
-        #100000;
-
-        current_case = "TX should transmit byte 0x6c";
-        write_reg(8'h10, 32'h0000006C); // 'l'
-        #1000;
-        receive_uart_data(captured_tx_data);
-        check_value(8'h6C, captured_tx_data);
-        #100000;
-
-        current_case = "TX should transmit byte 0x6c again";
-        write_reg(8'h10, 32'h0000006C); // 'l'
-        #1000;
-        receive_uart_data(captured_tx_data);
-        check_value(8'h6C, captured_tx_data);
-        #100000;
-
-        current_case = "TX should transmit byte 0x6f";
-        write_reg(8'h10, 32'h0000006F); // 'o'
-        #1000;
-        receive_uart_data(captured_tx_data);
-        check_value(8'h6F, captured_tx_data);
-        #100000;
-
-        // 测试8：接收多个字节
-        $display("\nTest 8: Receive multiple bytes");
-        // 发送 'W'
-        current_case = "RX should receive byte 0x57";
-        send_uart_data(8'h57);
-        wait_rx_done();
-        read_reg(8'h0c, read_data);
-        check_value(8'h57, read_data[7:0]);
-        // 清除RX flag
-        write_reg(8'h04, 32'h00000002);
-
-        // 发送 'o'
-        current_case = "RX should receive byte 0x6f";
-        send_uart_data(8'h6F);
-        wait_rx_done();
-        read_reg(8'h0c, read_data);
-        check_value(8'h6F, read_data[7:0]);
-        write_reg(8'h04, 32'h00000002);
-
-        // 发送 'r'
-        current_case = "RX should receive byte 0x72";
-        send_uart_data(8'h72);
-        wait_rx_done();
-        read_reg(8'h0c, read_data);
-        check_value(8'h72, read_data[7:0]);
-        write_reg(8'h04, 32'h00000002);
-
-        // 发送 'l'
-        current_case = "RX should receive byte 0x6c";
-        send_uart_data(8'h6C);
-        wait_rx_done();
-        read_reg(8'h0c, read_data);
-        check_value(8'h6C, read_data[7:0]);
-        write_reg(8'h04, 32'h00000002);
-
-        // 发送 'e'
-        current_case = "RX should receive byte 0x65";
-        send_uart_data(8'h65);
-        wait_rx_done();
-        read_reg(8'h0c, read_data);
-        check_value(8'h65, read_data[7:0]);
-        // 不清除最后一个RX flag, 让SR[1]=1 for test9
-
-        // 测试9：检查最终状态
-        $display("\nTest 9: Check final status");
-        current_case = "Final Status Register should show TX and RX ready flags";
-        read_reg(8'h04, read_data); // 读SR
-        check_value(32'h00000003, read_data);
-
-        // 显示测试摘要
-        show_summary();
-
-        // 结束仿真
-        #1000;
-        if (fail_count == 0) begin
-            $finish;
-        end
-        else begin
-            $fatal(1);
+task capture_tx_byte;
+    input [7:0] expected;
+    input [1023:0] name;
+    integer timeout;
+    integer bit_index;
+    reg found;
+    reg [7:0] captured;
+begin : capture_body
+    found = 1'b0;
+    captured = 8'h00;
+    for (timeout = 0; timeout < (BIT_TICKS * 3); timeout = timeout + 1) begin
+        @(negedge clk_i);
+        if (pad_txd === 1'b0) begin
+            found = 1'b1;
+            timeout = BIT_TICKS * 3;
         end
     end
-
-    // 生成VCD波形
-    initial begin
-        $dumpfile("uart.vcd");
-        $dumpvars(0, uart_tb);
+    check32({name, " start bit observed"}, 32'h1, {31'b0, found});
+    if (!found) disable capture_body;
+    repeat (BIT_TICKS / 2) @(negedge clk_i);
+    check32({name, " start bit center is low"}, 32'h0, {31'b0, pad_txd});
+    for (bit_index = 0; bit_index < 8; bit_index = bit_index + 1) begin
+        repeat (BIT_TICKS) @(negedge clk_i);
+        captured[bit_index] = pad_txd;
     end
+    repeat (BIT_TICKS) @(negedge clk_i);
+    check32({name, " stop bit is high"}, 32'h1, {31'b0, pad_txd});
+    check32({name, " LSB-first byte"}, {24'b0, expected}, {24'b0, captured});
+    repeat (BIT_TICKS * 2) @(negedge clk_i);
+end
+endtask
+
+task send_rx_byte;
+    input [7:0] value;
+    integer bit_index;
+begin
+    @(negedge clk_i);
+    addr_i = UART_SR;
+    data_rd_i = 1'b1;
+    data_we_i = 1'b0;
+    data_i = 32'h0;
+    pad_rxd = 1'b0;
+    repeat (BIT_TICKS) @(negedge clk_i);
+    for (bit_index = 0; bit_index < 8; bit_index = bit_index + 1) begin
+        pad_rxd = value[bit_index];
+        repeat (BIT_TICKS) @(negedge clk_i);
+    end
+    pad_rxd = 1'b1;
+    repeat (BIT_TICKS * 3) @(negedge clk_i);
+    data_rd_i = 1'b0;
+end
+endtask
+
+task wait_tx_complete;
+    output [31:0] status;
+    input [1023:0] name;
+    integer timeout;
+    reg found;
+begin
+    status = 32'h0;
+    found = 1'b0;
+    for (timeout = 0; timeout < (BIT_TICKS * 3); timeout = timeout + 1) begin
+        if (!found) begin
+            bus_read(UART_SR, status);
+            if (status[0]) found = 1'b1;
+        end
+    end
+    check32({name, " completion becomes visible while idle"}, 32'h1, {31'b0, found});
+end
+endtask
+
+initial begin
+    clk_i = 1'b0;
+    rst_n_i = 1'b1;
+    pad_rxd = 1'b1;
+    idle_bus();
+    tests = 0;
+    failures = 0;
+    checked_cycles = 0;
+    lfsr = 32'hcafe_1234;
+
+    $display("[TEST] UART reset values, register decode, and synchronous reads");
+    reset_dut();
+    bus_read(UART_CR, read_data);       check32("CR reset", 32'h0000_0003, read_data);
+    bus_read(UART_SR, read_data);       check32("SR reset", 32'h0000_0000, read_data);
+    bus_read(UART_BAUD_REG, read_data); check32("BAUD is fixed at 115200", 32'd115200, read_data);
+    bus_read(UART_RXD, read_data);      check32("RXD reset low byte", 32'h0000_00ff, read_data);
+    bus_read(UART_TXD, read_data);      check32("TXD reset low byte", 32'h0000_00ff, read_data);
+    bus_read(8'hfc, read_data);         check32("unknown address reads zero", 32'h0, read_data);
+    bus_write(UART_BAUD_REG, 32'd9600);
+    bus_read(UART_BAUD_REG, read_data); check32("BAUD ignores writes", 32'd115200, read_data);
+    bus_write(UART_CR, 32'h1234_0003);
+    bus_read(UART_CR, read_data);       check32("CR preserves all writable bits", 32'h1234_0003, read_data);
+    bus_write(UART_TXD, 32'hdead_be5a);
+    bus_read(UART_TXD, read_data);      check32("TXD stores only low byte", 32'h0000_005a, read_data);
+
+    $display("[TEST] exact TX framing, bit order, bit duration, and completion flag");
+    reset_dut();
+    for (i = 0; i < 4; i = i + 1) begin
+        case (i)
+            0: read_data = 32'h00;
+            1: read_data = 32'hff;
+            2: read_data = 32'h96;
+            default: read_data = 32'h53;
+        endcase
+        bus_write(UART_TXD, read_data);
+        capture_tx_byte(read_data[7:0], "TX frame");
+        wait_tx_complete(read_data, "TX frame");
+        check32("TX completion flag is set", 32'h1, read_data & 32'h1);
+        bus_write(UART_SR, 32'h0000_0001);
+        bus_read(UART_SR, read_data);
+        check32("TX flag is write-one-to-clear", 32'h0, read_data & 32'h1);
+    end
+
+    $display("[TEST] TX disable blocks launch and preserves idle level");
+    reset_dut();
+    bus_write(UART_CR, 32'h0000_0002);
+    bus_write(UART_TXD, 32'h0000_0069);
+    for (i = 0; i < BIT_TICKS * 12; i = i + 1) begin
+        @(negedge clk_i);
+        if (pad_txd !== 1'b1)
+            check32("disabled TX must remain high", 32'h1, {31'b0, pad_txd});
+    end
+    bus_read(UART_SR, read_data);
+    check32("disabled TX does not set completion", 32'h0, read_data & 32'h1);
+    bus_write(UART_CR, 32'h0000_0003);
+    for (i = 0; i < BIT_TICKS * 3; i = i + 1) begin
+        @(negedge clk_i);
+        if (pad_txd !== 1'b1)
+            check32("reenable without a new TXD write must not launch stale data",
+                    32'h1, {31'b0, pad_txd});
+    end
+    bus_write(UART_TXD, 32'h0000_0036);
+    capture_tx_byte(8'h36, "TX works after disable and reenable");
+    wait_tx_complete(read_data, "TX after reenable");
+    check32("TX completion after reenable", 32'h1, read_data & 32'h1);
+
+    $display("[TEST] TXD write while busy does not queue an implicit second frame");
+    reset_dut();
+    bus_write(UART_TXD, 32'h0000_00c3);
+    fork
+        capture_tx_byte(8'hc3, "current TX frame survives busy write");
+        begin
+            repeat (BIT_TICKS * 3) @(negedge clk_i);
+            bus_write(UART_TXD, 32'h0000_005a);
+        end
+    join
+    wait_tx_complete(read_data, "busy-write TX frame");
+    bus_read(UART_TXD, read_data);
+    check32("busy TXD write updates holding register", 32'h0000_005a, read_data);
+    for (i = 0; i < BIT_TICKS * 3; i = i + 1) begin
+        @(negedge clk_i);
+        if (pad_txd !== 1'b1)
+            check32("busy write must not auto-queue another frame", 32'h1, {31'b0, pad_txd});
+    end
+
+    $display("[TEST] RX framing, bit order, data register, and W1C flag");
+    reset_dut();
+    for (i = 0; i < 4; i = i + 1) begin
+        case (i)
+            0: read_data = 32'h00;
+            1: read_data = 32'hff;
+            2: read_data = 32'h96;
+            default: read_data = 32'h5a;
+        endcase
+        send_rx_byte(read_data[7:0]);
+        bus_read(UART_RXD, lfsr);
+        check32("RX byte is stored LSB-first", read_data & 32'hff, lfsr);
+        bus_read(UART_SR, lfsr);
+        check32("RX completion flag visible when idle", 32'h2, lfsr & 32'h2);
+        bus_write(UART_SR, 32'h0000_0000);
+        bus_read(UART_SR, lfsr);
+        check32("writing zero preserves RX flag", 32'h2, lfsr & 32'h2);
+        bus_write(UART_SR, 32'h0000_0002);
+        bus_read(UART_SR, lfsr);
+        check32("writing one clears RX flag", 32'h0, lfsr & 32'h2);
+    end
+
+    $display("[TEST] RX disable suppresses data and completion flag");
+    reset_dut();
+    bus_write(UART_CR, 32'h0000_0001);
+    send_rx_byte(8'h69);
+    bus_read(UART_RXD, read_data);
+    check32("disabled RX keeps reset data", 32'h0000_00ff, read_data);
+    bus_read(UART_SR, read_data);
+    check32("disabled RX does not set completion", 32'h0, read_data & 32'h2);
+
+    $display("[TEST] deterministic mixed register traffic while UART is idle");
+    reset_dut();
+    for (i = 0; i < 160; i = i + 1) begin
+        @(negedge clk_i);
+        lfsr = {lfsr[30:0], lfsr[31] ^ lfsr[21] ^ lfsr[1] ^ lfsr[0]};
+        data_i = lfsr;
+        case (i % 10)
+            0: begin addr_i = UART_CR;  data_we_i = 1'b1; data_rd_i = 1'b0; data_i = 32'h3; end
+            1: begin addr_i = UART_SR;  data_we_i = 1'b1; data_rd_i = 1'b0; end
+            2: begin addr_i = 8'hec;    data_we_i = 1'b1; data_rd_i = 1'b0; end
+            default: begin
+                data_we_i = 1'b0;
+                data_rd_i = 1'b1;
+                case (i % 6)
+                    0: addr_i = UART_CR;
+                    1: addr_i = UART_SR;
+                    2: addr_i = UART_BAUD_REG;
+                    3: addr_i = UART_RXD;
+                    4: addr_i = UART_TXD;
+                    default: addr_i = 8'hfc;
+                endcase
+            end
+        endcase
+    end
+    @(negedge clk_i);
+    idle_bus();
+    repeat (2) @(negedge clk_i);
+
+    $display("\n========================================================");
+    $display("UART STRICT TEST SUMMARY: assertions=%0d checked_cycles=%0d failed=%0d",
+             tests, checked_cycles, failures);
+    $display("========================================================");
+    if (failures != 0) $fatal(1, "uart_tb failed");
+    $display("[PASS] uart_tb");
+    $finish;
+end
 
 endmodule

@@ -1,251 +1,219 @@
+`timescale 1ns/1ps
+`define TESTBENCH_VCS
 `include "pa_chip_param.v"
 
 module csr_tb;
 
-    // 时钟和复位信号
-    reg clk_i;
-    reg rst_n_i;
+reg                         clk_i;
+reg                         rst_n_i;
+wire [`DATA_BUS_WIDTH-1:0]  csr_mtvec_o;
+wire [`DATA_BUS_WIDTH-1:0]  csr_mepc_o;
+wire [`DATA_BUS_WIDTH-1:0]  csr_mstatus_o;
+reg  [`CSR_BUS_WIDTH-1:0]   csr_raddr_i;
+reg  [`CSR_BUS_WIDTH-1:0]   csr_waddr_i;
+reg                         csr_waddr_vld_i;
+reg  [`DATA_BUS_WIDTH-1:0]  csr_wdata_i;
+wire [`DATA_BUS_WIDTH-1:0]  csr_rdata_o;
 
-    // 输出信号
-    wire [`DATA_BUS_WIDTH-1:0] csr_mtvec_o;
-    wire [`DATA_BUS_WIDTH-1:0] csr_mepc_o;
-    wire [`DATA_BUS_WIDTH-1:0] csr_mstatus_o;
+integer tests;
+integer failures;
+integer i;
 
-    // 输入信号
-    reg [`CSR_BUS_WIDTH-1:0] csr_raddr_i;
-    reg [`CSR_BUS_WIDTH-1:0] csr_waddr_i;
-    reg csr_waddr_vld_i;
-    reg [`DATA_BUS_WIDTH-1:0] csr_wdata_i;
+reg [11:0] csr_addr [0:8];
+reg [31:0] csr_value[0:8];
 
-    // 输出信号
-    wire [`DATA_BUS_WIDTH-1:0] csr_rdata_o;
+pa_core_csr dut (
+    .clk_i(clk_i),
+    .rst_n_i(rst_n_i),
+    .csr_mtvec_o(csr_mtvec_o),
+    .csr_mepc_o(csr_mepc_o),
+    .csr_mstatus_o(csr_mstatus_o),
+    .csr_raddr_i(csr_raddr_i),
+    .csr_waddr_i(csr_waddr_i),
+    .csr_waddr_vld_i(csr_waddr_vld_i),
+    .csr_wdata_i(csr_wdata_i),
+    .csr_rdata_o(csr_rdata_o)
+);
 
-    // 测试统计变量
-    integer test_count = 0;
-    integer pass_count = 0;
-    integer fail_count = 0;
+always #5 clk_i = ~clk_i;
 
-    // 辅助任务：检查寄存器值并记录结果
-    task check_register;
-        input reg [31:0] expected;
-        input reg [31:0] actual;
-        input integer reg_id;
-        
-        reg [128:0] reg_names [0:10];
-        
-        begin
-            // 初始化寄存器名称数组
-            reg_names[0] = "CYCLE_LOW_INIT";
-            reg_names[1] = "CYCLEH_INIT";
-            reg_names[2] = "MTVEC";
-            reg_names[3] = "MEPC";
-            reg_names[4] = "MCAUSE";
-            reg_names[5] = "MIE";
-            reg_names[6] = "MIP";
-            reg_names[7] = "MTVAL";
-            reg_names[8] = "MSCRATCH";
-            reg_names[9] = "MSCRATCHCSWL";
-            reg_names[10] = "MSTATUS";
-            
-            test_count = test_count + 1;
-            if (actual === expected) begin
-                pass_count = pass_count + 1;
-                $display("  [PASS] %0s | expected=%h actual=%h", reg_names[reg_id], expected, actual);
-            end else begin
-                fail_count = fail_count + 1;
-                $display("  [FAIL] %0s | expected=%h actual=%h", reg_names[reg_id], expected, actual);
-                $display("    Debug: raddr=%h waddr=%h we=%b wdata=%h rdata=%h", csr_raddr_i, csr_waddr_i, csr_waddr_vld_i, csr_wdata_i, csr_rdata_o);
-                $display("    Hint : check reset value, write enable timing, CSR address decode, and read mux for this register.");
-            end
-        end
-    endtask
+initial begin
+    $dumpfile("csr.vcd");
+    $dumpvars(0, csr_tb);
+end
 
-    // 辅助任务：显示测试摘要
-    task show_summary;
-        begin
-            $display("");
-            $display("========================================================");
-            $display("CSR TEST SUMMARY");
-            $display("Total : %0d", test_count);
-            $display("Passed: %0d", pass_count);
-            $display("Failed: %0d", fail_count);
-            $display("========================================================");
-            if (fail_count == 0) begin
-                $display("[PASS] csr_tb");
-            end else begin
-                $display("[FAIL] csr_tb errors=%0d", fail_count);
-            end
-        end
-    endtask
-
-    // 实例化CSR模块
-    pa_core_csr dut (
-        .clk_i(clk_i),
-        .rst_n_i(rst_n_i),
-        .csr_mtvec_o(csr_mtvec_o),
-        .csr_mepc_o(csr_mepc_o),
-        .csr_mstatus_o(csr_mstatus_o),
-        .csr_raddr_i(csr_raddr_i),
-        .csr_waddr_i(csr_waddr_i),
-        .csr_waddr_vld_i(csr_waddr_vld_i),
-        .csr_wdata_i(csr_wdata_i),
-        .csr_rdata_o(csr_rdata_o)
-    );
-
-    // 时钟生成
-    initial begin
-        clk_i = 0;
-        forever #5 clk_i = ~clk_i; // 10ns周期
+task check32;
+    input [1023:0] name;
+    input [31:0] expected;
+    input [31:0] actual;
+begin
+    tests = tests + 1;
+    if (actual !== expected) begin
+        failures = failures + 1;
+        $display("[FAIL] %0s expected=%08h actual=%08h time=%0t", name, expected, actual, $time);
+        $display("       raddr=%08h waddr=%08h we=%b wdata=%08h", csr_raddr_i, csr_waddr_i,
+                 csr_waddr_vld_i, csr_wdata_i);
     end
+end
+endtask
 
-    // 波形输出
-    initial begin
-        $dumpfile("csr.vcd");
-        $dumpvars(0, csr_tb);
+task idle_bus;
+begin
+    csr_waddr_vld_i = 1'b0;
+    csr_waddr_i     = `ZERO_WORD;
+    csr_wdata_i     = `ZERO_WORD;
+end
+endtask
+
+task reset_dut;
+begin
+    @(negedge clk_i);
+    rst_n_i = 1'b0;
+    idle_bus();
+    csr_raddr_i = `CSR_MSTATUS;
+    #1;
+    check32("asynchronous reset immediately restores mstatus", 32'h0000_1880, csr_mstatus_o);
+    repeat (2) @(posedge clk_i);
+    @(negedge clk_i);
+    rst_n_i = 1'b1;
+end
+endtask
+
+task read_now;
+    input [31:0] addr;
+    input [31:0] expected;
+    input [1023:0] name;
+begin
+    csr_raddr_i = addr;
+    #1;
+    check32(name, expected, csr_rdata_o);
+end
+endtask
+
+task write_csr;
+    input [31:0] addr;
+    input [31:0] data;
+begin
+    @(negedge clk_i);
+    csr_waddr_i     = addr;
+    csr_wdata_i     = data;
+    csr_waddr_vld_i = 1'b1;
+    @(posedge clk_i);
+    #1;
+    @(negedge clk_i);
+    idle_bus();
+end
+endtask
+
+initial begin
+    clk_i = 1'b0;
+    rst_n_i = 1'b1;
+    csr_raddr_i = `ZERO_WORD;
+    csr_waddr_i = `ZERO_WORD;
+    csr_waddr_vld_i = 1'b0;
+    csr_wdata_i = `ZERO_WORD;
+    tests = 0;
+    failures = 0;
+
+    csr_addr[0] = `CSR_MTVEC;
+    csr_addr[1] = `CSR_MEPC;
+    csr_addr[2] = `CSR_MCAUSE;
+    csr_addr[3] = `CSR_MIE;
+    csr_addr[4] = `CSR_MIP;
+    csr_addr[5] = `CSR_MTVAL;
+    csr_addr[6] = `CSR_MSCRATCH;
+    csr_addr[7] = `CSR_MSCRATCHCSWL;
+    csr_addr[8] = `CSR_MSTATUS;
+
+    csr_value[0] = 32'h0123_4567;
+    csr_value[1] = 32'h89ab_cdef;
+    csr_value[2] = 32'h8000_0003;
+    csr_value[3] = 32'h1357_9bdf;
+    csr_value[4] = 32'h2468_ace0;
+    csr_value[5] = 32'hdead_beef;
+    csr_value[6] = 32'h55aa_aa55;
+    csr_value[7] = 32'hc001_c0de;
+    csr_value[8] = 32'h0000_1888;
+
+    $display("[TEST] CSR asynchronous reset and exact cycle timing");
+    reset_dut();
+    read_now(`CSR_CYCLE, 32'h0, "cycle is zero before first released edge");
+    @(posedge clk_i); #1;
+    check32("cycle increments on first released edge", 32'h1, csr_rdata_o);
+    @(posedge clk_i); #1;
+    check32("cycle increments on every edge", 32'h2, csr_rdata_o);
+    write_csr(`CSR_CYCLE, 32'hffff_ffff);
+    read_now(`CSR_CYCLE, 32'h3, "cycle is read-only and still increments normally");
+    csr_raddr_i = `CSR_CYCLEH; #1;
+    check32("cycleh remains zero without overflow", 32'h0, csr_rdata_o);
+
+    reset_dut();
+    read_now(`CSR_MTVEC, 32'h0, "mtvec reset value");
+    read_now(`CSR_MEPC, 32'h0, "mepc reset value");
+    read_now(`CSR_MCAUSE, 32'h0, "mcause reset value");
+    read_now(`CSR_MIE, 32'h0, "mie reset value");
+    read_now(`CSR_MIP, 32'h0, "mip reset value");
+    read_now(`CSR_MTVAL, 32'h0, "mtval reset value");
+    read_now(`CSR_MSCRATCH, 32'h0, "mscratch reset value");
+    read_now(`CSR_MSTATUS, 32'h0000_1880, "mstatus reset value");
+    check32("mstatus direct output reset value", 32'h0000_1880, csr_mstatus_o);
+
+    $display("[TEST] all writable CSRs, direct outputs, and register isolation");
+    reset_dut();
+    for (i = 0; i < 9; i = i + 1) begin
+        write_csr({20'ha5a5a, csr_addr[i]}, csr_value[i]);
     end
-
-    // 测试过程
-    initial begin
-        // 初始化
-        rst_n_i = 0;
-        csr_raddr_i = 0;
-        csr_waddr_i = 0;
-        csr_waddr_vld_i = 0;
-        csr_wdata_i = 0;
-
-        // 复位
-        #10 rst_n_i = 1;
-
-        // 等待几个周期
-        @(posedge clk_i);
-        @(posedge clk_i);
-
-        // ==================== 测试cycle初始值 ====================
-        $display("\n========== Test 1: Cycle Register Initial Value ==========");
-        csr_raddr_i = `CSR_CYCLE;
-        @(posedge clk_i);
-        check_register(32'h0000_0002, csr_rdata_o, 0);
-
-        csr_raddr_i = `CSR_CYCLEH;
-        @(posedge clk_i);
-        check_register(32'h0000_0000, csr_rdata_o, 1);
-
-        // ==================== 测试 MTVEC ====================
-        $display("\n========== Test 2: MTVEC Register ==========");
-        csr_waddr_i = `CSR_MTVEC;
-        csr_waddr_vld_i = 1;
-        csr_wdata_i = 32'hAAAA_AAAA;
-        @(posedge clk_i);
-        csr_waddr_vld_i = 0;
-
-        csr_raddr_i = `CSR_MTVEC;
-        @(posedge clk_i);
-        check_register(32'hAAAA_AAAA, csr_rdata_o, 2);
-
-        // ==================== 测试 MEPC ====================
-        $display("\n========== Test 3: MEPC Register ==========");
-        csr_waddr_i = `CSR_MEPC;
-        csr_waddr_vld_i = 1;
-        csr_wdata_i = 32'h1234_5678;
-        @(posedge clk_i);
-        csr_waddr_vld_i = 0;
-
-        csr_raddr_i = `CSR_MEPC;
-        @(posedge clk_i);
-        check_register(32'h1234_5678, csr_rdata_o, 3);
-
-        // ==================== 测试 MCAUSE ====================
-        $display("\n========== Test 4: MCAUSE Register ==========");
-        csr_waddr_i = `CSR_MCAUSE;
-        csr_waddr_vld_i = 1;
-        csr_wdata_i = 32'h0000_000B;
-        @(posedge clk_i);
-        csr_waddr_vld_i = 0;
-
-        csr_raddr_i = `CSR_MCAUSE;
-        @(posedge clk_i);
-        check_register(32'h0000_000B, csr_rdata_o, 4);
-
-        // ==================== 测试 MIE ====================
-        $display("\n========== Test 5: MIE Register ==========");
-        csr_waddr_i = `CSR_MIE;
-        csr_waddr_vld_i = 1;
-        csr_wdata_i = 32'h0000_0888;
-        @(posedge clk_i);
-        csr_waddr_vld_i = 0;
-
-        csr_raddr_i = `CSR_MIE;
-        @(posedge clk_i);
-        check_register(32'h0000_0888, csr_rdata_o, 5);
-
-        // ==================== 测试 MIP ====================
-        $display("\n========== Test 6: MIP Register ==========");
-        csr_waddr_i = `CSR_MIP;
-        csr_waddr_vld_i = 1;
-        csr_wdata_i = 32'h0000_0444;
-        @(posedge clk_i);
-        csr_waddr_vld_i = 0;
-
-        csr_raddr_i = `CSR_MIP;
-        @(posedge clk_i);
-        check_register(32'h0000_0444, csr_rdata_o, 6);
-
-        // ==================== 测试 MTVAL ====================
-        $display("\n========== Test 7: MTVAL Register ==========");
-        csr_waddr_i = `CSR_MTVAL;
-        csr_waddr_vld_i = 1;
-        csr_wdata_i = 32'hDEAD_BEEF;
-        @(posedge clk_i);
-        csr_waddr_vld_i = 0;
-
-        csr_raddr_i = `CSR_MTVAL;
-        @(posedge clk_i);
-        check_register(32'hDEAD_BEEF, csr_rdata_o, 7);
-
-        // ==================== 测试 MSCRATCH ====================
-        $display("\n========== Test 8: MSCRATCH Register ==========");
-        csr_waddr_i = `CSR_MSCRATCH;
-        csr_waddr_vld_i = 1;
-        csr_wdata_i = 32'h5555_5555;
-        @(posedge clk_i);
-        csr_waddr_vld_i = 0;
-
-        csr_raddr_i = `CSR_MSCRATCH;
-        @(posedge clk_i);
-        check_register(32'h5555_5555, csr_rdata_o, 8);
-
-        // ==================== 测试 MSCRATCHCSWL ====================
-        $display("\n========== Test 9: MSCRATCHCSWL Register ==========");
-        csr_waddr_i = `CSR_MSCRATCHCSWL;
-        csr_waddr_vld_i = 1;
-        csr_wdata_i = 32'h6666_6666;
-        @(posedge clk_i);
-        csr_waddr_vld_i = 0;
-
-        csr_raddr_i = `CSR_MSCRATCHCSWL;
-        @(posedge clk_i);
-        check_register(32'h6666_6666, csr_rdata_o, 9);
-
-        // ==================== 测试 MSTATUS ====================
-        $display("\n========== Test 10: MSTATUS Register ==========");
-        csr_waddr_i = `CSR_MSTATUS;
-        csr_waddr_vld_i = 1;
-        csr_wdata_i = 32'h0000_0000;
-        @(posedge clk_i);
-        csr_waddr_vld_i = 0;
-
-        csr_raddr_i = `CSR_MSTATUS;
-        @(posedge clk_i);
-        check_register(32'h0000_0000, csr_rdata_o, 10);
-
-        // ==================== 完成测试 ====================
-        show_summary;
-        if (fail_count == 0) begin
-            $finish;
-        end
-        else begin
-            $fatal(1);
-        end
+    for (i = 0; i < 9; i = i + 1) begin
+        read_now({20'h5a5a5, csr_addr[i]}, csr_value[i], "CSR retains its own distinct value");
     end
+    check32("mtvec direct output", csr_value[0], csr_mtvec_o);
+    check32("mepc direct output", csr_value[1], csr_mepc_o);
+    check32("mstatus direct output", csr_value[8], csr_mstatus_o);
+
+    $display("[TEST] write enable, unknown address, and same-cycle visibility");
+    reset_dut();
+    write_csr(`CSR_MTVEC, 32'h1111_2222);
+    @(negedge clk_i);
+    csr_raddr_i     = `CSR_MTVEC;
+    csr_waddr_i     = `CSR_MTVEC;
+    csr_wdata_i     = 32'h3333_4444;
+    csr_waddr_vld_i = 1'b0;
+    #1;
+    check32("disabled write does not change read data before edge", 32'h1111_2222, csr_rdata_o);
+    @(posedge clk_i); #1;
+    check32("disabled write does not change register", 32'h1111_2222, csr_rdata_o);
+
+    @(negedge clk_i);
+    csr_waddr_vld_i = 1'b1;
+    csr_wdata_i     = 32'h5555_6666;
+    #1;
+    check32("write is not visible before active edge", 32'h1111_2222, csr_rdata_o);
+    @(posedge clk_i); #1;
+    check32("write becomes visible immediately after active edge", 32'h5555_6666, csr_rdata_o);
+
+    @(negedge clk_i);
+    csr_waddr_i     = 32'h0000_0fff;
+    csr_wdata_i     = 32'hffff_ffff;
+    csr_waddr_vld_i = 1'b1;
+    @(posedge clk_i); #1;
+    idle_bus();
+    read_now(`CSR_MTVEC, 32'h5555_6666, "unknown write does not corrupt mtvec");
+    read_now(32'h0000_0fff, 32'h0, "unknown CSR reads zero");
+
+    $display("[TEST] read mux is combinational, not one cycle late");
+    csr_raddr_i = `CSR_MTVEC; #1;
+    check32("combinational read mtvec", 32'h5555_6666, csr_rdata_o);
+    csr_raddr_i = `CSR_MSTATUS; #1;
+    check32("combinational read changes within same cycle", 32'h0000_1880, csr_rdata_o);
+    csr_raddr_i = `CSR_MEPC; #1;
+    check32("combinational read changes again without clock", 32'h0, csr_rdata_o);
+
+    $display("\n========================================================");
+    $display("CSR STRICT TEST SUMMARY: total=%0d failed=%0d", tests, failures);
+    $display("========================================================");
+    if (failures != 0) $fatal(1, "csr_tb failed");
+    $display("[PASS] csr_tb");
+    $finish;
+end
 
 endmodule
