@@ -8,6 +8,9 @@
 
 本项目的推荐上手顺序是：先配置 Linux/WSL 环境和 RISC-V 工具链，再配置仓库自带的 NEMU，然后从 `sim/simple` 跑通 `make build`、`make run`、`make rtl_run` 和 `make trace_run`。
 
+> [!NOTE]
+> 本项目的 CPU 及核心架构基于并衍生自 [yuheng-riscv-soc](https://gitee.com/dengchow/yuheng-riscv-soc)，部分处理器框架也使用了该开源项目的设计与代码。上游项目采用 Apache License 2.0。本项目依照该许可证使用、修改和分发相关衍生内容，并保留相应的版权、许可证和归属声明。本仓库包含对上游内容的修改；具体许可条件请参阅本仓库的 [LICENSE](./LICENSE) 文件。上述说明不表示上游作者对本项目提供认可或背书。
+
 ---
 
 ## 项目结构
